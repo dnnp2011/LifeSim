@@ -1,15 +1,12 @@
-// #include <OpenGL/gl.h>
-// #include <GLFW/glfw3.h>
+#include <Cocoa/Cocoa.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
 #include "extern/imgui/imgui.h"
 #include "extern/imgui/imgui_impl_opengl2.h"
-#include "extern/imgui/imgui_impl_glfw.h"
-// #include "extern/imgui/imgui_impl_opengl2.h"
-// #include "extern/imgui/imgui_impl_metal.mm"
-// #include "extern/imgui/imgui_impl_osx.mm"
+//#include "extern/imgui/imgui_impl_metal.mm"
+//#include "extern/imgui/imgui_impl_osx.mm"
 
-
-using namespace ImGui;
 
 int main() {
     // Setup Dear ImGui context
@@ -35,10 +32,9 @@ int main() {
     }
 
     // Setup Platform/Renderer backends
-    // ImGui_ImplOSX_Init();
-    ImGui_ImplOpenGL2_Init();
-    ImGui_ImplGlfw_InitForOpenGL();
-    // ImGui_ImplMetal_Init();
+//    ImGui_ImplOSX_Init(nullptr);
+//     ImGui_ImplOpenGL2_Init();
+//    ImGui_ImplMetal_Init(nullptr);
 
     ImGui::ShowDemoWindow();
 

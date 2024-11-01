@@ -2,7 +2,10 @@
 // Created by Dalton Pierce on 10/30/24.
 //
 
+#include <iostream>
+
 #include "Meep.h"
+
 
 class Meep {
 public:
@@ -11,7 +14,8 @@ public:
 public:
     unsigned int age;
 
-    Meep(): name(nullptr), age(0) {
+    Meep():
+        name(nullptr), age(0) {
         std::cout << "Meep Born\n";
     }
 
