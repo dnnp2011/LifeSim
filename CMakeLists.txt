@@ -1,40 +1,62 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.10)
 project(LifeSim)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wformat -std=c++11")
 
-# Add the GLFW include directory
-include_directories("/usr/local/Cellar/glfw/3.4/include")
-# Add the ImGui include directory
-include_directories(${CMAKE_SOURCE_DIR}/extern/imgui)
-
-
-#add_executable(
-#        LifeSim main.cpp
-#extern/imgui/imgui_impl_opengl2.h
-#extern/imgui/imgui_impl_glfw.h
-#extern/imgui/imgui.cpp
-#extern/imgui/imgui_draw.cpp
-#extern/imgui/imgui_demo.cpp
-#extern/imgui/imgui_tables.cpp
-#extern/imgui/imgui_widgets.cpp
-#        #        WorldManager.cpp
-#        #        WorldManager.h
-#        #        Meep.cpp
-#        #        Meep.h
-#)
-
-add_executable(
-        LifeSim
+# Define source files
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui)
+set(SOURCES
         main.cpp
+        ${IMGUI_DIR}/imgui.cpp
+        ${IMGUI_DIR}/imgui_demo.cpp
+        ${IMGUI_DIR}/imgui_draw.cpp
+        ${IMGUI_DIR}/imgui_tables.cpp
+        ${IMGUI_DIR}/imgui_widgets.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_opengl2.cpp
 )
 
-target_link_libraries(LifeSim PRIVATE Cocoa Metal)
+# Add executable
+add_executable(LifeSim ${SOURCES})
 
-# Link the GLFW and other necessary libraries
-target_link_libraries(LifeSim PRIVATE /usr/local/Cellar/glfw/3.4/lib/libglfw.dylib "-framework Cocoa" "-framework OpenGL" "-framework IOKit" "-framework CoreVideo" "-framework Metal" "-framework QuartzCore" )
-# Add the macOS frameworks directory to the linker search paths
-link_directories(/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks)
-# Ensure the linker can find the Cocoa framework
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks")
+# Include directories
+target_include_directories(LifeSim PRIVATE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
+# Platform-specific settings
+if(APPLE)
+    message("Building for Mac OS X")
+    target_link_libraries(LifeSim PRIVATE
+            "-framework OpenGL"
+            "-framework Cocoa"
+            "-framework IOKit"
+            "-framework CoreVideo"
+            "-L/usr/local/Cellar/glfw/3.4/lib"
+            "-lglfw"
+    )
+    target_include_directories(LifeSim PRIVATE
+            /usr/local/include
+            /opt/local/include
+            /opt/homebrew/include
+            /usr/local/Cellar/glfw/3.4/include
+    )
+    link_directories(
+            /usr/local/lib
+            /opt/local/lib
+            /opt/homebrew/lib
+            /usr/local/Cellar/glfw/3.4/lib
+            /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks
+    )
+elseif(UNIX)
+    message("Building for Linux")
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GLFW REQUIRED glfw3)
+    target_link_libraries(LifeSim PRIVATE ${GLFW_LIBRARIES} GL)
+    target_include_directories(LifeSim PRIVATE ${GLFW_INCLUDE_DIRS})
+elseif(WIN32)
+    message("Building for Windows")
+    target_link_libraries(LifeSim PRIVATE glfw3 gdi32 opengl32 imm32)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GLFW REQUIRED glfw3)
+    target_include_directories(LifeSim PRIVATE ${GLFW_INCLUDE_DIRS})
+endif()
