@@ -1,3 +1,6 @@
+## Library Docs
+/lib/**/docs
+
 ## OSX artifacts
 .DS_Store
 
@@ -75,12 +78,8 @@ examples/example_sdl2_sdlrenderer/example_sdl2_sdlrenderer
 *.al
 
 # Ignore executable files
-*.exe
 *.out
 *.app
-*.dll
-*.so
-*.dylib
 
 # Ignore debug files
 *.dSYM/

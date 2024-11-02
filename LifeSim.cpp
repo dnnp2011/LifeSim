@@ -39,7 +39,7 @@ int main(int, char **) {
         return 1;
 
     // Create window with graphics context
-    GLFWwindow *window = glfwCreateWindow(1280, 720, "Game of LifeSim", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1920, 1080, "LifeSim", nullptr, nullptr);
 
     if (window == nullptr)
         return 1;
@@ -69,7 +69,7 @@ int main(int, char **) {
         style.WindowRounding              = 5.0f;             // Rounded panel corners
         style.PopupRounding               = 5.0f;             // Rounded popup corners
         style.Colors[ImGuiCol_WindowBg].w = 0.8f;             // Sets panel transparency
-        style.WindowMinSize               = ImVec2(500, 500); // Set minimum window size
+        style.WindowMinSize               = ImVec2(1280, 720); // Set minimum window size
     }
 
     // Setup Platform/Renderer backends
@@ -91,8 +91,8 @@ int main(int, char **) {
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
-    const ImFont *font = io.Fonts->AddFontFromFileTTF("/Library/Fonts/FiraCode-Regular.ttf", 14.0f, nullptr, io.Fonts->GetGlyphRangesDefault());
-    IM_ASSERT(font != nullptr);
+    // const ImFont *font = io.Fonts->AddFontFromFileTTF("/Library/Fonts/FiraCode-Regular.ttf", 14.0f, nullptr, io.Fonts->GetGlyphRangesDefault());
+    // IM_ASSERT(font != nullptr);
 
     // Our state
     bool show_demo_window    = true;
