@@ -7,6 +7,7 @@
 ## Dear ImGui artifacts
 imgui.ini
 imgui*.ini
+/lib/imgui/*
 
 ## General build artifacts
 *.o

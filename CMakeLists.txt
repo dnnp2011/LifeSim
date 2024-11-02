@@ -46,11 +46,10 @@ if (APPLE)
     )
     set(MAC_LINK_LIBRARIES
             glfw3
-            opengl32
             "-framework OpenGL"
             "-framework Cocoa"
             "-framework IOKit"
-            "-framework CoreVideo"
+            #            "-framework CoreVideo"
     )
 
     target_include_directories(LifeSim PRIVATE ${MAC_INCLUDE_DIRS})
