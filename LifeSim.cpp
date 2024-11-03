@@ -14,11 +14,12 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
-#include <stdio.h>
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #endif
+#include <iostream>
 #include <GLFW/glfw3.h>
+#include <windows.h>
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 -to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -27,12 +28,25 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-static void glfw_error_callback(int error, const char *description) {
+static void glfw_error_callback(const int error, const char *description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    std::cout << R"(Running WinMain())" << std::endl;
+    MessageBox(nullptr, "Hello, World!", "WinMain Demo", MB_OK);
+
+    return 0;
 }
 
 // Main code
 int main(int, char **) {
+    if constexpr (WIN32) { // Windows Only
+        MessageBox(nullptr, "Booting LifeSim!", "LifeSim", MB_OK);
+    }
+
+    std::cout << R"(Running main())" << std::endl;
+
     glfwSetErrorCallback(glfw_error_callback);
 
     if (!glfwInit())
@@ -66,9 +80,9 @@ int main(int, char **) {
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle &style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        style.WindowRounding              = 5.0f;             // Rounded panel corners
-        style.PopupRounding               = 5.0f;             // Rounded popup corners
-        style.Colors[ImGuiCol_WindowBg].w = 0.8f;             // Sets panel transparency
+        style.WindowRounding              = 5.0f;              // Rounded panel corners
+        style.PopupRounding               = 5.0f;              // Rounded popup corners
+        style.Colors[ImGuiCol_WindowBg].w = 0.8f;              // Sets panel transparency
         style.WindowMinSize               = ImVec2(1280, 720); // Set minimum window size
     }
 
@@ -135,8 +149,8 @@ int main(int, char **) {
             ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
             ImGui::Checkbox("Another Window", &show_another_window);
 
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);              // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float *) &clear_color); // Edit 3 floats representing a color
+            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                               // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3("clear color", reinterpret_cast<float *>(&clear_color)); // Edit 3 floats representing a color
 
             if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
                 counter++;

@@ -6,6 +6,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wformat -std=c++23")
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui)
 set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
 set(OPENGL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/opengl)
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS") // Causes "No such file or directory" error
+
 
 # Define source files
 set(SOURCES
@@ -20,7 +22,11 @@ set(SOURCES
 )
 
 # Add executable
-add_executable(LifeSim ${SOURCES})
+if (WIN32)
+    add_executable(LifeSim WIN32 ${SOURCES})
+else ()
+    add_executable(LifeSim ${SOURCES})
+endif ()
 
 # Include directories
 target_include_directories(LifeSim PRIVATE /lib ${IMGUI_DIR} ${IMGUI_DIR}/backends)
