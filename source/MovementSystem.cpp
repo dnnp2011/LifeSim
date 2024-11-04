@@ -1,12 +1,11 @@
-#include "MovementSystem.h"
-
-
 #include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include "MovementSystem.h"
 #include "common.h"
+
 
 void MovementSystem::update(std::vector<Entity> &entities, std::unordered_map<int, ImVec2> &positions, std::unordered_map<int, Velocity> &velocities, const std::unordered_set<int> &entitiesToStop) const {
     std::vector<std::thread> threads;

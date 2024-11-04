@@ -8,11 +8,7 @@
 #define GL_SILENCE_DEPRECATION
 #endif
 
-#include <cstdio>
-#include <imgui.h>
 #include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl2.h>
-#include <iostream>
 #include <GLFW/glfw3.h>
 
 #include "common.h"
@@ -42,9 +38,9 @@ public:
 
     void render() const;
 
-    static ImVec2 ScreenToViewport(const ImVec2 &screen_coords);
+    ImVec2 ScreenToViewport(const ImVec2 &screen_coords);
 
-    static void drawShape(ShapeType shape, ImVec2 p, int size, ImU32 color);
+    void drawShape(ShapeType shape, ImVec2 p, int size, ImU32 color);
 
 private:
     void drawGui();

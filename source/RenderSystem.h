@@ -5,6 +5,7 @@
 
 #include "common.h"
 
+
 class RenderSystem {
 public:
     void update(const std::vector<Entity> &entities, const std::unordered_map<int, ImVec2> &positions, const std::unordered_map<int, ShapeType> &shapes);

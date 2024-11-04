@@ -6,6 +6,7 @@
 
 #include "common.h"
 
+
 class CollisionSystem {
 public:
     std::unordered_set<int> entitiesToStop;

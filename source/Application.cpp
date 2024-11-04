@@ -1,4 +1,7 @@
+#include <iostream>
+
 #include "Application.h"
+
 
 Application::Application() {
     std::cout << "Application()" << std::endl;

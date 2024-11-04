@@ -1,10 +1,10 @@
-#include "RenderSystem.h"
-
 #include <unordered_map>
 #include <vector>
 
+#include "Application.h"
+#include "RenderSystem.h"
 #include "common.h"
-#include "Renderer.h"
+
 
 // TODO: Refactor to use multithreading to draw in parallel, if possible
 void RenderSystem::update(const std::vector<Entity> &entities, const std::unordered_map<int, ImVec2> &positions, const std::unordered_map<int, ShapeType> &shapes) {
@@ -23,7 +23,7 @@ void RenderSystem::update(const std::vector<Entity> &entities, const std::unorde
         auto shape    = shapes.find(entity.id);
 
         if (position != positions.end() && shape != shapes.end()) {
-            Renderer::drawShape(shape->second, position->second, 50, IM_COL32(255, 255, 255, 255));
+            g_Application.renderer.drawShape(shape->second, position->second, 50, IM_COL32(255, 255, 255, 255));
         }
     }
 

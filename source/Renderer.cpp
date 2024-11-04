@@ -1,5 +1,3 @@
-#include "Renderer.h"
-
 #include <cstdio>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -8,6 +6,8 @@
 #include <GLFW/glfw3.h>
 
 #include "common.h"
+#include "Renderer.h"
+
 
 static void glfw_error_callback(const int error, const char *description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);

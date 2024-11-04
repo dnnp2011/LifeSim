@@ -2,6 +2,7 @@
 
 #include "ECSManager.h"
 
+
 ECSManager::ECSManager() {
     for (size_t i = 0; i < 5; i++) {
         Entity entity = createEntity();

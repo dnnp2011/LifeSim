@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <vector>
 #include <unordered_map>
 
@@ -9,6 +8,7 @@
 #include "MovementSystem.h"
 #include "CollisionSystem.h"
 #include "RenderSystem.h"
+
 
 class ECSManager {
 public:

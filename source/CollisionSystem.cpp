@@ -1,8 +1,9 @@
-#include "CollisionSystem.h"
-
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+#include "CollisionSystem.h"
+
 
 void CollisionSystem::update(const std::vector<Entity> &entities, std::unordered_map<int, ImVec2> &positions, std::unordered_map<int, Collider> &colliders) {
     entitiesToStop.clear();

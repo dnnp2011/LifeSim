@@ -1,7 +1,7 @@
 #pragma once
 
-
 #include "ECSManager.h"
+
 
 struct WorldSize {
     unsigned int x;
