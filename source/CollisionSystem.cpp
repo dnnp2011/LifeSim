@@ -1,25 +1,43 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <thread>
+#include <mutex>
 
 #include "CollisionSystem.h"
 
 
+std::mutex mtx;
+
 void CollisionSystem::update(const std::vector<Entity> &entities, std::unordered_map<int, ImVec2> &positions, std::unordered_map<int, Collider> &colliders) {
     entitiesToStop.clear();
 
-    for (size_t i = 0; i < entities.size(); ++i) {
-        for (size_t j = i + 1; j < entities.size(); ++j) {
-            auto &entityA = entities[i];
-            auto &entityB = entities[j];
+    std::vector<std::thread> threads;
 
-            if (positions.find(entityA.id) != positions.end() && colliders.find(entityA.id) != colliders.end() && positions.find(entityB.id) != positions.end() && colliders.find(entityB.id) != colliders.end()) {
-                if (isColliding(positions[entityA.id], colliders[entityA.id], positions[entityB.id], colliders[entityB.id])) {
-                    entitiesToStop.insert(entityA.id);
-                    entitiesToStop.insert(entityB.id);
+    for (const auto &entityA: entities) {
+        for (const auto &entityB: entities) {
+            if (entityA.id == entityB.id)
+                continue;
+
+            threads.emplace_back([this, &positions, &colliders, &entityA, &entityB]() {
+                const auto entityAPosition = positions.find(entityA.id);
+                const auto entityACollider = colliders.find(entityA.id);
+                const auto entityBPosition = positions.find(entityB.id);
+                const auto entityBCollider = colliders.find(entityB.id);
+
+                if (entityAPosition != positions.end() && entityACollider != colliders.end() && entityBPosition != positions.end() && entityBCollider != colliders.end()) {
+                    if (isColliding(positions[entityA.id], colliders[entityA.id], positions[entityB.id], colliders[entityB.id])) {
+                        const std::lock_guard lock(mtx);
+                        entitiesToStop.insert(entityA.id);
+                        entitiesToStop.insert(entityB.id);
+                    }
                 }
-            }
+            });
         }
+    }
+
+    for (auto &thread: threads) {
+        thread.join();
     }
 }
 

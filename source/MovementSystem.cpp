@@ -13,8 +13,8 @@ void MovementSystem::update(std::vector<Entity> &entities, std::unordered_map<in
     for (const auto &entity: entities) {
         if (entitiesToStop.find(entity.id) == entitiesToStop.end()) {
             threads.emplace_back([this, &positions, &velocities, &entity]() {
-                auto entityPosition = positions.find(entity.id);
-                auto entityVelocity = velocities.find(entity.id);
+                const auto entityPosition = positions.find(entity.id);
+                const auto entityVelocity = velocities.find(entity.id);
 
                 if (entityPosition != positions.end() && entityVelocity != velocities.end()) {
                     positions[entity.id].x += entityVelocity->second.dx;
