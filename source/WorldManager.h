@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 
 #include "ECSManager.h"
 
@@ -16,15 +15,9 @@ public:
     WorldSize worldSize;
     ECSManager ecs;
 
-    WorldManager() : cellSize{ 10 }, worldSize{ 1000, 1000 } {
-        std::cout << "World Created" << std::endl;
-    }
+    WorldManager();
 
-    ~WorldManager() {
-        std::cout << "I am become Death, the destroyer of worlds" << std::endl;
-    }
+    ~WorldManager();
 
-    void run() {
-        ecs.update();
-    }
+    void run();
 };

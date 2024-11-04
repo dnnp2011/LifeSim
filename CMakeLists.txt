@@ -24,19 +24,13 @@ set(SOURCES
         ${IMGUI_DIR}/imgui_widgets.cpp
         ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
         ${IMGUI_DIR}/backends/imgui_impl_opengl2.cpp
-        source/common.h
         source/Renderer.cpp
-        source/Renderer.h
         source/Application.cpp
-        source/Application.h
         source/ECSManager.cpp
-        source/ECSManager.h
-        source/WorldManager.h
         source/WorldManager.cpp
-        source/MovementSystem.h
         source/MovementSystem.cpp
         source/RenderSystem.cpp
-        source/RenderSystem.h
+        source/CollisionSystem.cpp
 )
 
 # Add executable
