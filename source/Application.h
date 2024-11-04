@@ -5,12 +5,14 @@
 
 
 class Application {
-private:
-    WorldManager worldManager{};
-    Renderer renderer{};
+public:
+    WorldManager worldManager;
+    Renderer renderer;
 
 public:
-    Application() = default;
+    Application() {
+        std::cout << "Application()" << std::endl;
+    }
 
     Application(const Application &) = delete;
 
@@ -33,8 +35,9 @@ public:
                 continue;
             }
 
+            renderer.prerender();
+            worldManager.run();
             renderer.render();
-            // worldManager.tick();
 
             // std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
