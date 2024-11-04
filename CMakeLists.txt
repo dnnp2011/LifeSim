@@ -2,10 +2,15 @@ cmake_minimum_required(VERSION 3.29)
 project(LifeSim)
 
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wformat -std=c++23")
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui)
 set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
 set(OPENGL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/opengl)
+
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /W4 /std:c++latest /Zi /Od /RTC1")
+else ()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wformat -std=c++23")
+endif ()
 #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS") // Causes "No such file or directory" error
 
 
@@ -19,6 +24,16 @@ set(SOURCES
         ${IMGUI_DIR}/imgui_widgets.cpp
         ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
         ${IMGUI_DIR}/backends/imgui_impl_opengl2.cpp
+        source/Renderer.cpp
+        source/Renderer.h
+        source/Application.cpp
+        source/Application.h
+        source/ECSManager.cpp
+        source/ECSManager.h
+        source/WorldManager.h
+        source/WorldManager.cpp
+        source/MovementSystem.h
+        source/MovementSystem.cpp
 )
 
 # Add executable
@@ -63,9 +78,13 @@ if (APPLE)
     target_link_libraries(LifeSim PRIVATE ${MAC_LINK_LIBRARIES})
 elseif (WIN32)
     message("Building for Windows")
-
     set(GLFW_INCLUDE_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/include)
-    set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-mingw-w64)
+
+    if (MSVC)
+        set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-vc2022)
+    else ()
+        set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-mingw-w64)
+    endif ()
 
     target_include_directories(LifeSim PRIVATE ${GLFW_INCLUDE_DIRS})
     target_link_directories(LifeSim PRIVATE ${GLFW_LIBRARY_DIRS} ${OPENGL_DIR})

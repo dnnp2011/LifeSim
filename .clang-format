@@ -7,8 +7,10 @@ AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: false
 AlignOperands: true
 AlignTrailingComments: true
-AlwaysBreakTemplateDeclarations: Yes
-BraceWrapping: 
+AllowShortIfStatementsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakTemplateDeclarations: No
+BraceWrapping:
   AfterCaseLabel: false
   AfterClass: false
   AfterControlStatement: false
@@ -26,12 +28,12 @@ BraceWrapping:
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
 BreakBeforeBraces: Custom
-BreakConstructorInitializers: AfterColon
 BreakConstructorInitializersBeforeComma: false
 ColumnLimit: 220
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ContinuationIndentWidth: 8
-IncludeCategories: 
+Cpp11BracedListStyle: false
+IncludeCategories:
   - Regex: '^<.*'
     Priority: 1
   - Regex: '^".*'
