@@ -40,7 +40,13 @@ public:
 
     ImVec2 ScreenToViewport(const ImVec2 &screen_coords);
 
-    void drawShape(ShapeType shape, ImVec2 p, int size, ImU32 color);
+    void drawCircle(const ImVec2 &center, float radius, ImU32 color);
+
+    void drawRectangle(const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color);
+
+    void drawTriangle(const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color);
+
+    void drawShape(ShapeType shape, ImVec2 position, int size, ImU32 color);
 
 private:
     void drawGui();

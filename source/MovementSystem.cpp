@@ -7,8 +7,11 @@
 #include "common.h"
 
 
-void MovementSystem::update(std::vector<Entity> &entities, std::unordered_map<int, ImVec2> &positions, std::unordered_map<int, Velocity> &velocities, const std::unordered_set<int> &entitiesToStop) const {
+void MovementSystem::update(std::vector<Entity> &entities, std::unordered_map<int, Position> &positions, std::unordered_map<int, Velocity> &velocities, const std::unordered_set<int> &entitiesToStop) const {
     std::vector<std::thread> threads;
+
+    // TODO: Don't create more threads than the number of cores (what about hyperthreading?)
+    // const unsigned int maxThreads = std::thread::hardware_concurrency();
 
     for (const auto &entity: entities) {
         if (entitiesToStop.find(entity.id) == entitiesToStop.end()) {

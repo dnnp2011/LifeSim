@@ -9,7 +9,7 @@
 
 std::mutex mtx;
 
-void CollisionSystem::update(const std::vector<Entity> &entities, std::unordered_map<int, ImVec2> &positions, std::unordered_map<int, Collider> &colliders) {
+void CollisionSystem::update(const std::vector<Entity> &entities, std::unordered_map<int, Position> &positions, std::unordered_map<int, Collider> &colliders) {
     entitiesToStop.clear();
 
     std::vector<std::thread> threads;
@@ -41,7 +41,7 @@ void CollisionSystem::update(const std::vector<Entity> &entities, std::unordered
     }
 }
 
-bool CollisionSystem::isColliding(const ImVec2 &posA, const Collider &colA, const ImVec2 &posB, const Collider &colB) {
+bool CollisionSystem::isColliding(const Position &posA, const Collider &colA, const Position &posB, const Collider &colB) {
     return !(posA.x + colA.width < posB.x || posA.x >
              posB.x + colB.width || posA.y + colA.height < posB.y || posA.y >
              posB.y + colB.height

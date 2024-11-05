@@ -1,8 +1,7 @@
-#include <cstdio>
+#include <iostream>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
-#include <iostream>
 #include <GLFW/glfw3.h>
 
 #include "common.h"
@@ -12,6 +11,29 @@
 static void glfw_error_callback(const int error, const char *description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
+
+template<ShapeType T> class Shape;
+
+template<> class Shape<ShapeType::Circle> {
+public:
+    static void draw(ImDrawList *draw_list, const ImVec2 &center, float radius, ImU32 color) {
+        draw_list->AddCircleFilled(center, radius, color);
+    }
+};
+
+template<> class Shape<ShapeType::Rectangle> {
+public:
+    static void draw(ImDrawList *draw_list, const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color) {
+        draw_list->AddRectFilled(topLeft, bottomRight, color);
+    }
+};
+
+template<> class Shape<ShapeType::Triangle> {
+public:
+    static void draw(ImDrawList *draw_list, const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color) {
+        draw_list->AddTriangleFilled(p1, p2, p3, color);
+    }
+};
 
 Renderer::Renderer() {
     std::cout << "Renderer()" << std::endl;
@@ -99,33 +121,10 @@ Renderer::~Renderer() {
     window = nullptr;
 }
 
-void Renderer::drawShape(ShapeType shape, ImVec2 p, int size, ImU32 color) {
-    ImDrawList *draw_list = ImGui::GetWindowDrawList();
-
-    switch (shape) {
-        case ShapeType::Rectangle:
-            draw_list->AddRectFilled(ScreenToViewport(p), ScreenToViewport(ImVec2(p.x + size, p.y + size)), color);
-            break;
-        case ShapeType::Circle:
-            draw_list->AddCircleFilled(ScreenToViewport(ImVec2(p.x + size / 2, p.y + size / 2)), size / 2, color);
-            break;
-        case ShapeType::Triangle:
-            draw_list->AddTriangleFilled(ScreenToViewport(p), ScreenToViewport(ImVec2(p.x + size, p.y)), ScreenToViewport(ImVec2(p.x + size / 2, p.y + size)), color);
-            break;
-    }
-}
-
-ImVec2 Renderer::ScreenToViewport(const ImVec2 &screen_coords) {
-    const ImGuiViewport *viewport = ImGui::GetMainViewport();
-    const ImVec2 viewport_pos     = viewport->Pos;
-    const ImVec2 viewport_size    = viewport->Size;
-
-    ImVec2 windowSize{ 1920, 1080 }; // TODO: Figure out how to grab this from the Renderer instance, or make it static
-
-    const auto viewport_coords   = ImVec2(screen_coords.x + viewport_pos.x, screen_coords.y + viewport_pos.y);
-    const auto normalized_coords = ImVec2(viewport_coords.x * (windowSize.x / viewport_size.x), viewport_coords.y * (windowSize.y / viewport_size.y));
-
-    return normalized_coords;
+void Renderer::prerender() const {
+    ImGui_ImplOpenGL2_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 }
 
 void Renderer::render() const {
@@ -159,11 +158,43 @@ void Renderer::render() const {
     glfwSwapBuffers(window);
 }
 
-void Renderer::prerender() const {
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL2_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+ImVec2 Renderer::ScreenToViewport(const ImVec2 &screen_coords) {
+    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+    const ImVec2 viewport_pos     = viewport->Pos;
+    const ImVec2 viewport_size    = viewport->Size;
+
+    ImVec2 windowSize{ 1920, 1080 }; // TODO: Figure out how to grab this from the Renderer instance, or make it static
+
+    const auto viewport_coords   = ImVec2(screen_coords.x + viewport_pos.x, screen_coords.y + viewport_pos.y);
+    const auto normalized_coords = ImVec2(viewport_coords.x * (windowSize.x / viewport_size.x), viewport_coords.y * (windowSize.y / viewport_size.y));
+
+    return normalized_coords;
+}
+
+void Renderer::drawCircle(const ImVec2 &center, float radius, ImU32 color) {
+    Shape<ShapeType::Circle>::draw(ImGui::GetWindowDrawList(), center, radius, color);
+}
+
+void Renderer::drawRectangle(const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color) {
+    Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
+}
+
+void Renderer::drawTriangle(const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color) {
+    Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), p1, p2, p3, color);
+}
+
+void Renderer::drawShape(ShapeType shape, ImVec2 position, int size, ImU32 color) {
+    switch (shape) {
+        case ShapeType::Rectangle:
+            drawRectangle(ScreenToViewport(position), ScreenToViewport(ImVec2(position.x + size, position.y + size)), color);
+            break;
+        case ShapeType::Circle:
+            drawCircle(ScreenToViewport(ImVec2(position.x + size / 2, position.y + size / 2)), size / 2, color);
+            break;
+        case ShapeType::Triangle:
+            drawTriangle(ScreenToViewport(position), ScreenToViewport(ImVec2(position.x + size, position.y)), ScreenToViewport(ImVec2(position.x + size / 2, position.y + size)), color);
+            break;
+    }
 }
 
 void Renderer::drawGui() {

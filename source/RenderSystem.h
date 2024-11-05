@@ -8,5 +8,5 @@
 
 class RenderSystem {
 public:
-    void update(const std::vector<Entity> &entities, const std::unordered_map<int, ImVec2> &positions, const std::unordered_map<int, ShapeType> &shapes);
+    void update(const std::vector<Entity> &entities, const std::unordered_map<int, Position> &positions, const std::unordered_map<int, Collider> &colliders, const std::unordered_map<int, ShapeType> &shapes);
 };

@@ -11,8 +11,8 @@ class CollisionSystem {
 public:
     std::unordered_set<int> entitiesToStop;
 
-    void update(const std::vector<Entity> &entities, std::unordered_map<int, ImVec2> &positions, std::unordered_map<int, Collider> &colliders);
+    void update(const std::vector<Entity> &entities, std::unordered_map<int, Position> &positions, std::unordered_map<int, Collider> &colliders);
 
 private:
-    static bool isColliding(const ImVec2 &posA, const Collider &colA, const ImVec2 &posB, const Collider &colB);
+    static bool isColliding(const Position &posA, const Collider &colA, const Position &posB, const Collider &colB);
 };

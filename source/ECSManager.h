@@ -13,7 +13,7 @@
 class ECSManager {
 public:
     std::vector<Entity> entities;
-    std::unordered_map<int, ImVec2> positions;
+    std::unordered_map<int, Position> positions;
     std::unordered_map<int, Velocity> velocities;
     std::unordered_map<int, Collider> colliders;
     std::unordered_map<int, ShapeType> shapes;
@@ -24,9 +24,9 @@ public:
 
     ECSManager();
 
-    Entity createEntity();
+    Entity createEntity(Position position, Velocity velocity, Collider collider, ShapeType shape);
 
-    void addComponent(int entityId, ImVec2 position);
+    void addComponent(int entityId, Position position);
 
     void addComponent(int entityId, Velocity velocity);
 
