@@ -3,7 +3,7 @@
 
 #include "Application.h"
 #include "RenderSystem.h"
-#include "common.h"
+#include "Common.h"
 
 
 // TODO: Refactor to use multithreading to draw in parallel, if possible
@@ -46,6 +46,8 @@ void RenderSystem::update(const std::vector<Entity> &entities, const std::unorde
                         ImVec2(position->second.x - (collider->second.width / 2), position->second.y + (collider->second.height / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
+                    break;
+                default:
                     break;
             }
         }

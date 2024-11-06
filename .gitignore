@@ -1,5 +1,8 @@
 ## Library Docs
 /lib/**/docs
+/lib/**/doc
+/lib/**/readme.md
+/lib/**/README.md
 
 ## OSX artifacts
 .DS_Store

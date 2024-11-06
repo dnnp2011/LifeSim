@@ -16,7 +16,7 @@ public:
 
     Application& operator=(const Application &) = delete;
 
-    void run();
+    void Run();
 };
 
 inline Application g_Application;

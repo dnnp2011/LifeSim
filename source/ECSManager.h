@@ -3,7 +3,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "common.h"
+#include "Common.h"
 #include "Renderer.h"
 #include "MovementSystem.h"
 #include "CollisionSystem.h"

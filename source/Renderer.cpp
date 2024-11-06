@@ -1,10 +1,11 @@
 #include <iostream>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
-#include <GLFW/glfw3.h>
 
-#include "common.h"
+#include "Common.h"
 #include "Renderer.h"
 
 
@@ -12,23 +13,27 @@ static void glfw_error_callback(const int error, const char *description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-template<ShapeType T> class Shape;
+template<ShapeType T>
+class Shape;
 
-template<> class Shape<ShapeType::Circle> {
+template<>
+class Shape<ShapeType::Circle> {
 public:
     static void draw(ImDrawList *draw_list, const ImVec2 &center, float radius, ImU32 color) {
         draw_list->AddCircleFilled(center, radius, color);
     }
 };
 
-template<> class Shape<ShapeType::Rectangle> {
+template<>
+class Shape<ShapeType::Rectangle> {
 public:
     static void draw(ImDrawList *draw_list, const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color) {
         draw_list->AddRectFilled(topLeft, bottomRight, color);
     }
 };
 
-template<> class Shape<ShapeType::Triangle> {
+template<>
+class Shape<ShapeType::Triangle> {
 public:
     static void draw(ImDrawList *draw_list, const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color) {
         draw_list->AddTriangleFilled(p1, p2, p3, color);
@@ -53,6 +58,11 @@ Renderer::Renderer() {
         glfwGetWindowSize(window, &width, &height);
         std::cout << "Created GLFW window: " << width << "x" << height << std::endl;
     }
+
+    // if (GLenum err = glewInit(); GLEW_OK != err) {
+    //     fprintf(stderr, "Error: %p\n", glewGetErrorString(err));
+    // }
+    // fprintf(stdout, "Status: Using GLEW %p\n", glewGetString(GLEW_VERSION));
 
     IM_ASSERT(window != nullptr);
 
@@ -193,6 +203,9 @@ void Renderer::drawShape(ShapeType shape, ImVec2 position, int size, ImU32 color
             break;
         case ShapeType::Triangle:
             drawTriangle(ScreenToViewport(position), ScreenToViewport(ImVec2(position.x + size, position.y)), ScreenToViewport(ImVec2(position.x + size / 2, position.y + size)), color);
+            break;
+        default:
+            HandleError(ExitCode::INVALID_SHAPE_TYPE);
             break;
     }
 }

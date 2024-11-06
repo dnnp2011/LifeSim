@@ -3,16 +3,22 @@
 #include "ECSManager.h"
 #include "../utils/Random.h"
 
+#define ENTITY_COUNT 3
 
 ECSManager::ECSManager() {
-    for (size_t i = 0; i < 5; i++) {
-        int size;
+    entities.reserve(ENTITY_COUNT);
+    positions.reserve(ENTITY_COUNT);
+    velocities.reserve(ENTITY_COUNT);
+    colliders.reserve(ENTITY_COUNT);
+
+    for (size_t i = 0; i < ENTITY_COUNT; i++) {
+        int colliderSize;
 
         createEntity(
-            Position{ Random<float>::generate(0, 1920), Random<float>::generate(0, 1080) },
-            Velocity{ Random<float>::generate(-1, 1), Random<float>::generate(-1, 1) },
-            Collider{ size = Random<int>::generate(2, 15), size },
-            ShapeType{ Random<int>::generate(0, 3) }
+            Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
+            Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
+            Collider{ Collider{ colliderSize = Random<int>().generate(3, 50), colliderSize } },
+            ShapeType{ ShapeType{ Random<uint_fast8_t>().generate(0, 3) } }
         );
     }
 }
@@ -48,8 +54,6 @@ void ECSManager::addComponent(const int entityId, const ShapeType shape) {
 }
 
 void ECSManager::update() {
-    std::cout << "Running ECSManager::update()" << std::endl;
-
     collisionSystem.update(entities, positions, colliders);
     movementSystem.update(entities, positions, velocities, collisionSystem.entitiesToStop);
     renderSystem.update(entities, positions, colliders, shapes); // Maybe this should be called at same level of GUI Renderer

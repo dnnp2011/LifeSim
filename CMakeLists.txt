@@ -1,18 +1,28 @@
 cmake_minimum_required(VERSION 3.29)
 project(LifeSim)
 
+set(DEBUG 1)
+set(CONSOLE 1)
 set(CMAKE_CXX_STANDARD 23)
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui)
 set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
 set(OPENGL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/opengl)
+set(GLEW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/glew/glew-2.1.0-win32)
+set(GLOBAL_INCLUDE_DIRS /lib /utils ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /W4 /std:c++latest /Zi /Od /RTC1")
 else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wformat -std=c++23")
 endif ()
-#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS") // Causes "No such file or directory" error
 
+if (CONSOLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole")
+endif ()
+
+if (DEBUG)
+    add_definitions(-DDEBUG)
+endif ()
 
 # Define source files
 set(SOURCES
@@ -31,7 +41,6 @@ set(SOURCES
         source/MovementSystem.cpp
         source/RenderSystem.cpp
         source/CollisionSystem.cpp
-        #        utils/Random.h
 )
 
 # Add executable
@@ -40,9 +49,6 @@ if (WIN32)
 else ()
     add_executable(LifeSim ${SOURCES})
 endif ()
-
-# Include directories
-target_include_directories(LifeSim PRIVATE /lib ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
 # Platform-specific settings
 if (APPLE)
@@ -53,7 +59,8 @@ if (APPLE)
             /opt/local/include
             /opt/homebrew/include
             ${GLFW_DIR}/glfw-3.4.bin.MACOS/include
-            ${OPENGL_DIR}
+            ${OPENGL_DIR}/Headers
+            ${GLEW_DIR}/include
     )
     set(MAC_LINK_DIRECTORIES
             /usr/local/lib
@@ -65,18 +72,19 @@ if (APPLE)
     )
     set(MAC_LINK_LIBRARIES
             glfw3
+            glew
             "-framework OpenGL"
             "-framework Cocoa"
             "-framework IOKit"
-            #            "-framework CoreVideo"
     )
 
-    target_include_directories(LifeSim PRIVATE ${MAC_INCLUDE_DIRS})
+    target_include_directories(LifeSim PRIVATE ${GLOBAL_INCLUDE_DIRS} ${MAC_INCLUDE_DIRS})
     target_link_directories(LifeSim PRIVATE ${MAC_LINK_DIRECTORIES})
     target_link_libraries(LifeSim PRIVATE ${MAC_LINK_LIBRARIES})
 elseif (WIN32)
     message("Building for Windows")
     set(GLFW_INCLUDE_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/include)
+    set(GLEW_LIBRARY_DIRS ${GLEW_DIR}/bin/Release/x64 ${GLEW_DIR}/lib/Release/x64)
 
     if (MSVC)
         set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-vc2022)
@@ -84,17 +92,40 @@ elseif (WIN32)
         set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-mingw-w64)
     endif ()
 
-    target_include_directories(LifeSim PRIVATE ${GLFW_INCLUDE_DIRS})
-    target_link_directories(LifeSim PRIVATE ${GLFW_LIBRARY_DIRS} ${OPENGL_DIR})
-    target_link_libraries(LifeSim PRIVATE glfw3 gdi32 opengl32 imm32)
+    target_include_directories(LifeSim PRIVATE ${GLOBAL_INCLUDE_DIRS} ${OPENGL_DIR}/Headers ${GLEW_DIR}/include ${GLFW_INCLUDE_DIRS})
+    target_link_directories(LifeSim PRIVATE ${OPENGL_DIR} ${GLEW_LIBRARY_DIRS} ${GLFW_LIBRARY_DIRS})
+    #    target_link_libraries(LifeSim PRIVATE gdi32 imm32 glfw3 glew32 glew32.lib, glu32.lib, and opengl32.lib)
+    target_link_libraries(LifeSim PRIVATE gdi32 imm32 glew32.dll glfw3 glu32.dll opengl32.dll) # TODO: Why isn't glew linking correctly?
 
     # PkgConfig not working right now, and doesn't seem to be actually be necessary
     # find_package(PkgConfig REQUIRED)
     # pkg_check_modules(GLFW REQUIRED glfw3)
 elseif (UNIX)
     message("Building for Linux")
+
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(GLFW REQUIRED glfw3)
-    target_link_libraries(LifeSim PRIVATE ${GLFW_LIBRARIES} GL)
-    target_include_directories(LifeSim PRIVATE ${GLFW_INCLUDE_DIRS})
+    pkg_check_modules(glew REQUIRED glew)
+    pkg_check_modules(OpenGL REQUIRED gl)
+
+    set(LINUX_INCLUDE_DIRS
+            /usr/include
+            /usr/local/include
+            ${GLFW_DIR}/glfw-3.4.bin.MACOS/include
+            ${OPENGL_DIR}/Headers
+            ${GLEW_DIR}/include
+    )
+    set(LINUX_LINK_DIRECTORIES
+            /usr/lib
+            /usr/local/lib
+    )
+    set(LINUX_LINK_LIBRARIES
+            glfw3
+            glew
+            gl
+    )
+
+    target_include_directories(LifeSim PRIVATE ${GLOBAL_INCLUDE_DIRS} ${LINUX_INCLUDE_DIRS})
+    target_link_directories(LifeSim PRIVATE ${LINUX_LINK_DIRECTORIES})
+    target_link_libraries(LifeSim PRIVATE ${LINUX_LINK_LIBRARIES})
 endif ()

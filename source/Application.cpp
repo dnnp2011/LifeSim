@@ -1,14 +1,16 @@
 #include <iostream>
 // #include <thread>
+#include <imgui_impl_glfw.h>
+#include <GLFW/glfw3.h>
 
 #include "Application.h"
 
 
 Application::Application() {
-    std::cout << "Application()" << std::endl;
+    std::cout << "Starting LifeSim Application" << std::endl;
 }
 
-void Application::run() {
+void Application::Run() {
     // std::thread entityThread(worldManager.run, std::ref(worldManager), 60.0);
 
     while (!glfwWindowShouldClose(renderer.window)) {

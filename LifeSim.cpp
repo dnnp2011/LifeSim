@@ -15,8 +15,8 @@
 #include <iostream>
 
 #include "source/Application.h"
+#include "utils/Random.h"
 
-#define DEBUG 0
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     std::cout << R"(Running WinMain())" << std::endl;
@@ -28,9 +28,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 int main(int, char **) {
     if constexpr (WIN32 && DEBUG) { // Windows Only
         MessageBox(nullptr, "Booting LifeSim!", "LifeSim", MB_OK);
+    } else if constexpr (DEBUG) {
+        std::cout << "Press Enter to continue..." << std::endl;
+        std::cin.get();
     }
 
-    g_Application.run();
+    g_Application.Run();
 
     return 0;
 }
