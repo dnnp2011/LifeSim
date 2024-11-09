@@ -3,6 +3,9 @@
 #include <string>
 #include <cstdint>
 #include <imgui.h>
+#include <thread>
+#include <unordered_map>
+#include <vector>
 
 
 struct Position {
@@ -34,11 +37,18 @@ enum class ShapeType: unsigned int {
     COUNT
 };
 
+using EntityBuffer    = std::vector<Entity>;
+using PositionBuffer  = std::unordered_map<int, Position>;
+using ColliderBuffer  = std::unordered_map<int, Collider>;
+using VelocityBuffer  = std::unordered_map<int, Velocity>;
+using ShapeTypeBuffer = std::unordered_map<int, ShapeType>;
+using ThreadBuffer    = std::vector<std::thread>;
+
 template<typename T>
-std::string ToString(const T &value);
+std::string ToString(const T& value);
 
 template<>
-inline std::string ToString(const ShapeType &shape) {
+inline std::string ToString(const ShapeType& shape) {
     switch (shape) {
         case ShapeType::Rectangle:
             return "Rectangle";
@@ -54,7 +64,7 @@ inline std::string ToString(const ShapeType &shape) {
 }
 
 template<>
-inline std::string ToString(const ExitCode &code) {
+inline std::string ToString(const ExitCode& code) {
     switch (code) {
         case ExitCode::SUCCESS:
             return "Program executed successfully";
@@ -67,7 +77,7 @@ inline std::string ToString(const ExitCode &code) {
     }
 }
 
-inline void HandleError(const ExitCode &exitCode, const std::string &message = "") {
+inline void HandleError(const ExitCode& exitCode, const std::string& message = "") {
     switch (exitCode) {
         case ExitCode::INVALID_SHAPE_TYPE:
             ImGui::OpenPopup("Invalid Shape Type");

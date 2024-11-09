@@ -3,7 +3,8 @@
 #include "ECSManager.h"
 #include "../utils/Random.h"
 
-#define ENTITY_COUNT 3
+#define ENTITY_COUNT 8
+
 
 ECSManager::ECSManager() {
     m_Entities.reserve(ENTITY_COUNT);
@@ -15,11 +16,12 @@ ECSManager::ECSManager() {
         int colliderSize;
 
         createEntity(
-                Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
-                Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
-                Collider{ Collider{ colliderSize = Random<int>().generate(3, 50), colliderSize } },
-                ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
-                );
+            Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
+            Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
+            Collider{ Collider{ colliderSize = Random<int>().generate(15, 100), colliderSize } },
+            ShapeType{ ShapeType::Rectangle }
+            // ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
+        );
     }
 }
 
@@ -54,6 +56,8 @@ void ECSManager::addComponent(const int entityId, const ShapeType shape) {
 }
 
 void ECSManager::update(float fixedDeltaTime) {
+    std::cout << "Physics Tick" << std::endl;
+
     m_CollisionSystem.update(m_Entities, m_Positions, m_Colliders);
     m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop);
     // m_RenderSystem.update(m_Entities, m_Positions, m_Colliders, m_Shapes); // Maybe this should be called at same level of GUI Renderer

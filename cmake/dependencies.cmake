@@ -70,10 +70,10 @@ function(link_dependencies)
             INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIR}"
     )
 
-    target_link_libraries(LifeSim PUBLIC GLEW::GLEW)
-    target_link_libraries(LifeSim PUBLIC OpenGL::GL)
-    target_link_libraries(LifeSim PUBLIC glm::glm)
-    target_link_libraries(LifeSim PUBLIC glfw)
+    target_link_libraries(LifeSim PRIVATE GLEW::GLEW)
+    target_link_libraries(LifeSim PRIVATE OpenGL::GL)
+    target_link_libraries(LifeSim PRIVATE glm::glm)
+    target_link_libraries(LifeSim PRIVATE glfw)
 endfunction()
 #endregion ---------------------------------------------------------------
 

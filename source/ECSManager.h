@@ -4,7 +4,6 @@
 #include <unordered_map>
 
 #include "Common.h"
-#include "Renderer.h"
 #include "MovementSystem.h"
 #include "CollisionSystem.h"
 #include "RenderSystem.h"
@@ -12,11 +11,11 @@
 
 class ECSManager {
 public:
-    std::vector<Entity> m_Entities;
-    std::unordered_map<int, Position> m_Positions;
-    std::unordered_map<int, Velocity> m_Velocities;
-    std::unordered_map<int, Collider> m_Colliders;
-    std::unordered_map<int, ShapeType> m_Shapes;
+    EntityBuffer m_Entities;
+    PositionBuffer m_Positions;
+    VelocityBuffer m_Velocities;
+    ColliderBuffer m_Colliders;
+    ShapeTypeBuffer m_Shapes;
 
     MovementSystem m_MovementSystem;
     CollisionSystem m_CollisionSystem;

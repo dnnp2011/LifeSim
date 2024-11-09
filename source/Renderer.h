@@ -15,8 +15,8 @@
 
 class Renderer {
 public:
-    GLFWwindow *window = nullptr;
-    ImGuiIO *io        = nullptr;
+    GLFWwindow* window = nullptr;
+    ImGuiIO* io        = nullptr;
 
 private:
     bool show_demo_window    = false;
@@ -37,15 +37,15 @@ public:
 
     void render() const;
 
-    ImVec2 ScreenToViewport(const ImVec2 &screen_coords);
+    ImVec2 ScreenToViewport(const ImVec2& screen_coords);
 
-    void drawCircle(const ImVec2 &center, float radius, ImU32 color);
+    void drawCircle(const ImVec2& center, const float& radius, const ImU32& color);
 
-    void drawRectangle(const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color);
+    void drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32& color);
 
-    void drawTriangle(const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color);
+    void drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32& color);
 
-    void drawShape(ShapeType shape, ImVec2 position, int size, ImU32 color);
+    void drawShape(const ShapeType& shape, const ImVec2& position, const int& size, const ImU32& color);
 
 private:
     void drawGui();

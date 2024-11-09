@@ -46,12 +46,14 @@ void Application::Run() {
         }
 
         m_Renderer.prerender();
-        m_ECSManger.m_RenderSystem.update(
-                m_ECSManger.m_Entities,
-                m_ECSManger.m_Positions,
-                m_ECSManger.m_Colliders,
-                m_ECSManger.m_Shapes
-                );
+
+        RenderSystem::update(
+            m_ECSManger.m_Entities,
+            m_ECSManger.m_Positions,
+            m_ECSManger.m_Colliders,
+            m_ECSManger.m_Shapes
+        );
+
         m_Renderer.render();
 
         // std::this_thread::sleep_for(std::chrono::milliseconds(16));

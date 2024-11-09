@@ -10,11 +10,11 @@
 class MovementSystem {
 public:
     void update(
-        const float &fixedDeltaTime,
-        const std::vector<Entity> &entities,
-        std::unordered_map<int, Position> &positions,
-        const std::unordered_map<int, Velocity> &velocities,
-        const std::unordered_set<int> &entitiesToStop
+        const float& fixedDeltaTime,
+        const EntityBuffer& entities,
+        PositionBuffer& positions,
+        const VelocityBuffer& velocities,
+        const std::unordered_set<int>& entitiesToStop
     ) const;
 
 private:

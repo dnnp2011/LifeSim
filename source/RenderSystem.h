@@ -1,12 +1,14 @@
 #pragma once
 
-#include <unordered_map>
-#include <vector>
-
 #include "Common.h"
 
 
 class RenderSystem {
 public:
-    void update(const std::vector<Entity> &entities, const std::unordered_map<int, Position> &positions, const std::unordered_map<int, Collider> &colliders, const std::unordered_map<int, ShapeType> &shapes);
+    static void update(
+        const EntityBuffer& entities,
+        const PositionBuffer& positions,
+        const ColliderBuffer& colliders,
+        const ShapeTypeBuffer& shapes
+    );
 };

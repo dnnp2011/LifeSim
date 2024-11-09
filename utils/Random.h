@@ -46,7 +46,7 @@
 template<typename T>
 class Random {
 public:
-    Random(): random_device(std::random_device{}), generator(random_device()) {}
+    Random(): random_device(std::random_device{}), generator(random_device()) { }
 
     T generate(T min, T max) {
         if (min > max)
@@ -65,6 +65,8 @@ public:
 
             return static_cast<T>(distribution(generator));
         }
+
+        return T{};
     }
 
 private:
@@ -84,7 +86,7 @@ template class Random<ShapeType>;
  */
 class RandomNumberGenerator {
 public:
-    virtual ~RandomNumberGenerator() = default; // Virtual destructor for proper cleanup
+    virtual ~RandomNumberGenerator() = default;
 
     virtual int generateInt(int min, int max) = 0;
 
@@ -92,10 +94,10 @@ public:
 
     virtual double generateDouble(double min, double max) = 0;
 
-    virtual ShapeType generateShapeType(ShapeType min, ShapeType max) = 0;
+    virtual ShapeType generateShapeType(const ShapeType& min = static_cast<ShapeType>(0), const ShapeType& max = ShapeType::COUNT) = 0;
 };
 
-class UniformRandomGenerator : public RandomNumberGenerator {
+class UniformRandomGenerator final : public RandomNumberGenerator {
 private:
     std::mt19937_64 generator;
     std::uniform_int_distribution<int> intDistribution;
@@ -103,27 +105,27 @@ private:
     std::uniform_real_distribution<double> doubleDistribution;
 
 public:
-    explicit UniformRandomGenerator(int seed = static_cast<int>(time(nullptr))) : generator(seed) {} // Constructor for seeding the generator
+    explicit UniformRandomGenerator(const int seed = static_cast<int>(time(nullptr))) : generator(seed) { } // Constructor for seeding the generator
 
-    int generateInt(int min, int max) override {
+    int generateInt(const int min, const int max) override {
         intDistribution.param(std::uniform_int_distribution<int>::param_type(min, max));
 
         return intDistribution(generator);
     }
 
-    float generateFloat(float min, float max) override {
+    float generateFloat(const float min, const float max) override {
         floatDistribution.param(std::uniform_real_distribution<float>::param_type(min, max));
 
         return floatDistribution(generator);
     }
 
-    double generateDouble(double min, double max) override {
+    double generateDouble(const double min, const double max) override {
         doubleDistribution.param(std::uniform_real_distribution<double>::param_type(min, max));
 
         return doubleDistribution(generator);
     }
 
-    ShapeType generateShapeType(ShapeType min = static_cast<ShapeType>(0), ShapeType max = ShapeType::COUNT) override {
+    ShapeType generateShapeType(const ShapeType& min = static_cast<ShapeType>(0), const ShapeType& max = ShapeType::COUNT) override {
         intDistribution.param(std::uniform_int_distribution<int>::param_type(static_cast<int>(min), static_cast<int>(max)));
 
         return static_cast<ShapeType>(intDistribution(generator));

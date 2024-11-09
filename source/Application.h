@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ECSManager.h"
 #include "Renderer.h"
 #include "WorldManager.h"
-#include "ECSManager.h"
 
 
 class Application {
@@ -14,9 +14,9 @@ public:
 public:
     Application();
 
-    Application(const Application &) = delete;
+    Application(const Application&) = delete;
 
-    Application &operator=(const Application &) = delete;
+    Application& operator=(const Application&) = delete;
 
     void Run();
 };

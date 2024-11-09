@@ -9,7 +9,7 @@
 #include "Renderer.h"
 
 
-static void glfw_error_callback(const int error, const char *description) {
+static void glfw_error_callback(const int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
@@ -19,7 +19,7 @@ class Shape;
 template<>
 class Shape<ShapeType::Circle> {
 public:
-    static void draw(ImDrawList *draw_list, const ImVec2 &center, float radius, ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& center, float radius, ImU32 color) {
         draw_list->AddCircleFilled(center, radius, color);
     }
 };
@@ -27,15 +27,15 @@ public:
 template<>
 class Shape<ShapeType::Rectangle> {
 public:
-    static void draw(ImDrawList *draw_list, const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color) {
-        draw_list->AddRectFilled(topLeft, bottomRight, color);
+    static void draw(ImDrawList* draw_list, const ImVec2& topLeft, const ImVec2& bottomRight, ImU32 color) {
+        draw_list->AddRectFilled(topLeft, bottomRight, color, 0.5f);
     }
 };
 
 template<>
 class Shape<ShapeType::Triangle> {
 public:
-    static void draw(ImDrawList *draw_list, const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color) {
         draw_list->AddTriangleFilled(p1, p2, p3, color);
     }
 };
@@ -49,7 +49,13 @@ Renderer::Renderer() {
         throw std::runtime_error("Failed to initialize GLFW");
 
     // Create window with graphics context
-    window = glfwCreateWindow(static_cast<int>(windowSize.x), static_cast<int>(windowSize.y), "LifeSim", nullptr, nullptr);
+    window = glfwCreateWindow(
+        static_cast<int>(windowSize.x),
+        static_cast<int>(windowSize.y),
+        "LifeSim",
+        nullptr,
+        nullptr
+    );
 
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -68,13 +74,13 @@ Renderer::Renderer() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
-    if (GLenum err = glewInit(); GLEW_OK != err) {
+    if (const auto err = glewInit(); GLEW_OK != err) {
         fprintf(stderr, "Error: %p\n", glewGetErrorString(err));
     }
     fprintf(stdout, "Status: Using GLEW %p\n", glewGetString(GLEW_VERSION));
 
     io = &ImGui::GetIO();
-    (void) io;
+    (void)io;
     io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
     io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
@@ -87,7 +93,7 @@ Renderer::Renderer() {
     //ImGui::StyleColorsLight();
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-    ImGuiStyle &style = ImGui::GetStyle();
+    ImGuiStyle& style = ImGui::GetStyle();
     if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         style.WindowRounding              = window_rounding;
         style.PopupRounding               = popupRounding;
@@ -146,8 +152,23 @@ void Renderer::render() const {
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    glClearColor(
+        clear_color.x * clear_color.w,
+        clear_color.y * clear_color.w,
+        clear_color.z * clear_color.w,
+        clear_color.w
+    );
     glClear(GL_COLOR_BUFFER_BIT);
+
+    // TODO: Abstract this stage into a separate method to draw directly with OpenGL after prepping ImGui and getting OpenGL ready to render
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(0.0f, 0.5f);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex2f(0.5f, -0.5f);
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex2f(-0.5f, -0.5f);
+    glEnd();
 
     // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!),
     // you may need to backup/reset/restore other state, e.g. for current shader using the commented lines below.
@@ -161,7 +182,7 @@ void Renderer::render() const {
     // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
     //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
     if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        GLFWwindow *backup_current_context = glfwGetCurrentContext();
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
@@ -171,41 +192,53 @@ void Renderer::render() const {
     glfwSwapBuffers(window);
 }
 
-ImVec2 Renderer::ScreenToViewport(const ImVec2 &screen_coords) {
-    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
     const ImVec2 viewport_pos     = viewport->Pos;
     const ImVec2 viewport_size    = viewport->Size;
 
-    ImVec2 windowSize{ 1920, 1080 }; // TODO: Figure out how to grab this from the Renderer instance, or make it static
+    constexpr ImVec2 windowSize{ 1920, 1080 }; // TODO: Figure out how to grab this from the Renderer instance, or make it static
 
     const auto viewport_coords   = ImVec2(screen_coords.x + viewport_pos.x, screen_coords.y + viewport_pos.y);
-    const auto normalized_coords = ImVec2(viewport_coords.x * (windowSize.x / viewport_size.x), viewport_coords.y * (windowSize.y / viewport_size.y));
+    const auto normalized_coords = ImVec2(
+        viewport_coords.x * (windowSize.x / viewport_size.x),
+        viewport_coords.y * (windowSize.y / viewport_size.y)
+    );
 
     return normalized_coords;
 }
 
-void Renderer::drawCircle(const ImVec2 &center, float radius, ImU32 color) {
+void Renderer::drawCircle(const ImVec2& center, const float& radius, const ImU32& color) {
     Shape<ShapeType::Circle>::draw(ImGui::GetWindowDrawList(), center, radius, color);
 }
 
-void Renderer::drawRectangle(const ImVec2 &topLeft, const ImVec2 &bottomRight, ImU32 color) {
+void Renderer::drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32& color) {
     Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
 }
 
-void Renderer::drawTriangle(const ImVec2 &p1, const ImVec2 &p2, const ImVec2 &p3, ImU32 color) {
+void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32& color) {
     Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), p1, p2, p3, color);
 }
 
-void Renderer::drawShape(ShapeType shape, ImVec2 position, int size, ImU32 color) {
+void Renderer::drawShape(const ShapeType& shape, const ImVec2& position, const int& size, const ImU32& color) {
     switch (shape) {
         case ShapeType::Rectangle:
-            drawRectangle(ScreenToViewport(position), ScreenToViewport(ImVec2(position.x + size, position.y + size)), color);
+            drawRectangle(
+                ScreenToViewport(position),
+                ScreenToViewport(ImVec2(position.x + size, position.y + size)),
+                color
+            );
             break;
         case ShapeType::Circle:
             drawCircle(ScreenToViewport(ImVec2(position.x + size / 2, position.y + size / 2)), size / 2, color);
             break;
         case ShapeType::Triangle:
-            drawTriangle(ScreenToViewport(position), ScreenToViewport(ImVec2(position.x + size, position.y)), ScreenToViewport(ImVec2(position.x + size / 2, position.y + size)), color);
+            drawTriangle(
+                ScreenToViewport(position),
+                ScreenToViewport(ImVec2(position.x + size, position.y)),
+                ScreenToViewport(ImVec2(position.x + size / 2, position.y + size)),
+                color
+            );
             break;
         default:
             HandleError(ExitCode::INVALID_SHAPE_TYPE);
@@ -232,7 +265,8 @@ void Renderer::drawGui() {
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                              // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&clear_color)); // Edit 3 floats representing a color
 
-        if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
+        if (ImGui::Button("Button"))
+            // Buttons return true when clicked (most widgets return true when edited/activated)
             counter++;
         ImGui::SameLine();
         ImGui::Text("counter = %d", counter);
@@ -243,7 +277,8 @@ void Renderer::drawGui() {
 
     // 3. Show another simple window.
     if (show_another_window) {
-        ImGui::Begin("Another Window", &show_another_window); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Begin("Another Window", &show_another_window);
+        // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
         ImGui::Text("Hello from another window!");
         if (ImGui::Button("Close Me"))
             show_another_window = false;

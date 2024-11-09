@@ -1,11 +1,36 @@
 {
-    "version": 2,
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 2,
+        "patch": 9
+    },
     "configurePresets": [
         {
-            "name": "vcpkg",
+            "name": "vcpkg-debug",
+            "description": "Platform-agnostic vcpkg CMake preset using default Ninja generator in Debug mode",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "binaryDir": "${sourceDir}/build-debug",
+            "environment": {
+                "VCPKG_ROOT": "${sourceDir}/dependencies/vcpkg"
+            },
             "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "vcpkg-release",
+            "description": "Platform-agnostic vcpkg CMake preset using default Ninja generator in Release mode",
+            "generator": "Ninja",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "binaryDir": "${sourceDir}/build-release",
+            "environment": {
+                "VCPKG_ROOT": "${sourceDir}/dependencies/vcpkg"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             }
         }

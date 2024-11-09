@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     return 0;
 }
 
-int main(int, char **) {
+int main(int, char**) {
     // if constexpr (WIN64 && DEBUG) { // Windows Only
     //     MessageBox(nullptr, "Booting LifeSim!", "LifeSim", MB_OK);
     // } else if constexpr (DEBUG) {
