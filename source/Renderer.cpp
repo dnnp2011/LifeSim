@@ -1,9 +1,9 @@
 #include <iostream>
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
+#include <GLFW/glfw3.h>
 
 #include "Common.h"
 #include "Renderer.h"
@@ -63,7 +63,6 @@ Renderer::Renderer() {
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
-
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

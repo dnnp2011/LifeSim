@@ -35,13 +35,18 @@ function(find_dependencies)
     message(STATUS "Finding vcpkg dependencies...")
 
     set(glew_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glew")
+    set(glew_FOUND TRUE)
     find_package(glew CONFIG REQUIRED)
 
     set(OpenGL_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/opengl")
     find_package(OpenGL REQUIRED)
 
     set(glm_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glm")
+    set(glm_FOUND TRUE)
     find_package(glm CONFIG REQUIRED)
+
+    set(glfw3_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glfw3")
+    find_package(glfw3 CONFIG REQUIRED)
 endfunction()
 #endregion ---------------------------------------------------------------
 
@@ -49,20 +54,39 @@ endfunction()
 function(link_dependencies)
     message(STATUS "Linking vcpkg dependencies...")
 
+    set(GLEW_INCLUDE_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/include)
+    set(GLEW_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/lib)
+    set(GLEW_DEBUG_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/debug/lib)
+    set(GLEW_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/bin)
+    set(GLEW_DEBUG_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/debug/bin)
+
+    # Fix for missing glew32.lib reference
+    set_target_properties(GLEW::GLEW PROPERTIES
+            IMPORTED_IMPLIB "${GLEW_LIBRARY_DIR}/glew32.lib"
+            IMPORTED_IMPLIB_DEBUG "${GLEW_DEBUG_LIBRARY_DIR}/glew32d.lib"
+            IMPORTED_LINK_INTERFACE_LIBRARIES "opengl32;glu32"
+            IMPORTED_LOCATION "${GLEW_BIN_DIR}/glew32.dll"
+            IMPORTED_LOCATION_DEBUG "${GLEW_DEBUG_BIN_DIR}/glew32d.dll"
+            INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIR}"
+    )
+
     target_link_libraries(LifeSim PUBLIC GLEW::GLEW)
     target_link_libraries(LifeSim PUBLIC OpenGL::GL)
     target_link_libraries(LifeSim PUBLIC glm::glm)
+    target_link_libraries(LifeSim PUBLIC glfw)
 endfunction()
 #endregion ---------------------------------------------------------------
 
 #region Configure PkgConfig ----------------------------------------------
 function(check_dependencies)
     message(STATUS "Checking dependencies with PkgConfig...")
+    include(FindPkgConfig)
+    set(PKG_CONFIG_EXECUTABLE ${DEPS_DIR}/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf/pkgconf.exe)
 
-    find_package(pkgconf CONFIG REQUIRED)
-    pkg_check_modules(GLM REQUIRED glm)
-    pkg_check_modules(GLEW REQUIRED glew32)
-    pkg_check_modules(GL REQUIRED opengl32)
-    #    pkg_check_modules(GLFW REQUIRED glfw3)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(glew REQUIRED glew)
+    pkg_check_modules(OpenGL REQUIRED OpenGL)
+    pkg_check_modules(glm REQUIRED glm)
+    pkg_check_modules(glfw3 REQUIRED glfw3)
 endfunction()
 #endregion ---------------------------------------------------------------

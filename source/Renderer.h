@@ -9,7 +9,6 @@
 #endif
 
 #include <imgui_impl_glfw.h>
-#include <GLFW/glfw3.h>
 
 #include "Common.h"
 

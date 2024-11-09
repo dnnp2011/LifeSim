@@ -16,6 +16,7 @@
 
 #include "source/Application.h"
 
+#define DEBUG 0
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     std::cout << R"(Running WinMain())" << std::endl;

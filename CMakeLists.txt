@@ -15,25 +15,19 @@ set(CMAKE_CXX_STANDARD 23)
 
 #region Configure Global Settings ----------------------------------------
 set_build_flags()
-#set_global_variables()
 #endregion ---------------------------------------------------------------
 
 
 #region Configure Dependencies -------------------------------------------
 message(STATUS "Fetching dependencies...")
 
-# vcpkg
+# Configure vcpkg
 if(USE_VCPKG)
-    set(VCPKG_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/vcpkg)
-    set(VCPKG_INSTALL_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed)
+    set(VCPKG_ROOT ${CMAKE_SOURCE_DIR}/dependencies/vcpkg)
+    set(VCPKG_INSTALL_ROOT ${CMAKE_SOURCE_DIR}/vcpkg_installed)
     set(CMAKE_TOOLCHAIN_FILE ${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-    list(APPEND CMAKE_MODULE_PATH "${VCPKG_ROOT}/packages")
-endif()
-
-# PkgConfig
-if(USE_PKG_CONFIG)
-    set(PKG_CONFIG_EXECUTABLE ${DEPS_DIR}/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf/pkgconf.exe)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+    list(APPEND CMAKE_MODULE_PATH ${VCPKG_ROOT}/packages)
 endif()
 
 if(USE_FETCH_CONTENT)
@@ -41,15 +35,15 @@ if(USE_FETCH_CONTENT)
 elseif(USE_VCPKG)
     find_dependencies()
 endif()
-
-if(USE_PKG_CONFIG)
-    check_dependencies()
-endif()
 #endregion ---------------------------------------------------------------
 
 #region GLOBALS ------------------------------------------------------
 set(DEPS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
+if(USE_PKG_CONFIG)
+    check_dependencies()
+endif()
 
 ## ImGui
 set(IMGUI_DIR ${DEPS_DIR}/imgui)
@@ -96,77 +90,12 @@ else()
     add_executable(LifeSim ${PROJECT_SOURCE} ${IMGUI_SOURCE})
 endif()
 
-#add_executable(glewinfo glewinfo.c)
-#target_link_libraries(glewinfo PRIVATE libglew_static)
-
 link_dependencies()
-
-
-#    if(WIN64)
-#        set(GLFW_DIR ${GLFW_ROOT_DIR}/glfw-3.4.bin.WIN64)
-#    elseif(APPLE)
-#        set(GLFW_DIR ${GLFW_ROOT_DIR}/glfw-3.4.bin.MACOS)
-#    elseif(UNIX)
-#        message(FATAL_ERROR "Unix not supported for GLFW")
-#    endif()
-
-#    ## GLFW
-#    set(GLFW_ROOT_DIR ${DEPENDENCIES_DIR}/glfw)
-#    set(GLFW_INCLUDE_DIR ${GLFW_DIR}/include)
-
-#    if(USE_STATIC_LIBS)
-#        set(GLFW_LIBRARY_DIR ${GLFW_DIR}/lib-static-ucrt) # Static Library
-#    else()
-#        if(MSVC)
-#            set(GLFW_LIBRARY_DIR ${GLFW_DIR}/lib-vc2022)
-#        else()
-#            set(GLFW_LIBRARY_DIR ${GLFW_DIR}/lib-mingw-w64)
-#            #            set(GLFW_LIBRARY_DIR ${GLFW_DIR}/lib-static-ucrt)
-#        endif()
-#    endif()
-
-
-#    set(GLFW_INCLUDE_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/include)
-
-#    if(MSVC)
-#        set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-vc2022)
-#    else()
-#        set(GLFW_LIBRARY_DIRS ${GLFW_DIR}/glfw-3.4.bin.WIN64/lib-mingw-w64)
-#    endif()
-
-#    if(MSVC)
-#        set_target_properties(LifeSim PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-#    endif()
-
-#if(USE_STATIC_LIBS)
-#    add_library(glfw3 STATIC IMPORTED)
-#    set_target_properties(glfw3 PROPERTIES
-#            IMPORTED_LOCATION "${GLFW_LIBRARY_DIR}/glfw3dll.lib"
-#            IMPORTED_IMPLIB "${GLFW_LIBRARY_DIR}/glfw3dll.lib"
-#            INTERFACE_INCLUDE_DIRECTORIES "${GLFW_INCLUDE_DIR}"
-#    )
-#else()
-#    add_library(glfw3 SHARED IMPORTED)
-#    if(MSVC)
-#        set_target_properties(glfw3 PROPERTIES
-#                IMPORTED_LOCATION "${GLFW_LIBRARY_DIR}/glfw3.dll"
-#                IMPORTED_IMPLIB "${GLFW_LIBRARY_DIR}/glfw3.lib"
-#                INTERFACE_INCLUDE_DIRECTORIES "${GLFW_INCLUDE_DIR}"
-#        )
-#    else()
-#        set_target_properties(glfw3 PROPERTIES
-#                IMPORTED_LOCATION "${GLFW_LIBRARY_DIR}/glfw3.dll"
-#                IMPORTED_IMPLIB "${GLFW_LIBRARY_DIR}/libglfw3dll.a"
-#                INTERFACE_INCLUDE_DIRECTORIES "${GLFW_INCLUDE_DIR}"
-#        )
-#    endif()
-#endif()
-#target_link_libraries(LifeSim PRIVATE glfw3)
 
 #endregion ---------------------------------------------------------------
 
 #region Configure Platform-specific Settings -----------------------------
-if(WIN64)
+if(WIN32 OR WIN64)
     configure_windows_settings()
 elseif(APPLE)
     configure_apple_settings()

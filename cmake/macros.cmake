@@ -1,9 +1,3 @@
-#region Set Globals ------------------------------------------------------
-macro(set_global_variables)
-    message(STATUS "Setting Global Variables...")
-endmacro()
-#endregion ---------------------------------------------------------------
-
 #region Set Build Flags --------------------------------------------------
 macro(set_build_flags)
     message(STATUS "Setting Build Flags")
@@ -30,12 +24,8 @@ endmacro()
 macro(configure_windows_settings)
     message(STATUS "Building for Windows...")
 
-    target_include_directories(LifeSim PRIVATE
-            ${INCLUDE_DIRS}
-    )
-    target_link_directories(LifeSim PRIVATE
-            ${LIBRARY_DIRS}
-    )
+    target_include_directories(LifeSim PRIVATE ${INCLUDE_DIRS})
+    target_link_directories(LifeSim PRIVATE ${LIBRARY_DIRS})
 
     # Other Platform Libraries
     target_link_libraries(LifeSim PRIVATE gdi32 imm32)
