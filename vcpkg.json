@@ -1,0 +1,11 @@
+{
+    "name": "life-sim",
+    "version": "0.6.0",
+    "dependencies": [
+        "glew",
+        "glfw3",
+        "glm",
+        "opengl",
+        "pkgconf"
+    ]
+}

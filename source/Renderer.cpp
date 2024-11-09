@@ -59,19 +59,21 @@ Renderer::Renderer() {
         std::cout << "Created GLFW window: " << width << "x" << height << std::endl;
     }
 
-    // if (GLenum err = glewInit(); GLEW_OK != err) {
-    //     fprintf(stderr, "Error: %p\n", glewGetErrorString(err));
-    // }
-    // fprintf(stdout, "Status: Using GLEW %p\n", glewGetString(GLEW_VERSION));
-
     IM_ASSERT(window != nullptr);
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
 
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
+    if (GLenum err = glewInit(); GLEW_OK != err) {
+        fprintf(stderr, "Error: %p\n", glewGetErrorString(err));
+    }
+    fprintf(stdout, "Status: Using GLEW %p\n", glewGetString(GLEW_VERSION));
+
     io = &ImGui::GetIO();
     (void) io;
     io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
@@ -112,11 +114,13 @@ Renderer::Renderer() {
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
 
-    if (fopen_s(nullptr, "../assets/fonts/Roboto-Regular.ttf", "r") != 0) {
-        std::cout << "Loading Roboto Font..." << std::endl;
-        const ImFont *font = io->Fonts->AddFontFromFileTTF("../assets/fonts/Roboto-Regular.ttf", 14.0f, nullptr, io->Fonts->GetGlyphRangesDefault());
-        IM_ASSERT(font != nullptr);
-    }
+    // #if(!MSVC)
+    //     if (fopen_s(nullptr, "../assets/fonts/Roboto-Regular.ttf", "r") != 0) {
+    //         std::cout << "Loading Roboto Font..." << std::endl;
+    //         const ImFont *font = io->Fonts->AddFontFromFileTTF("../assets/fonts/Roboto-Regular.ttf", 14.0f, nullptr, io->Fonts->GetGlyphRangesDefault());
+    //         IM_ASSERT(font != nullptr);
+    //     }
+    // #endif
 }
 
 Renderer::~Renderer() {

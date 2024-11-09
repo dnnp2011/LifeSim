@@ -73,6 +73,7 @@ private:
 };
 
 template class Random<int>;
+template class Random<unsigned int>;
 template class Random<float>;
 template class Random<double>;
 template class Random<ShapeType>;

@@ -18,7 +18,7 @@ ECSManager::ECSManager() {
             Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
             Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
             Collider{ Collider{ colliderSize = Random<int>().generate(3, 50), colliderSize } },
-            ShapeType{ ShapeType{ Random<uint_fast8_t>().generate(0, 3) } }
+            ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
         );
     }
 }

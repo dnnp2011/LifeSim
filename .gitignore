@@ -1,8 +1,14 @@
+# vcpkg
+vcpkg_installed/
+dependencies/vcpkg/packages/
+dependencies/vcpkg/vcpkg_installed/
+
 ## Library Docs
-/lib/**/docs
-/lib/**/doc
-/lib/**/readme.md
-/lib/**/README.md
+/dependencies/**/docs
+/dependencies/**/doc
+/dependencies/**/readme.md
+/dependencies/**/README.md
+/dependencies/glfw
 
 ## OSX artifacts
 .DS_Store
@@ -10,7 +16,6 @@
 ## Dear ImGui artifacts
 imgui.ini
 imgui*.ini
-/lib/imgui/*
 
 ## General build artifacts
 *.o
@@ -19,6 +24,8 @@ imgui*.ini
 examples/*/Debug/*
 examples/*/Release/*
 examples/*/x64/*
+glewinfo.txt
+visualinfo.txt
 
 ## Visual Studio artifacts
 .vs

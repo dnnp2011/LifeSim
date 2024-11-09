@@ -21,13 +21,13 @@ struct Entity {
     int id;
 };
 
-enum class ExitCode: std::uint_fast8_t {
+enum class ExitCode: unsigned int {
     SUCCESS            = 0,
     INVALID_SHAPE_TYPE = 1,
     COUNT,
 };
 
-enum class ShapeType: std::uint_fast8_t {
+enum class ShapeType: unsigned int {
     Rectangle,
     Circle,
     Triangle,
