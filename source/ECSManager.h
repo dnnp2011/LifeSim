@@ -12,15 +12,15 @@
 
 class ECSManager {
 public:
-    std::vector<Entity> entities;
-    std::unordered_map<int, Position> positions;
-    std::unordered_map<int, Velocity> velocities;
-    std::unordered_map<int, Collider> colliders;
-    std::unordered_map<int, ShapeType> shapes;
+    std::vector<Entity> m_Entities;
+    std::unordered_map<int, Position> m_Positions;
+    std::unordered_map<int, Velocity> m_Velocities;
+    std::unordered_map<int, Collider> m_Colliders;
+    std::unordered_map<int, ShapeType> m_Shapes;
 
-    MovementSystem movementSystem;
-    CollisionSystem collisionSystem;
-    RenderSystem renderSystem;
+    MovementSystem m_MovementSystem;
+    CollisionSystem m_CollisionSystem;
+    RenderSystem m_RenderSystem;
 
     ECSManager();
 
@@ -34,5 +34,5 @@ public:
 
     void addComponent(int entityId, ShapeType shape);
 
-    void update();
+    void update(float fixedDeltaTime);
 };

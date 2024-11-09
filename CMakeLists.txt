@@ -9,8 +9,6 @@ set(CONSOLE 1)
 set(USE_FETCH_CONTENT 0)
 set(USE_VCPKG 1)
 set(USE_PKG_CONFIG 0)
-set(USE_STATIC_LIBS 0)
-set(USE_MANUAL_LINKING 0)
 set(CMAKE_CXX_STANDARD 23)
 
 #region Configure Global Settings ----------------------------------------

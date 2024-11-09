@@ -6,20 +6,20 @@
 #define ENTITY_COUNT 3
 
 ECSManager::ECSManager() {
-    entities.reserve(ENTITY_COUNT);
-    positions.reserve(ENTITY_COUNT);
-    velocities.reserve(ENTITY_COUNT);
-    colliders.reserve(ENTITY_COUNT);
+    m_Entities.reserve(ENTITY_COUNT);
+    m_Positions.reserve(ENTITY_COUNT);
+    m_Velocities.reserve(ENTITY_COUNT);
+    m_Colliders.reserve(ENTITY_COUNT);
 
     for (size_t i = 0; i < ENTITY_COUNT; i++) {
         int colliderSize;
 
         createEntity(
-            Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
-            Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
-            Collider{ Collider{ colliderSize = Random<int>().generate(3, 50), colliderSize } },
-            ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
-        );
+                Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
+                Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
+                Collider{ Collider{ colliderSize = Random<int>().generate(3, 50), colliderSize } },
+                ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
+                );
     }
 }
 
@@ -27,7 +27,7 @@ Entity ECSManager::createEntity(Position position, Velocity velocity, Collider c
     static int nextId = 0;
     const Entity entity{ nextId++ };
 
-    entities.push_back(entity);
+    m_Entities.push_back(entity);
 
     addComponent(entity.id, position);
     addComponent(entity.id, velocity);
@@ -38,23 +38,23 @@ Entity ECSManager::createEntity(Position position, Velocity velocity, Collider c
 }
 
 void ECSManager::addComponent(const int entityId, const Position position) {
-    positions[entityId] = position;
+    m_Positions[entityId] = position;
 }
 
 void ECSManager::addComponent(const int entityId, const Velocity velocity) {
-    velocities[entityId] = velocity;
+    m_Velocities[entityId] = velocity;
 }
 
 void ECSManager::addComponent(const int entityId, const Collider collider) {
-    colliders[entityId] = collider;
+    m_Colliders[entityId] = collider;
 }
 
 void ECSManager::addComponent(const int entityId, const ShapeType shape) {
-    shapes[entityId] = shape;
+    m_Shapes[entityId] = shape;
 }
 
-void ECSManager::update() {
-    collisionSystem.update(entities, positions, colliders);
-    movementSystem.update(entities, positions, velocities, collisionSystem.entitiesToStop);
-    renderSystem.update(entities, positions, colliders, shapes); // Maybe this should be called at same level of GUI Renderer
+void ECSManager::update(float fixedDeltaTime) {
+    m_CollisionSystem.update(m_Entities, m_Positions, m_Colliders);
+    m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop);
+    // m_RenderSystem.update(m_Entities, m_Positions, m_Colliders, m_Shapes); // Maybe this should be called at same level of GUI Renderer
 }

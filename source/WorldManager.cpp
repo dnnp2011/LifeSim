@@ -13,5 +13,4 @@ WorldManager::~WorldManager() {
 
 void WorldManager::run() {
     // TODO: Implement Time.deltaTime or tickRate to show console output every n ticks
-    ecs.update();
 }

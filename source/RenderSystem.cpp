@@ -26,21 +26,21 @@ void RenderSystem::update(const std::vector<Entity> &entities, const std::unorde
         if (position != positions.end() && shape != shapes.end()) {
             switch (shape->second) {
                 case ShapeType::Rectangle:
-                    g_Application.renderer.drawRectangle(
+                    g_Application.m_Renderer.drawRectangle(
                         ImVec2(position->second.x - (collider->second.width / 2), position->second.y - (collider->second.height / 2)),
                         ImVec2(position->second.x + (collider->second.width / 2), position->second.y + (collider->second.height / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Circle:
-                    g_Application.renderer.drawCircle(
+                    g_Application.m_Renderer.drawCircle(
                         ImVec2(position->second.x, position->second.y),
                         std::max(collider->second.width, collider->second.height) / 2,
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Triangle:
-                    g_Application.renderer.drawTriangle(
+                    g_Application.m_Renderer.drawTriangle(
                         ImVec2(position->second.x, position->second.y - (collider->second.height / 2)),
                         ImVec2(position->second.x + (collider->second.width / 2), position->second.y + (collider->second.height / 2)),
                         ImVec2(position->second.x - (collider->second.width / 2), position->second.y + (collider->second.height / 2)),

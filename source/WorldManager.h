@@ -1,7 +1,5 @@
 #pragma once
 
-#include "ECSManager.h"
-
 
 struct WorldSize {
     unsigned int x;
@@ -13,7 +11,6 @@ public:
     unsigned short int cellSize;
 
     WorldSize worldSize;
-    ECSManager ecs;
 
     WorldManager();
 
