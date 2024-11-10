@@ -14,8 +14,6 @@ void RenderSystem::update(
     const ColliderBuffer& colliders,
     const ShapeTypeBuffer& shapes
 ) {
-    std::cout << "Render Tick" << std::endl;
-
     constexpr ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus;
     const ImGuiViewport* viewport           = ImGui::GetMainViewport();
     const ImVec2 viewport_pos               = viewport->Pos;

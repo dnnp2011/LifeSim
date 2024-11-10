@@ -56,8 +56,6 @@ void ECSManager::addComponent(const int entityId, const ShapeType shape) {
 }
 
 void ECSManager::update(float fixedDeltaTime) {
-    std::cout << "Physics Tick" << std::endl;
-
     m_CollisionSystem.update(m_Entities, m_Positions, m_Colliders);
     m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop);
     // m_RenderSystem.update(m_Entities, m_Positions, m_Colliders, m_Shapes); // Maybe this should be called at same level of GUI Renderer

@@ -208,19 +208,19 @@ ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
     return normalized_coords;
 }
 
-void Renderer::drawCircle(const ImVec2& center, const float& radius, const ImU32& color) {
+void Renderer::drawCircle(const ImVec2& center, const float& radius, ImU32 color) {
     Shape<ShapeType::Circle>::draw(ImGui::GetWindowDrawList(), center, radius, color);
 }
 
-void Renderer::drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32& color) {
+void Renderer::drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, ImU32 color) {
     Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
 }
 
-void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32& color) {
+void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color) {
     Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), p1, p2, p3, color);
 }
 
-void Renderer::drawShape(const ShapeType& shape, const ImVec2& position, const int& size, const ImU32& color) {
+void Renderer::drawShape(const ShapeType& shape, const ImVec2& position, const int& size, ImU32 color) {
     switch (shape) {
         case ShapeType::Rectangle:
             drawRectangle(

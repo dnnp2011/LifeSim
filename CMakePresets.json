@@ -33,6 +33,37 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             }
+        },
+        {
+            "name": "vcpkg-docker",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build-docker",
+            "environment": {
+                "VCPKG_ROOT": "/LifeSim/dependencies/vcpkg",
+                "VCPKG_DEFAULT_TRIPLET": "x64-linux"
+            },
+            "cacheVariables": {
+                "VCPKG_EXE ": "/LifeSim/dependencies/vcpkg/vcpkg",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "/LifeSim",
+                "CMAKE_MAKE_PROGRAM": "/usr/bin/make",
+                "CMAKE_STRIP": "/usr/bin/strip",
+                "CMAKE_READELF": "/usr/bin/readelf",
+                "CMAKE_OBJDUMP": "/usr/bin/objdump",
+                "CMAKE_OBJCOPY": "/usr/bin/objcopy",
+                "CMAKE_NM": "/usr/bin/nm",
+                "CMAKE_RANLIB": "/usr/bin/ranlib",
+                "CMAKE_LINKER": "/usr/bin/ld",
+                "CMAKE_C_COMPILER_RANLIB": "/usr/bin/gcc-ranlib",
+                "CMAKE_C_COMPILER_AR": "/usr/bin/gcc-ar",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER_RANLIB": "/usr/bin/gcc-ranlib",
+                "CMAKE_CXX_COMPILER_AR": "/usr/bin/gcc-ar",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_AR": "/usr/bin/ar",
+                "CMAKE_ADDR2LINE": "/usr/bin/addr2line"
+            }
         }
     ]
 }

@@ -1,7 +1,6 @@
 # vcpkg
 vcpkg_installed/
-dependencies/vcpkg/packages/
-dependencies/vcpkg/vcpkg_installed/
+dependencies/vcpkg/**
 
 ## Library Docs
 /dependencies/**/docs
