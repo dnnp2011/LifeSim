@@ -15,7 +15,6 @@ set(CMAKE_CXX_STANDARD 23)
 set_build_flags()
 #endregion ---------------------------------------------------------------
 
-
 #region Configure Dependencies -------------------------------------------
 message(STATUS "Fetching dependencies...")
 
@@ -89,7 +88,6 @@ else()
 endif()
 
 link_dependencies()
-
 #endregion ---------------------------------------------------------------
 
 #region Configure Platform-specific Settings -----------------------------

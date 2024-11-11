@@ -1,11 +1,13 @@
 #pragma once
 
-#include <string>
 #include <cstdint>
 #include <imgui.h>
+#include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
+
+constexpr size_t ENTITY_COUNT = 8;
 
 
 struct Position {

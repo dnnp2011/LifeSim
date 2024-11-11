@@ -1,12 +1,12 @@
-#include <iostream>
-#include <GL/glew.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
+#include <iostream>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Common.h"
 #include "Renderer.h"
+#include "Common.h"
 
 
 static void glfw_error_callback(const int error, const char* description) {
@@ -19,7 +19,7 @@ class Shape;
 template<>
 class Shape<ShapeType::Circle> {
 public:
-    static void draw(ImDrawList* draw_list, const ImVec2& center, float radius, ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& center, const float radius, const ImU32 color) {
         draw_list->AddCircleFilled(center, radius, color);
     }
 };
@@ -27,7 +27,7 @@ public:
 template<>
 class Shape<ShapeType::Rectangle> {
 public:
-    static void draw(ImDrawList* draw_list, const ImVec2& topLeft, const ImVec2& bottomRight, ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
         draw_list->AddRectFilled(topLeft, bottomRight, color, 0.5f);
     }
 };
@@ -35,7 +35,7 @@ public:
 template<>
 class Shape<ShapeType::Triangle> {
 public:
-    static void draw(ImDrawList* draw_list, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color) {
         draw_list->AddTriangleFilled(p1, p2, p3, color);
     }
 };
@@ -140,17 +140,31 @@ Renderer::~Renderer() {
     window = nullptr;
 }
 
-void Renderer::prerender() const {
+void Renderer::prepareNewFrame() const {
+    glDebugMessageCallback(
+        [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+            fprintf(
+                stderr,
+                "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+                (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+                type,
+                severity,
+                message
+            );
+        },
+        nullptr
+    );
     ImGui_ImplOpenGL2_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void Renderer::render() const {
+void Renderer::renderFrame() const {
     // Rendering
     ImGui::Render();
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
+    // glfwGetWindowSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(
         clear_color.x * clear_color.w,
@@ -161,12 +175,18 @@ void Renderer::render() const {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // TODO: Abstract this stage into a separate method to draw directly with OpenGL after prepping ImGui and getting OpenGL ready to render
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_QUADS);
+    // RED
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(0.0f, 0.5f);
+    glVertex2f(-0.5, 0.5f); // Top Left -> Top Right -> Bottom Right -> Bottom Left
+    // GREEN
     glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex2f(0.5f, -0.5f);
+    glVertex2f(0.5f, 0.5f);
+    // BLUE
     glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex2f(0.5f, -0.5f);
+    // WHITE
+    glColor3f(1.0f, 1.0f, 1.0f);
     glVertex2f(-0.5f, -0.5f);
     glEnd();
 
@@ -208,19 +228,19 @@ ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
     return normalized_coords;
 }
 
-void Renderer::drawCircle(const ImVec2& center, const float& radius, ImU32 color) {
+void Renderer::drawCircle(const ImVec2& center, const float& radius, const ImU32 color) {
     Shape<ShapeType::Circle>::draw(ImGui::GetWindowDrawList(), center, radius, color);
 }
 
-void Renderer::drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, ImU32 color) {
+void Renderer::drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
     Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
 }
 
-void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color) {
+void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color) {
     Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), p1, p2, p3, color);
 }
 
-void Renderer::drawShape(const ShapeType& shape, const ImVec2& position, const int& size, ImU32 color) {
+void Renderer::drawShape(const ShapeType& shape, const ImVec2& position, const int& size, const ImU32 color) {
     switch (shape) {
         case ShapeType::Rectangle:
             drawRectangle(
@@ -265,9 +285,10 @@ void Renderer::drawGui() {
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                              // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&clear_color)); // Edit 3 floats representing a color
 
+        // Buttons return true when clicked (most widgets return true when edited/activated)
         if (ImGui::Button("Button"))
-            // Buttons return true when clicked (most widgets return true when edited/activated)
             counter++;
+
         ImGui::SameLine();
         ImGui::Text("counter = %d", counter);
 

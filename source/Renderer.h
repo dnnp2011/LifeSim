@@ -21,21 +21,21 @@ public:
 private:
     bool show_demo_window    = false;
     bool show_another_window = false;
-    ImVec4 clear_color{ 0.45f, 0.55f, 0.60f, 1.00f };
+    ImVec4 clear_color{ 0.0f, 0.0f, 0.0f, 1.00f }; // Window Background Color
     float window_rounding{ 5.0f };
     float popupRounding{ 5.0f };
     float windowBgAlpha{ 0.8f };
     ImVec2 windowMinSize{ 1280, 720 };
-    ImVec2 windowSize{ 1920, 1080 }; // Figure out how to reference this from within a static method
+    ImVec2 windowSize{ 3840, 2160 };
 
 public:
     Renderer();
 
     ~Renderer();
 
-    void prerender() const;
+    void prepareNewFrame() const;
 
-    void render() const;
+    void renderFrame() const;
 
     ImVec2 ScreenToViewport(const ImVec2& screen_coords);
 

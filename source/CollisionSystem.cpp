@@ -1,13 +1,13 @@
+#include <mutex>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <thread>
-#include <mutex>
 
 #include "CollisionSystem.h"
 
 
-std::mutex mtx;
+static std::mutex mtx;
 
 void CollisionSystem::update(
     const EntityBuffer& entities,
@@ -54,8 +54,8 @@ bool CollisionSystem::isColliding(
     const Position& posB,
     const Collider& colB
 ) {
-    return !(posA.x + colA.width < posB.x
-        || posA.x > posB.x + colB.width
-        || posA.y + colA.height < posB.y
-        || posA.y > posB.y + colB.height);
+    return !(posA.x + static_cast<float>(colA.width) < posB.x
+        || posA.x > posB.x + static_cast<float>(colB.width)
+        || posA.y + static_cast<float>(colA.height) < posB.y
+        || posA.y > posB.y + static_cast<float>(colB.height));
 }

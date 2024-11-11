@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
+#include "CollisionSystem.h"
 #include "Common.h"
 #include "MovementSystem.h"
-#include "CollisionSystem.h"
 #include "RenderSystem.h"
 
 
@@ -23,15 +23,15 @@ public:
 
     ECSManager();
 
-    Entity createEntity(Position position, Velocity velocity, Collider collider, ShapeType shape);
+    Entity createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape);
 
-    void addComponent(int entityId, Position position);
+    void addComponent(int entityId, const Position& position);
 
-    void addComponent(int entityId, Velocity velocity);
+    void addComponent(int entityId, const Velocity& velocity);
 
-    void addComponent(int entityId, Collider collider);
+    void addComponent(int entityId, const Collider& collider);
 
-    void addComponent(int entityId, ShapeType shape);
+    void addComponent(int entityId, const ShapeType& shape);
 
     void update(float fixedDeltaTime);
 };

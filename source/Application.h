@@ -18,6 +18,16 @@ public:
 
     Application& operator=(const Application&) = delete;
 
+    static void DrawPerformanceGui(
+        float frameTime,
+        float fps,
+        double windowsFrameTime,
+        double windowsFps,
+        float physicsFrameTime,
+        float physicsStepsPerSecond,
+        float cpuUsage
+    );
+
     void Run();
 };
 

@@ -3,8 +3,6 @@
 #include "ECSManager.h"
 #include "../utils/Random.h"
 
-#define ENTITY_COUNT 8
-
 
 ECSManager::ECSManager() {
     m_Entities.reserve(ENTITY_COUNT);
@@ -25,11 +23,11 @@ ECSManager::ECSManager() {
     }
 }
 
-Entity ECSManager::createEntity(Position position, Velocity velocity, Collider collider, ShapeType shape) {
+Entity ECSManager::createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape) {
     static int nextId = 0;
     const Entity entity{ nextId++ };
 
-    m_Entities.push_back(entity);
+    m_Entities.emplace_back(entity);
 
     addComponent(entity.id, position);
     addComponent(entity.id, velocity);
@@ -39,24 +37,23 @@ Entity ECSManager::createEntity(Position position, Velocity velocity, Collider c
     return entity;
 }
 
-void ECSManager::addComponent(const int entityId, const Position position) {
+void ECSManager::addComponent(const int entityId, const Position& position) {
     m_Positions[entityId] = position;
 }
 
-void ECSManager::addComponent(const int entityId, const Velocity velocity) {
+void ECSManager::addComponent(const int entityId, const Velocity& velocity) {
     m_Velocities[entityId] = velocity;
 }
 
-void ECSManager::addComponent(const int entityId, const Collider collider) {
+void ECSManager::addComponent(const int entityId, const Collider& collider) {
     m_Colliders[entityId] = collider;
 }
 
-void ECSManager::addComponent(const int entityId, const ShapeType shape) {
+void ECSManager::addComponent(const int entityId, const ShapeType& shape) {
     m_Shapes[entityId] = shape;
 }
 
-void ECSManager::update(float fixedDeltaTime) {
+void ECSManager::update(const float fixedDeltaTime) {
     m_CollisionSystem.update(m_Entities, m_Positions, m_Colliders);
     m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop);
-    // m_RenderSystem.update(m_Entities, m_Positions, m_Colliders, m_Shapes); // Maybe this should be called at same level of GUI Renderer
 }
