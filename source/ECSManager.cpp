@@ -54,6 +54,6 @@ void ECSManager::addComponent(const int entityId, const ShapeType& shape) {
 }
 
 void ECSManager::update(const float fixedDeltaTime) {
-    m_CollisionSystem.update(m_Entities, m_Positions, m_Colliders);
-    m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop);
+    m_CollisionSystem.update(m_Entities, m_Positions, m_Velocities, m_Colliders);
+    m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop, m_CollisionSystem.entitiesOutOfBounds);
 }

@@ -163,8 +163,8 @@ void Renderer::renderFrame() const {
     // Rendering
     ImGui::Render();
     int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
-    // glfwGetWindowSize(window, &display_w, &display_h);
+    // glfwGetFramebufferSize(window, &display_w, &display_h);
+    glfwGetWindowSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(
         clear_color.x * clear_color.w,
@@ -212,17 +212,18 @@ void Renderer::renderFrame() const {
     glfwSwapBuffers(window);
 }
 
-ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
+ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) const {
+    int height, width;
+    glfwGetWindowSize(window, &width, &height);
+
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     const ImVec2 viewport_pos     = viewport->Pos;
     const ImVec2 viewport_size    = viewport->Size;
 
-    constexpr ImVec2 windowSize{ 1920, 1080 }; // TODO: Figure out how to grab this from the Renderer instance, or make it static
-
     const auto viewport_coords   = ImVec2(screen_coords.x + viewport_pos.x, screen_coords.y + viewport_pos.y);
     const auto normalized_coords = ImVec2(
-        viewport_coords.x * (windowSize.x / viewport_size.x),
-        viewport_coords.y * (windowSize.y / viewport_size.y)
+        viewport_coords.x * (static_cast<float>(width) / viewport_size.x),
+        viewport_coords.y * (static_cast<float>(height) / viewport_size.y)
     );
 
     return normalized_coords;

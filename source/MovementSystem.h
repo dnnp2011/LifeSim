@@ -11,8 +11,9 @@ public:
         float fixedDeltaTime,
         const EntityBuffer& entities,
         PositionBuffer& positions,
-        const VelocityBuffer& velocities,
-        const std::unordered_set<int>& entitiesToStop
+        VelocityBuffer& velocities,
+        const std::unordered_set<int>& entitiesToStop,
+        const std::unordered_set<int>& entitiesOutOfBounds
     ) const;
 
 private:

@@ -3,22 +3,38 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <GLFW/glfw3.h>
 
 #include "CollisionSystem.h"
+#include "Application.h"
 
 
 static std::mutex mtx;
+static std::mutex oobMtx;
 
 void CollisionSystem::update(
     const EntityBuffer& entities,
     PositionBuffer& positions,
+    VelocityBuffer& velocities,
     ColliderBuffer& colliders
 ) {
     entitiesToStop.clear();
 
     ThreadBuffer threads;
 
+    static int width, height;
+    glfwGetWindowSize(g_Application.m_Renderer.window, &width, &height);
+
     for (const auto& entityA: entities) {
+        if (isOutOfBounds(positions[entityA.id], colliders[entityA.id], velocities[entityA.id], width, height)) {
+            const std::lock_guard oobLock(oobMtx);
+
+            velocities[entityA.id].dx *= -1;
+            velocities[entityA.id].dy *= -1;
+
+            entitiesOutOfBounds.insert(entityA.id);
+        }
+
         for (const auto& entityB: entities) {
             if (entityA.id == entityB.id)
                 continue;
@@ -54,8 +70,21 @@ bool CollisionSystem::isColliding(
     const Position& posB,
     const Collider& colB
 ) {
-    return !(posA.x + static_cast<float>(colA.width) < posB.x
-        || posA.x > posB.x + static_cast<float>(colB.width)
-        || posA.y + static_cast<float>(colA.height) < posB.y
-        || posA.y > posB.y + static_cast<float>(colB.height));
+    return IsLessThanOrEqual<float>(posA.x, posB.x + static_cast<float>(colB.width))
+            && IsGreaterThanOrEqual<float>(posA.x + static_cast<float>(colA.width), posB.x)
+            && IsLessThanOrEqual<float>(posA.y, posB.y + static_cast<float>(colB.height))
+            && IsGreaterThanOrEqual<float>(posA.y + static_cast<float>(colA.height), posB.y);
+}
+
+bool CollisionSystem::isOutOfBounds(
+    const Position& pos,
+    const Collider& col,
+    const Velocity& vel,
+    const int width,
+    const int height
+) {
+    return IsLessThanOrEqual<float>(pos.x, 0)
+            || IsGreaterThanOrEqual<float>(pos.x + static_cast<float>(col.width), static_cast<float>(width))
+            || IsLessThanOrEqual<float>(pos.y, 0)
+            || IsGreaterThanOrEqual(pos.y + static_cast<float>(col.height), static_cast<float>(height));
 }

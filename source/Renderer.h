@@ -37,7 +37,7 @@ public:
 
     void renderFrame() const;
 
-    ImVec2 ScreenToViewport(const ImVec2& screen_coords);
+    [[nodiscard]] ImVec2 ScreenToViewport(const ImVec2& screen_coords) const;
 
     void drawCircle(const ImVec2& center, const float& radius, ImU32 color);
 

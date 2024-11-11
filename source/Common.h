@@ -1,13 +1,16 @@
 #pragma once
 
-#include <cstdint>
+#include <chrono>
+#include <cmath>
+#include <functional>
 #include <imgui.h>
 #include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
 
-constexpr size_t ENTITY_COUNT = 8;
+constexpr size_t ENTITY_COUNT = 10;
+constexpr size_t EQ_DELTA     = 0.01;
 
 
 struct Position {
@@ -79,6 +82,21 @@ inline std::string ToString(const ExitCode& code) {
     }
 }
 
+template<typename T>
+bool IsEqual(const T& a, const T& b, const T& delta = EQ_DELTA) {
+    return std::abs(a - b) <= delta;
+}
+
+template<typename T>
+bool IsLessThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA) {
+    return (a < b) || IsEqual(a, b, delta);
+}
+
+template<typename T>
+bool IsGreaterThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA) {
+    return (a > b) || IsEqual(a, b, delta);
+}
+
 inline void HandleError(const ExitCode& exitCode, const std::string& message = "") {
     switch (exitCode) {
         case ExitCode::INVALID_SHAPE_TYPE:
@@ -87,5 +105,22 @@ inline void HandleError(const ExitCode& exitCode, const std::string& message = "
         default:
             fprintf(stderr, "exit(%s):: %s\n", ToString(exitCode).c_str(), message.c_str());
             exit(static_cast<int>(exitCode));
+    }
+}
+
+/**
+ * @brief Debounce a callback
+ * @param callback Callback to invoke
+ * @param debounce Time in milliseconds to wait before invoking the callback
+ */
+inline void Debounce(const std::function<void()>& callback, const double& debounce) {
+    static auto lastCallTime = std::chrono::steady_clock::now();
+    const auto currentTime   = std::chrono::steady_clock::now();
+
+    const std::chrono::duration<double> elapsedTime = currentTime - lastCallTime;
+
+    if (elapsedTime.count() > (debounce / 1000)) {
+        callback();
+        lastCallTime = currentTime;
     }
 }
