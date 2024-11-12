@@ -10,8 +10,7 @@
 #include <vector>
 
 constexpr size_t ENTITY_COUNT = 10;
-constexpr size_t EQ_DELTA     = 0.01;
-
+constexpr size_t EQ_DELTA     = 0.1;
 
 struct Position {
     float x, y;

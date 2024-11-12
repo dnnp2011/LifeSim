@@ -16,9 +16,9 @@ static LARGE_INTEGER start;
 static LARGE_INTEGER end;
 
 struct WindowsMetrics {
-    int windowsFrames       = 0;
-    double windowsFrameTime = 0.0;
-    double windowsFps       = 0.0;
+    int windowsFrames{ 0 };
+    double windowsFrameTime{ 0.0 };
+    double windowsFps{ 0.0 };
 };
 
 static float GetCpuUsage() {
@@ -62,8 +62,8 @@ static float GetCpuUsage() {
 static WindowsMetrics CalculateWindowsFPS() {
     static double windowsElapsedTime;
     static double windowsFrameTime;
-    static int windowsFrames = 0;
-    static double windowsFps = 0.0;
+    static int windowsFrames{ 0 };
+    static double windowsFps{ 0.0 };
 
     QueryPerformanceCounter(&end);
     windowsElapsedTime = static_cast<double>(end.QuadPart - start.QuadPart) / frequency.QuadPart;
@@ -84,22 +84,22 @@ Application::Application() {
 }
 
 void Application::Run() {
-    static constexpr auto fixedDeltaTime = 1.0f / 30.0f; // Fixed timestep (30 updates per second)
+    static constexpr auto fixedDeltaTime{ 1.0f / 30.0f }; // Fixed timestep (30 updates per second)
 
-    static int frameCount  = 0;
-    static float frameTime = 0.0f;
-    static float lastFrame = 0.0f;
-    static float lastTime  = 0.0f;
-    static float fps       = 0.0f;
+    static int frameCount{ 0 };
+    static float frameTime{ 0.0f };
+    static float lastFrame{ 0.0f };
+    static float lastTime{ 0.0f };
+    static float fps{ 0.0f };
 
-    static float physicsAccumulator = 0.0f;
-    static int physicsTickCount     = 0;
-    static float physicsFrameTime   = 0.0f;
-    static float lastPhysicsTick    = 0.0f;
-    static float lastPhysicsTime    = 0.0f;
-    static float physicsTps         = 0.0f; // Tick per second
+    static float physicsAccumulator{ 0.0f };
+    static int physicsTickCount{ 0 };
+    static float physicsFrameTime{ 0.0f };
+    static float lastPhysicsTick{ 0.0f };
+    static float lastPhysicsTime{ 0.0f };
+    static float physicsTps{ 0.0f }; // Tick per second
 
-    static float cpuUsage = 0.0f;
+    static float cpuUsage{ 0.0f };
 
     // -- Start Windows Performance Counter -- //
     QueryPerformanceFrequency(&frequency);
@@ -117,7 +117,7 @@ void Application::Run() {
         }
         //endregion -------------------------------------------------
 
-        const auto currentTime = static_cast<float>(glfwGetTime());
+        const auto currentTime{ static_cast<float>(glfwGetTime()) };
 
         //region Calculate FPS --------------------------------------
         frameCount++;
@@ -193,7 +193,17 @@ void Application::DrawPerformanceGui(
     const float physicsStepsPerSecond,
     const float cpuUsage
 ) {
-    ImGui::Begin("Performance Metrics");
+    static ImVec2 panelSize{ 250, 175 };
+    static ImVec2 maxPanelSize{ 400, 400 };
+    static ImVec2 padding{ 10, 10 };
+    static bool showPerformanceMetrics{ true };
+
+    ImGui::SetNextWindowSize(panelSize);
+    ImGui::SetNextWindowSizeConstraints(panelSize, maxPanelSize);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
+
+    if (!ImGui::Begin("Performance Metrics", &showPerformanceMetrics, ImGuiWindowFlags_AlwaysAutoResize))
+        goto cleanup;
 
     ImGui::Text("Frame Time: %.3f ms", frameTime * 1000.0f);
     ImGui::Text("FPS: %.1f", fps);
@@ -203,5 +213,7 @@ void Application::DrawPerformanceGui(
     ImGui::Text("Physics Steps Per Second: %.1f", physicsStepsPerSecond);
     ImGui::Text("CPU Usage: %.1f%%", cpuUsage);
 
+cleanup:
     ImGui::End();
+    ImGui::PopStyleVar();
 }

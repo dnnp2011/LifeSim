@@ -15,18 +15,19 @@
 
 class Renderer {
 public:
-    GLFWwindow* window = nullptr;
-    ImGuiIO* io        = nullptr;
+    GLFWwindow* window{ nullptr };
+    ImGuiIO* io{ nullptr };
 
 private:
-    bool show_demo_window    = false;
-    bool show_another_window = false;
+    bool show_demo_window{ false };
+    bool show_another_window{ false };
     ImVec4 clear_color{ 0.0f, 0.0f, 0.0f, 1.00f }; // Window Background Color
     float window_rounding{ 5.0f };
     float popupRounding{ 5.0f };
     float windowBgAlpha{ 0.8f };
     ImVec2 windowMinSize{ 1280, 720 };
-    ImVec2 windowSize{ 3840, 2160 };
+    ImVec2 windowMaxSize{ 3840, 2160 };
+    ImVec2 windowSize{ 1280, 720 };
 
 public:
     Renderer();
@@ -37,7 +38,7 @@ public:
 
     void renderFrame() const;
 
-    [[nodiscard]] ImVec2 ScreenToViewport(const ImVec2& screen_coords) const;
+    [[nodiscard]] static ImVec2 ScreenToViewport(const ImVec2& screen_coords);
 
     void drawCircle(const ImVec2& center, const float& radius, ImU32 color);
 
@@ -45,7 +46,7 @@ public:
 
     void drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color);
 
-    void drawShape(const ShapeType& shape, const ImVec2& position, const int& size, ImU32 color);
+    void drawShape(const ShapeType& shape, const ImVec2& topLeft, const int& size, ImU32 color);
 
 private:
     void drawGui();

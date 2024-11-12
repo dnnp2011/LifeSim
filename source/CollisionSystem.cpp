@@ -18,7 +18,7 @@ void CollisionSystem::update(
     VelocityBuffer& velocities,
     ColliderBuffer& colliders
 ) {
-    entitiesToStop.clear();
+    // entitiesToStop.clear();
 
     ThreadBuffer threads;
 
@@ -32,7 +32,9 @@ void CollisionSystem::update(
             velocities[entityA.id].dx *= -1;
             velocities[entityA.id].dy *= -1;
 
-            entitiesOutOfBounds.insert(entityA.id);
+            // entitiesOutOfBounds.insert(entityA.id);
+
+            continue; // Skip collision detection for out of bounds entities
         }
 
         for (const auto& entityB: entities) {
@@ -40,18 +42,24 @@ void CollisionSystem::update(
                 continue;
 
             threads.emplace_back(
-                [this, &positions, &colliders, &entityA, &entityB]() {
-                    const auto entityAPosition = positions.find(entityA.id);
-                    const auto entityACollider = colliders.find(entityA.id);
-                    const auto entityBPosition = positions.find(entityB.id);
-                    const auto entityBCollider = colliders.find(entityB.id);
+                [this, &positions, &colliders, &entityA, &entityB, &velocities]() {
+                    const auto entityAPosition{ positions.find(entityA.id) };
+                    const auto entityACollider{ colliders.find(entityA.id) };
+                    const auto entityBPosition{ positions.find(entityB.id) };
+                    const auto entityBCollider{ colliders.find(entityB.id) };
 
                     if (entityAPosition != positions.end() && entityACollider != colliders.end() && entityBPosition != positions.end() && entityBCollider != colliders.end()) {
                         if (isColliding(positions[entityA.id], colliders[entityA.id], positions[entityB.id], colliders[entityB.id])) {
                             const std::lock_guard lock(mtx);
 
-                            entitiesToStop.insert(entityA.id);
-                            entitiesToStop.insert(entityB.id);
+                            velocities[entityA.id].dx *= -1;
+                            velocities[entityA.id].dy *= -1;
+
+                            velocities[entityB.id].dx *= -1;
+                            velocities[entityB.id].dy *= -1;
+
+                            // entitiesToStop.insert(entityA.id);
+                            // entitiesToStop.insert(entityB.id);
                         }
                     }
                 }

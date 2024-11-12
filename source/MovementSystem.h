@@ -17,5 +17,5 @@ public:
     ) const;
 
 private:
-    uint8_t m_speed = 40;
+    uint8_t m_speed = 80;
 };

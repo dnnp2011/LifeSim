@@ -1,6 +1,8 @@
 #include <iostream>
+#include <GLFW/glfw3.h>
 
 #include "ECSManager.h"
+#include "Application.h"
 #include "../utils/Random.h"
 
 
@@ -10,13 +12,16 @@ ECSManager::ECSManager() {
     m_Velocities.reserve(ENTITY_COUNT);
     m_Colliders.reserve(ENTITY_COUNT);
 
+    static int width, height;
+    glfwGetWindowSize(g_Application.m_Renderer.window, &width, &height);
+
     for (size_t i = 0; i < ENTITY_COUNT; i++) {
-        int colliderSize;
+        const int colliderSize{ Random<int>().generate(50, 200) };
 
         createEntity(
-            Position{ Position{ Random<float>().generate(0, 1920), Random<float>().generate(0, 1080) } },
-            Velocity{ Velocity{ Random<float>().generate(-1, 1), Random<float>().generate(-1, 1) } },
-            Collider{ Collider{ colliderSize = Random<int>().generate(15, 100), colliderSize } },
+            Position{ Position{ Random<float>().generate(0, static_cast<float>(width)), Random<float>().generate(0, static_cast<float>(height)) } },
+            Velocity{ Velocity{ Random<float>().generate(-2, 2), Random<float>().generate(-2, 2) } },
+            Collider{ Collider{ colliderSize, colliderSize } },
             ShapeType{ ShapeType::Rectangle }
             // ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
         );
@@ -24,7 +29,7 @@ ECSManager::ECSManager() {
 }
 
 Entity ECSManager::createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape) {
-    static int nextId = 0;
+    static int nextId{ 0 };
     const Entity entity{ nextId++ };
 
     m_Entities.emplace_back(entity);
@@ -54,6 +59,19 @@ void ECSManager::addComponent(const int entityId, const ShapeType& shape) {
 }
 
 void ECSManager::update(const float fixedDeltaTime) {
-    m_CollisionSystem.update(m_Entities, m_Positions, m_Velocities, m_Colliders);
-    m_MovementSystem.update(fixedDeltaTime, m_Entities, m_Positions, m_Velocities, m_CollisionSystem.entitiesToStop, m_CollisionSystem.entitiesOutOfBounds);
+    m_CollisionSystem.update(
+        m_Entities,
+        m_Positions,
+        m_Velocities,
+        m_Colliders
+    );
+
+    m_MovementSystem.update(
+        fixedDeltaTime,
+        m_Entities,
+        m_Positions,
+        m_Velocities,
+        m_CollisionSystem.entitiesToStop,
+        m_CollisionSystem.entitiesOutOfBounds
+    );
 }
