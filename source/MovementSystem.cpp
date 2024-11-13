@@ -24,17 +24,17 @@ void MovementSystem::update(
 
     for (const auto& entity: entities) {
         Debounce(
-            [entity, positions, velocities]() {
+            [entity, positions, velocities](const std::string& id) {
                 const auto entityPosition{ positions.find(entity.id) };
                 const auto entityVelocity{ velocities.find(entity.id) };
 
-                std::cout << "---------------------------------------" << "\n";
+                std::cout << id << "---------------------------------" << "\n";
                 std::cout << "Entity ID: " << entity.id << "\n";
                 std::cout << "Position: (" << entityPosition->second.x << ", " << entityPosition->second.y << ")" << "\n";
-                std::cout << "Velocity: (" << entityVelocity->second.dx << ", " << entityVelocity->second.dy << ")" << "\n";
-                std::cout << "---------------------------------------" << std::endl;
+                std::cout << "Velocity: (" << entityVelocity->second.dx << ", " << entityVelocity->second.dy << ")" << std::endl;
             },
-            2000
+            5000,
+            "MovementSystem::update::" + std::to_string(entity.id)
         );
 
         // if (entitiesOutOfBounds.contains(entity.id)) {

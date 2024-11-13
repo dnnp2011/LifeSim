@@ -7,10 +7,6 @@
 #include "Application.h"
 
 
-using Clock     = std::chrono::steady_clock;
-using TimePoint = Clock::time_point;
-using Duration  = std::chrono::duration<float>;
-
 static LARGE_INTEGER frequency;
 static LARGE_INTEGER start;
 static LARGE_INTEGER end;

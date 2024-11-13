@@ -9,15 +9,38 @@
 #include <unordered_map>
 #include <vector>
 
+
+using Clock     = std::chrono::steady_clock;
+using TimePoint = Clock::time_point;
+using Duration  = std::chrono::duration<double, std::milli>;
+
 constexpr size_t ENTITY_COUNT = 10;
 constexpr size_t EQ_DELTA     = 0.1;
 
 struct Position {
     float x, y;
+
+    explicit operator ImVec2() const {
+        return { x, y };
+    }
+
+    Position() = default;
+    Position(const float x, const float y) : x(x), y(y) { }
+    Position(const Position& pos) = default;
+    explicit Position(const ImVec2& vec) : x(vec.x), y(vec.y) { }
 };
 
 struct Velocity {
     float dx, dy;
+
+    explicit operator ImVec2() const {
+        return { dx, dy };
+    }
+
+    Velocity() = default;
+    Velocity(const float dx, const float dy) : dx(dx), dy(dy) { }
+    Velocity(const Velocity& vel) = default;
+    explicit Velocity(const ImVec2& vec) : dx(vec.x), dy(vec.y) { }
 };
 
 struct Collider {
@@ -110,16 +133,87 @@ inline void HandleError(const ExitCode& exitCode, const std::string& message = "
 /**
  * @brief Debounce a callback
  * @param callback Callback to invoke
- * @param debounce Time in milliseconds to wait before invoking the callback
+ * @param msDelay Time in milliseconds to wait before invoking the callback
+ * @param id Unique identifier for each call site
  */
-inline void Debounce(const std::function<void()>& callback, const double& debounce) {
-    static auto lastCallTime = std::chrono::steady_clock::now();
-    const auto currentTime   = std::chrono::steady_clock::now();
+inline void Debounce(const std::function<void(const std::string& id)>& callback, const double& msDelay, const std::string& id) {
+    static std::unordered_map<std::string, TimePoint> lastCallTimes;
 
-    const std::chrono::duration<double> elapsedTime = currentTime - lastCallTime;
+    auto& lastCallTime         = lastCallTimes[id];
+    const auto currentTime     = Clock::now();
+    const Duration elapsedTime = currentTime - lastCallTime;
 
-    if (elapsedTime.count() > (debounce / 1000)) {
-        callback();
+    if (elapsedTime.count() > msDelay) {
+        callback(id);
+
         lastCallTime = currentTime;
+    }
+}
+
+namespace ImMath {
+    /**
+     * @brief Add two ImVec2 vectors
+     * @param a Vector A
+     * @param b  Vector B
+     * @return Sum of two vectors
+     */
+    inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) {
+        return { a.x + b.x, a.y + b.y };
+    }
+
+    /**
+     * @brief Subtract two ImVec2 vectors
+     * @param a Vector A
+     * @param b  Vector B
+     * @return Difference of two vectors
+     */
+    inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) {
+        return { a.x - b.x, a.y - b.y };
+    }
+
+    /**
+     * @brief Multiply an ImVec2 vector by a scalar
+     * @param vec Vector to scale
+     * @param scalar Scalar value
+     * @return Scaled vector
+     */
+    inline ImVec2 operator*(const ImVec2& vec, const float& scalar) {
+        return { vec.x * scalar, vec.y * scalar };
+    }
+
+    /**
+     * @brief Divide an ImVec2 vector by a scalar
+     * @param vec Vector to scale
+     * @param scalar Scalar value
+     * @return Scaled vector
+     */
+    inline ImVec2 operator/(const ImVec2& vec, const float& scalar) {
+        return { vec.x / scalar, vec.y / scalar };
+    }
+
+    inline ImVec2 Normalize(const ImVec2& vec) {
+        const auto magnitude = std::sqrt(vec.x * vec.x + vec.y * vec.y);
+
+        return { vec.x / magnitude, vec.y / magnitude };
+    }
+
+    inline ImVec2 CalculateNormal(const ImVec2& p1, const ImVec2& p2) {
+        const auto normal = ImVec2{ p2.y - p1.y, -(p1.x - p2.x) };
+
+        return Normalize(normal);
+    }
+
+    inline float Dot(const ImVec2& a, const ImVec2& b) {
+        return (a.x * b.x) + (a.y * b.y);
+    }
+
+    inline ImVec2 Cross(const ImVec2& a, const ImVec2& b) {
+        return { a.x * b.y, a.y * b.x };
+    }
+
+    inline ImVec2 Reflect(const ImVec2& velocity, const ImVec2& normal) {
+        const auto dotProduct = Dot(velocity, normal);
+
+        return velocity - (normal * (2.0f * dotProduct));
     }
 }

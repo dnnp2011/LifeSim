@@ -29,8 +29,19 @@ void CollisionSystem::update(
         if (isOutOfBounds(positions[entityA.id], colliders[entityA.id], velocities[entityA.id], width, height)) {
             const std::lock_guard oobLock(oobMtx);
 
-            velocities[entityA.id].dx *= -1;
-            velocities[entityA.id].dy *= -1;
+            // TODO: Refactor this to use a boundary enum
+            // TODO: Return boundary normal from isOutOfBounds
+            ImVec2 boundaryNormal{ 1, 0 }; // Default to left viewport boundary
+
+            if (IsGreaterThanOrEqual<float>(positions[entityA.id].x + static_cast<float>(colliders[entityA.id].width), static_cast<float>(width))) {
+                boundaryNormal = { -1, 0 };
+            } else if (IsLessThanOrEqual<float>(positions[entityA.id].y, 0)) {
+                boundaryNormal = { 0, 1 };
+            } else if (IsGreaterThanOrEqual<float>(positions[entityA.id].y + static_cast<float>(colliders[entityA.id].height), static_cast<float>(height))) {
+                boundaryNormal = { 0, -1 };
+            }
+
+            velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect((ImVec2)velocities[entityA.id], boundaryNormal));
 
             // entitiesOutOfBounds.insert(entityA.id);
 

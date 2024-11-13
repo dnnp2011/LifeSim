@@ -240,7 +240,7 @@ ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
     glfwGetWindowPos(g_Application.m_Renderer.window, &xOffset, &yOffset);
 
     Debounce(
-        []() {
+        [](const std::string& id) {
             static const ImGuiViewport* viewport{ ImGui::GetMainViewport() };
             static ImVec2 viewport_pos{ viewport->Pos };
             static ImVec2 viewport_size{ viewport->Size };
@@ -249,12 +249,14 @@ ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
             fprintf(
                 stdout,
                 R"(
-Viewport Position: {%.1f, %.1f}
-Viewport Size: {%.1f, %.1f}
-Screen Size: {%d, %d}
-Window Size: {%d, %d}
-Viewport Offset: {%d, %d}
+%s ----------------------------
+Viewport Position: { %.1f, %.1f }
+Viewport Size: { %.1f, %.1f }
+Screen Size: { %d, %d }
+Window Size: { %d, %d }
+Viewport Offset: { %d, %d }
 )",
+                id.c_str(),
                 viewport_pos.x,
                 viewport_pos.y,
                 viewport_size.x,
@@ -267,9 +269,10 @@ Viewport Offset: {%d, %d}
                 yOffset
             );
         },
-        1000
+        10000,
+        "Renderer::ScreenToViewport"
     );
-#endif()
+#endif
 
     const ImVec2 normalized_coords{
         screen_coords.x * (windowWidth / screenWidth) + xOffset,
