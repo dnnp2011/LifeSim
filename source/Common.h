@@ -2,8 +2,11 @@
 
 #include <chrono>
 #include <cmath>
+#include <condition_variable>
 #include <functional>
 #include <imgui.h>
+#include <mutex>
+#include <queue>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -14,8 +17,8 @@ using Clock     = std::chrono::steady_clock;
 using TimePoint = Clock::time_point;
 using Duration  = std::chrono::duration<double, std::milli>;
 
-constexpr size_t ENTITY_COUNT = 10;
-constexpr size_t EQ_DELTA     = 0.1;
+constexpr size_t ENTITY_COUNT{ 10 };
+constexpr size_t EQ_DELTA{ static_cast<size_t>(0.1) };
 
 struct Position {
     float x, y;
@@ -215,5 +218,76 @@ namespace ImMath {
         const auto dotProduct = Dot(velocity, normal);
 
         return velocity - (normal * (2.0f * dotProduct));
+    }
+}
+
+namespace Threads {
+    class ThreadPool {
+    public:
+        explicit ThreadPool(size_t numThreads);
+        ~ThreadPool();
+
+        void enqueue(std::function<void()> task);
+
+    private:
+        std::vector<std::thread> workers;
+        std::queue<std::function<void()>> tasks;
+        std::mutex queueMutex;
+        std::condition_variable condition;
+        bool stop;
+
+        void workerThread();
+    };
+
+    inline ThreadPool::ThreadPool(const size_t numThreads) : stop(false) {
+        for (size_t i = 0; i < numThreads; ++i)
+            workers.emplace_back(&ThreadPool::workerThread, this);
+    }
+
+    inline ThreadPool::~ThreadPool() {
+        {
+            std::lock_guard lock(queueMutex);
+            stop = true;
+        }
+
+        condition.notify_all();
+
+        for (std::thread& worker: workers)
+            worker.join();
+    }
+
+    inline void ThreadPool::enqueue(std::function<void()> task) {
+        {
+            std::lock_guard lock(queueMutex);
+            tasks.push(std::move(task));
+        }
+
+        condition.notify_one();
+    }
+
+    inline void ThreadPool::workerThread() {
+        while (true) {
+            std::function<void()> task;
+
+            {
+                std::unique_lock lock(queueMutex);
+
+                condition.wait(
+                    lock,
+                    [this] {
+                        return stop || !tasks.empty();
+                    }
+                );
+
+                if (stop && tasks.empty())
+                    return;
+
+                task = std::move(tasks.front());
+
+                tasks.pop();
+            }
+
+            task();
+        }
     }
 }

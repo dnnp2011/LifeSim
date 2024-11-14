@@ -63,7 +63,6 @@ set(PROJECT_SOURCE
         source/Renderer.cpp
         source/Application.cpp
         source/ECSManager.cpp
-        source/WorldManager.cpp
         source/MovementSystem.cpp
         source/RenderSystem.cpp
         source/CollisionSystem.cpp

@@ -35,8 +35,37 @@
             }
         },
         {
+            "name": "vcpkg-debug-msvc",
+            "description": "Windows vcpkg CMake preset using default Visual Studio 17 2022 generator in Debug mode",
+            "generator": "Visual Studio 17 2022",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "binaryDir": "${sourceDir}/build-msvc-debug",
+            "environment": {
+                "VCPKG_ROOT": "${sourceDir}/dependencies/vcpkg"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "vcpkg-release-msvc",
+            "description": "Windows vcpkg CMake preset using default Visual Studio 17 2022 generator in Debug mode",
+            "generator": "Visual Studio 17 2022",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "binaryDir": "${sourceDir}/build-msvc-debug",
+            "environment": {
+                "VCPKG_ROOT": "${sourceDir}/dependencies/vcpkg"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
             "name": "vcpkg-docker",
             "generator": "Unix Makefiles",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
             "binaryDir": "${sourceDir}/build-docker",
             "environment": {
                 "VCPKG_ROOT": "/LifeSim/dependencies/vcpkg",

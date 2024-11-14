@@ -15,19 +15,19 @@
 
 class Renderer {
 public:
-    GLFWwindow* window{ nullptr };
-    ImGuiIO* io{ nullptr };
+    GLFWwindow* m_Window{ nullptr };
+    ImGuiIO* m_IO{ nullptr };
 
 private:
-    bool show_demo_window{ false };
-    bool show_another_window{ false };
-    ImVec4 clear_color{ 0.0f, 0.0f, 0.0f, 1.00f }; // Window Background Color
-    float window_rounding{ 5.0f };
-    float popupRounding{ 5.0f };
-    float windowBgAlpha{ 0.8f };
-    ImVec2 windowMinSize{ 1280, 720 };
-    ImVec2 windowMaxSize{ 3840, 2160 };
-    ImVec2 windowSize{ 1280, 720 };
+    bool m_showDemoWindow{ false };
+    bool m_showAnotherWindow{ false };
+    ImVec4 m_backgroundColor{ 0.0f, 0.0f, 0.0f, 1.00f }; // Window Background Color
+    float m_windowRounding{ 5.0f };
+    float m_popupRounding{ 5.0f };
+    float m_windowBgAlpha{ 0.8f };
+    ImVec2 m_windowMinSize{ 1280, 720 };
+    ImVec2 m_windowMaxSize{ 3840, 2160 };
+    ImVec2 m_windowSize{ 1280, 720 };
 
 public:
     Renderer();

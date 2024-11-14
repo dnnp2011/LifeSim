@@ -66,25 +66,25 @@ Renderer::Renderer() {
         throw std::runtime_error("Failed to initialize GLFW");
 
     // Create window with graphics context
-    window = glfwCreateWindow(
-        static_cast<int>(windowSize.x),
-        static_cast<int>(windowSize.y),
+    m_Window = glfwCreateWindow(
+        static_cast<int>(m_windowSize.x),
+        static_cast<int>(m_windowSize.y),
         "LifeSim",
         nullptr,
         nullptr
     );
 
-    if (window == nullptr) {
+    if (m_Window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
     } else {
         int width, height;
-        glfwGetWindowSize(window, &width, &height);
+        glfwGetWindowSize(m_Window, &width, &height);
         std::cout << "Created GLFW window: " << width << "x" << height << std::endl;
     }
 
-    IM_ASSERT(window != nullptr);
+    IM_ASSERT(m_Window != nullptr);
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(m_Window);
     glfwSwapInterval(1); // Enable vsync
 
     // Setup Dear ImGui context
@@ -97,12 +97,12 @@ Renderer::Renderer() {
     fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
     fprintf(stdout, "Status: Using OpenGL %s\n", glGetString(GL_VERSION));
 
-    io = &ImGui::GetIO();
-    (void)io;
-    io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-    io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
-    io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
+    m_IO = &ImGui::GetIO();
+    (void)m_IO;
+    m_IO->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    m_IO->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+    m_IO->ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
+    m_IO->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -112,15 +112,15 @@ Renderer::Renderer() {
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style{ ImGui::GetStyle() };
-    if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        style.WindowRounding              = window_rounding;
-        style.PopupRounding               = popupRounding;
-        style.Colors[ImGuiCol_WindowBg].w = windowBgAlpha;
-        style.WindowMinSize               = windowMinSize;
+    if (m_IO->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        style.WindowRounding              = m_windowRounding;
+        style.PopupRounding               = m_popupRounding;
+        style.Colors[ImGuiCol_WindowBg].w = m_windowBgAlpha;
+        style.WindowMinSize               = m_windowMinSize;
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
     ImGui_ImplOpenGL2_Init();
 
     // Load Fonts
@@ -151,11 +151,11 @@ Renderer::~Renderer() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(m_Window);
     glfwTerminate();
 
-    io     = nullptr;
-    window = nullptr;
+    m_IO     = nullptr;
+    m_Window = nullptr;
 }
 
 void Renderer::prepareNewFrame() const {
@@ -182,14 +182,14 @@ void Renderer::renderFrame() const {
     ImGui::Render();
     int display_w, display_h;
     // glfwGetFramebufferSize(window, &display_w, &display_h);
-    glfwGetWindowSize(window, &display_w, &display_h);
+    glfwGetWindowSize(m_Window, &display_w, &display_h);
     GLCall(glViewport(0, 0, display_w, display_h));
     GLCall(
         glClearColor(
-            clear_color.x * clear_color.w,
-            clear_color.y * clear_color.w,
-            clear_color.z * clear_color.w,
-            clear_color.w
+            m_backgroundColor.x * m_backgroundColor.w,
+            m_backgroundColor.y * m_backgroundColor.w,
+            m_backgroundColor.z * m_backgroundColor.w,
+            m_backgroundColor.w
         )
     );
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
@@ -222,22 +222,22 @@ void Renderer::renderFrame() const {
     // Update and Render additional Platform Windows
     // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
     //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-    if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    if (m_IO->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         GLFWwindow* backup_current_context{ glfwGetCurrentContext() };
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
 
-    glfwMakeContextCurrent(window);
-    glfwSwapBuffers(window);
+    glfwMakeContextCurrent(m_Window);
+    glfwSwapBuffers(m_Window);
 }
 
 ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
     static int screenHeight, screenWidth, xOffset, yOffset, windowHeight, windowWidth;
-    glfwGetFramebufferSize(g_Application.m_Renderer.window, &screenWidth, &screenHeight);
-    glfwGetWindowSize(g_Application.m_Renderer.window, &windowWidth, &windowHeight);
-    glfwGetWindowPos(g_Application.m_Renderer.window, &xOffset, &yOffset);
+    glfwGetFramebufferSize(g_Application.m_Renderer.m_Window, &screenWidth, &screenHeight);
+    glfwGetWindowSize(g_Application.m_Renderer.m_Window, &windowWidth, &windowHeight);
+    glfwGetWindowPos(g_Application.m_Renderer.m_Window, &xOffset, &yOffset);
 
     Debounce(
         [](const std::string& id) {
@@ -296,8 +296,8 @@ void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3
 
 void Renderer::drawGui() {
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+    if (m_showDemoWindow)
+        ImGui::ShowDemoWindow(&m_showDemoWindow);
 
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
     {
@@ -307,11 +307,11 @@ void Renderer::drawGui() {
         ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
 
         ImGui::Text("This is some useful text.");          // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
-        ImGui::Checkbox("Another Window", &show_another_window);
+        ImGui::Checkbox("Demo Window", &m_showDemoWindow); // Edit bools storing our window open/close state
+        ImGui::Checkbox("Another Window", &m_showAnotherWindow);
 
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                              // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&clear_color)); // Edit 3 floats representing a color
+        ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&m_backgroundColor)); // Edit 3 floats representing a color
 
         // Buttons return true when clicked (most widgets return true when edited/activated)
         if (ImGui::Button("Button"))
@@ -320,17 +320,17 @@ void Renderer::drawGui() {
         ImGui::SameLine();
         ImGui::Text("counter = %d", counter);
 
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io->Framerate, io->Framerate);
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_IO->Framerate, m_IO->Framerate);
         ImGui::End();
     }
 
     // 3. Show another simple window.
-    if (show_another_window) {
-        ImGui::Begin("Another Window", &show_another_window);
+    if (m_showAnotherWindow) {
+        ImGui::Begin("Another Window", &m_showAnotherWindow);
         // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
         ImGui::Text("Hello from another window!");
         if (ImGui::Button("Close Me"))
-            show_another_window = false;
+            m_showAnotherWindow = false;
         ImGui::End();
     }
 }

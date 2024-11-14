@@ -3,17 +3,29 @@ macro(set_build_flags)
     message(STATUS "Setting Build Flags")
 
     if(MSVC)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /W4 /std:c++latest /Zi /Od /RTC1")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /std:c++latest")
     else()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wformat -std=c++23")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++23")
     endif()
 
-    if(CONSOLE)
+    if(CONSOLE AND !MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole")
     endif()
 
     if(DEBUG)
         add_definitions(-DDEBUG)
+
+        if(MSVC)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Zi") #/RTC1
+        else()
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -Wformat")
+        endif()
+    else()
+        if(MSVC)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+        else()
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+        endif()
     endif()
 
     message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")

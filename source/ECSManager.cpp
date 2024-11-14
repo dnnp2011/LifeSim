@@ -13,7 +13,7 @@ ECSManager::ECSManager() {
     m_Colliders.reserve(ENTITY_COUNT);
 
     static int width, height;
-    glfwGetWindowSize(g_Application.m_Renderer.window, &width, &height);
+    glfwGetWindowSize(g_Application.m_Renderer.m_Window, &width, &height);
 
     for (size_t i = 0; i < ENTITY_COUNT; i++) {
         const int colliderSize{ Random<int>().generate(50, 200) };
@@ -71,7 +71,7 @@ void ECSManager::update(const float fixedDeltaTime) {
         m_Entities,
         m_Positions,
         m_Velocities,
-        m_CollisionSystem.entitiesToStop,
-        m_CollisionSystem.entitiesOutOfBounds
+        m_CollisionSystem.m_entitiesToStop,
+        m_CollisionSystem.m_entitiesOutOfBounds
     );
 }

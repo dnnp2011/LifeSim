@@ -17,8 +17,8 @@ public:
     ColliderBuffer m_Colliders;
     ShapeTypeBuffer m_Shapes;
 
-    MovementSystem m_MovementSystem;
-    CollisionSystem m_CollisionSystem;
+    MovementSystem m_MovementSystem{ std::thread::hardware_concurrency() };
+    CollisionSystem m_CollisionSystem{ std::thread::hardware_concurrency() };
     RenderSystem m_RenderSystem;
 
     ECSManager();

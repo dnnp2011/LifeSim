@@ -9,50 +9,42 @@
 #include "Application.h"
 
 
-static std::mutex mtx;
-static std::mutex oobMtx;
-
 void CollisionSystem::update(
     const EntityBuffer& entities,
     PositionBuffer& positions,
     VelocityBuffer& velocities,
     ColliderBuffer& colliders
 ) {
-    // entitiesToStop.clear();
-
-    ThreadBuffer threads;
-
     static int width, height;
-    glfwGetWindowSize(g_Application.m_Renderer.window, &width, &height);
+    glfwGetWindowSize(g_Application.m_Renderer.m_Window, &width, &height);
 
     for (const auto& entityA: entities) {
         if (isOutOfBounds(positions[entityA.id], colliders[entityA.id], velocities[entityA.id], width, height)) {
-            const std::lock_guard oobLock(oobMtx);
+            m_threadPool.enqueue(
+                [this, &positions, &colliders, &entityA, &velocities]() {
+                    const std::lock_guard oobLock(m_oobMtx);
 
-            // TODO: Refactor this to use a boundary enum
-            // TODO: Return boundary normal from isOutOfBounds
-            ImVec2 boundaryNormal{ 1, 0 }; // Default to left viewport boundary
+                    ImVec2 boundaryNormal{ 1, 0 };
+                    if (IsGreaterThanOrEqual<float>(positions[entityA.id].x + static_cast<float>(colliders[entityA.id].width), static_cast<float>(width))) {
+                        boundaryNormal = { -1, 0 };
+                    } else if (IsLessThanOrEqual<float>(positions[entityA.id].y, 0)) {
+                        boundaryNormal = { 0, 1 };
+                    } else if (IsGreaterThanOrEqual<float>(positions[entityA.id].y + static_cast<float>(colliders[entityA.id].height), static_cast<float>(height))) {
+                        boundaryNormal = { 0, -1 };
+                    }
 
-            if (IsGreaterThanOrEqual<float>(positions[entityA.id].x + static_cast<float>(colliders[entityA.id].width), static_cast<float>(width))) {
-                boundaryNormal = { -1, 0 };
-            } else if (IsLessThanOrEqual<float>(positions[entityA.id].y, 0)) {
-                boundaryNormal = { 0, 1 };
-            } else if (IsGreaterThanOrEqual<float>(positions[entityA.id].y + static_cast<float>(colliders[entityA.id].height), static_cast<float>(height))) {
-                boundaryNormal = { 0, -1 };
-            }
+                    velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect((ImVec2)velocities[entityA.id], boundaryNormal));
+                }
+            );
 
-            velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect((ImVec2)velocities[entityA.id], boundaryNormal));
-
-            // entitiesOutOfBounds.insert(entityA.id);
-
-            continue; // Skip collision detection for out of bounds entities
+            continue;
         }
 
         for (const auto& entityB: entities) {
             if (entityA.id == entityB.id)
                 continue;
 
-            threads.emplace_back(
+            m_threadPool.enqueue(
                 [this, &positions, &colliders, &entityA, &entityB, &velocities]() {
                     const auto entityAPosition{ positions.find(entityA.id) };
                     const auto entityACollider{ colliders.find(entityA.id) };
@@ -61,25 +53,18 @@ void CollisionSystem::update(
 
                     if (entityAPosition != positions.end() && entityACollider != colliders.end() && entityBPosition != positions.end() && entityBCollider != colliders.end()) {
                         if (isColliding(positions[entityA.id], colliders[entityA.id], positions[entityB.id], colliders[entityB.id])) {
-                            const std::lock_guard lock(mtx);
+                            const std::lock_guard lock(m_mtx);
 
                             velocities[entityA.id].dx *= -1;
                             velocities[entityA.id].dy *= -1;
 
                             velocities[entityB.id].dx *= -1;
                             velocities[entityB.id].dy *= -1;
-
-                            // entitiesToStop.insert(entityA.id);
-                            // entitiesToStop.insert(entityB.id);
                         }
                     }
                 }
             );
         }
-    }
-
-    for (auto& thread: threads) {
-        thread.join();
     }
 }
 
@@ -102,6 +87,7 @@ bool CollisionSystem::isOutOfBounds(
     const int width,
     const int height
 ) {
+    // TODO: Improve to predict if entity will be out of bounds in the next frame
     return IsLessThanOrEqual<float>(pos.x, 0)
             || IsGreaterThanOrEqual<float>(pos.x + static_cast<float>(col.width), static_cast<float>(width))
             || IsLessThanOrEqual<float>(pos.y, 0)

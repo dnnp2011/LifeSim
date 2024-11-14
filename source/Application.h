@@ -2,14 +2,15 @@
 
 #include "ECSManager.h"
 #include "Renderer.h"
-#include "WorldManager.h"
 
 
 class Application {
 public:
-    WorldManager m_WorldManager;
     Renderer m_Renderer;
     ECSManager m_ECSManger;
+
+private:
+    Threads::ThreadPool m_threadPool{ std::thread::hardware_concurrency() };
 
 public:
     Application();

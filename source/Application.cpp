@@ -101,12 +101,12 @@ void Application::Run() {
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&start);
 
-    while (!glfwWindowShouldClose(m_Renderer.window)) {
+    while (!glfwWindowShouldClose(m_Renderer.m_Window)) {
         //region GLFW Initialization --------------------------------
         glfwPollEvents();
 
         // Skip rendering if window is minimized
-        if (glfwGetWindowAttrib(m_Renderer.window, GLFW_ICONIFIED) != 0) {
+        if (glfwGetWindowAttrib(m_Renderer.m_Window, GLFW_ICONIFIED) != 0) {
             ImGui_ImplGlfw_Sleep(10);
 
             continue;
