@@ -8,7 +8,7 @@ macro(set_build_flags)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++23")
     endif()
 
-    if(CONSOLE AND !MSVC)
+    if(CONSOLE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole")
     endif()
 
@@ -18,7 +18,7 @@ macro(set_build_flags)
         if(MSVC)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Zi") #/RTC1
         else()
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -Wformat")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -Wformat -Wpedantic")
         endif()
     else()
         if(MSVC)

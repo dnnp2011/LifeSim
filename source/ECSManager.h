@@ -17,12 +17,17 @@ public:
     ColliderBuffer m_Colliders;
     ShapeTypeBuffer m_Shapes;
 
+private:
     MovementSystem m_MovementSystem{ std::thread::hardware_concurrency() };
     CollisionSystem m_CollisionSystem{ std::thread::hardware_concurrency() };
     RenderSystem m_RenderSystem;
 
+public:
     ECSManager();
 
+    void update(float fixedDeltaTime);
+
+private:
     Entity createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape);
 
     void addComponent(int entityId, const Position& position);
@@ -32,6 +37,4 @@ public:
     void addComponent(int entityId, const Collider& collider);
 
     void addComponent(int entityId, const ShapeType& shape);
-
-    void update(float fixedDeltaTime);
 };

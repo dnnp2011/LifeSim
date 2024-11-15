@@ -1,3 +1,4 @@
+#include <imgui_internal.h>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -35,7 +36,10 @@ void RenderSystem::update(
     ImGui::SetNextWindowPos(viewport_pos);
     ImGui::SetNextWindowSize(viewport_size);
 
-    ImGui::Begin("Fullscreen Window", nullptr, window_flags);
+    ImGui::Begin("Render Window", nullptr, window_flags);
+    // ImGui::ScaleWindowsInViewport(viewport, 1.0f);
+
+    const auto zoom = g_Application.m_Renderer.m_Zoom;
 
     for (const auto& [id]: entities) {
         const auto position{ positions.find(id) };
@@ -46,23 +50,23 @@ void RenderSystem::update(
             switch (shape->second) {
                 case ShapeType::Rectangle:
                     g_Application.m_Renderer.drawRectangle(
-                        ImVec2(position->second.x - (collider->second.width / 2), position->second.y - (collider->second.height / 2)),
-                        ImVec2(position->second.x + (collider->second.width / 2), position->second.y + (collider->second.height / 2)),
+                        ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y - ((collider->second.height * zoom) / 2)),
+                        ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Circle:
                     g_Application.m_Renderer.drawCircle(
                         ImVec2(position->second.x, position->second.y),
-                        static_cast<float>(std::max(collider->second.width, collider->second.height)) / 2,
+                        static_cast<float>(std::max(collider->second.width * zoom, collider->second.height * zoom)) / 2,
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Triangle:
                     g_Application.m_Renderer.drawTriangle(
-                        ImVec2(position->second.x, position->second.y - (collider->second.height / 2)),
-                        ImVec2(position->second.x + (collider->second.width / 2), position->second.y + (collider->second.height / 2)),
-                        ImVec2(position->second.x - (collider->second.width / 2), position->second.y + (collider->second.height / 2)),
+                        ImVec2(position->second.x, position->second.y - ((collider->second.height * zoom) / 2)),
+                        ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
+                        ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;

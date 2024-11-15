@@ -17,6 +17,7 @@ class Renderer {
 public:
     GLFWwindow* m_Window{ nullptr };
     ImGuiIO* m_IO{ nullptr };
+    mutable float m_Zoom{ 1.0f };
 
 private:
     bool m_showDemoWindow{ false };

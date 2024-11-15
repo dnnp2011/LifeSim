@@ -99,10 +99,10 @@ Renderer::Renderer() {
 
     m_IO = &ImGui::GetIO();
     (void)m_IO;
-    m_IO->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    m_IO->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-    m_IO->ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
-    m_IO->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
+    // m_IO->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    // m_IO->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+    m_IO->ConfigFlags |= ImGuiConfigFlags_DockingEnable;   // Enable Docking
+    m_IO->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -310,7 +310,7 @@ void Renderer::drawGui() {
         ImGui::Checkbox("Demo Window", &m_showDemoWindow); // Edit bools storing our window open/close state
         ImGui::Checkbox("Another Window", &m_showAnotherWindow);
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                              // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                                    // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&m_backgroundColor)); // Edit 3 floats representing a color
 
         // Buttons return true when clicked (most widgets return true when edited/activated)

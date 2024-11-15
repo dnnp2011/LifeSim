@@ -17,7 +17,7 @@ struct WindowsMetrics {
     double windowsFps{ 0.0 };
 };
 
-static float GetCpuUsage() {
+static float get_cpu_usage() {
     static FILETIME prevSysKernel, prevSysUser;
     static FILETIME prevProcKernel, prevProcUser;
     FILETIME sysIdle, sysKernel, sysUser;
@@ -91,6 +91,7 @@ void Application::Run() {
     static float physicsAccumulator{ 0.0f };
     static int physicsTickCount{ 0 };
     static float physicsFrameTime{ 0.0f };
+
     static float lastPhysicsTick{ 0.0f };
     static float lastPhysicsTime{ 0.0f };
     static float physicsTps{ 0.0f }; // Tick per second
@@ -101,7 +102,14 @@ void Application::Run() {
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&start);
 
+    // NOTE: When the GLFW backend is initialized, these callbacks should already be installed, but they don't seem to be working unless I explicitly set them (and scroll events still aren't working)
+    glfwSetKeyCallback(m_Renderer.m_Window, ImGui_ImplGlfw_KeyCallback);
+    glfwSetScrollCallback(m_Renderer.m_Window, ImGui_ImplGlfw_ScrollCallback);
+
     while (!glfwWindowShouldClose(m_Renderer.m_Window)) {
+        ImGui::SetNextFrameWantCaptureKeyboard(true);
+        ImGui::SetNextFrameWantCaptureMouse(true);
+
         //region GLFW Initialization --------------------------------
         glfwPollEvents();
 
@@ -149,7 +157,43 @@ void Application::Run() {
         }
         //endregion -------------------------------------------------
 
-        cpuUsage = GetCpuUsage();
+        //region IO Testing -----------------------------------------
+        static float zoom{ 1.0f };
+        const ImGuiIO* io = &ImGui::GetIO();
+
+        if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
+            std::cout << "ImGui::Arrow Up pressed" << std::endl;
+            zoom += 0.1f;
+        }
+        if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
+            std::cout << "ImGui::Arrow Down pressed" << std::endl;
+            zoom -= 0.1f;
+        }
+
+        if (std::abs(io->MouseWheel) > 0.0f || io->MouseWheelH != 0.0f) {
+            zoom += io->MouseWheel;
+            zoom = std::clamp(zoom, m_minZoom, m_maxZoom);
+
+            ImGui::SetWindowFontScale(zoom);
+
+            // auto t{ frameTime / 0.3f }; // 300ms to reach target zoom
+            auto t{ frameTime / 0.15f }; // 300ms to reach target zoom
+            // m_Renderer.m_Zoom = ImMath::Lerp(m_Renderer.m_Zoom, zoom, std::clamp(t, 0.0f, 3.0f)); // Works well but a bit abrupt at start and finish
+            m_Renderer.m_Zoom = ImMath::EaseInOut(m_Renderer.m_Zoom, zoom, std::clamp(t, 0.0f, 1.0f));
+        }
+
+        Debounce(
+            [io](const std::string& id) {
+                std::cout << "--------" << std::endl;
+                std::cout << id << ": " << io->MouseWheel << std::endl;
+                std::cout << id << "H: " << io->MouseWheelH << std::endl;
+            },
+            1000,
+            "MouseWheel"
+        );
+        //endregion -------------------------------------------------
+
+        cpuUsage = get_cpu_usage();
 
         auto [
             windowsFrames,

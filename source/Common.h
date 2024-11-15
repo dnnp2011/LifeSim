@@ -219,6 +219,23 @@ namespace ImMath {
 
         return velocity - (normal * (2.0f * dotProduct));
     }
+
+    template<typename T>
+    inline T Lerp(T start, T end, float t) {
+        return start + t * (end - start);
+    }
+
+    template<typename T>
+    inline T Dampen(T current, T target, const float smoothing, const float deltaTime) {
+        return current + (target - current) * (1 - std::exp(-smoothing * deltaTime));
+    }
+
+    template<typename T>
+    inline T EaseInOut(T start, T end, float t) {
+        float factor = (1 - std::cos(t * M_PI)) / 2;
+
+        return start * (1 - factor) + end * factor;
+    }
 }
 
 namespace Threads {

@@ -10,7 +10,12 @@ public:
     ECSManager m_ECSManger;
 
 private:
+    std::thread m_physicsThread;
+    std::thread m_renderThread;
+    std::atomic<bool> m_running{ true };
     Threads::ThreadPool m_threadPool{ std::thread::hardware_concurrency() };
+    float m_maxZoom{ 10.0f };
+    float m_minZoom{ 0.1f };
 
 public:
     Application();
