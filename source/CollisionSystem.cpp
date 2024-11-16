@@ -16,7 +16,7 @@ void CollisionSystem::update(
     ColliderBuffer& colliders
 ) {
     static int width, height;
-    glfwGetWindowSize(g_Application.m_Renderer.m_Window, &width, &height);
+    glfwGetWindowSize(Container::Resolve<Renderer>()->m_Window, &width, &height);
 
     for (const auto& entityA: entities) {
         if (isOutOfBounds(positions[entityA.id], colliders[entityA.id], velocities[entityA.id], width, height)) {
@@ -55,11 +55,30 @@ void CollisionSystem::update(
                         if (isColliding(positions[entityA.id], colliders[entityA.id], positions[entityB.id], colliders[entityB.id])) {
                             const std::lock_guard lock(m_mtx);
 
-                            velocities[entityA.id].dx *= -1;
-                            velocities[entityA.id].dy *= -1;
+                            ImVec2 normal = ImMath::CalculateNormal(
+                                ImVec2{ positions[entityA.id].x, positions[entityA.id].y },
+                                ImVec2{ positions[entityB.id].x, positions[entityB.id].y }
+                            );
 
-                            velocities[entityB.id].dx *= -1;
-                            velocities[entityB.id].dy *= -1;
+                            velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect((ImVec2)velocities[entityA.id], normal));
+                            velocities[entityB.id] = static_cast<Velocity>(ImMath::Reflect((ImVec2)velocities[entityB.id], ImMath::Invert(normal)));
+
+                            // const float penetrationDepth = ImMath::CalculatePenetrationDepth(
+                            //     static_cast<const ImVec2&>(positions[entityA.id]),
+                            //     static_cast<const ImVec2&>(positions[entityB.id]),
+                            //     colliders[entityA.id],
+                            //     colliders[entityB.id]
+                            // );
+                            // const float penetrationDepth = ImMath::Distance(
+                            //     static_cast<const ImVec2&>(positions[entityA.id]),
+                            //     static_cast<const ImVec2&>(positions[entityB.id])
+                            // ) - ((colliders[entityA.id].width + colliders[entityB.id].width) / 2);
+
+                            // velocities[entityA.id].dx *= -1;
+                            // velocities[entityA.id].dy *= -1;
+
+                            // velocities[entityB.id].dx *= -1;
+                            // velocities[entityB.id].dy *= -1;
                         }
                     }
                 }

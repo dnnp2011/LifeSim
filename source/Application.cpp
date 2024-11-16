@@ -75,10 +75,6 @@ static WindowsMetrics CalculateWindowsFPS() {
     return { windowsFrames, windowsFrameTime, windowsFps };
 }
 
-Application::Application() {
-    std::cout << "Starting LifeSim Application" << std::endl;
-}
-
 void Application::Run() {
     static constexpr auto fixedDeltaTime{ 1.0f / 30.0f }; // Fixed timestep (30 updates per second)
 
@@ -103,10 +99,10 @@ void Application::Run() {
     QueryPerformanceCounter(&start);
 
     // NOTE: When the GLFW backend is initialized, these callbacks should already be installed, but they don't seem to be working unless I explicitly set them (and scroll events still aren't working)
-    glfwSetKeyCallback(m_Renderer.m_Window, ImGui_ImplGlfw_KeyCallback);
-    glfwSetScrollCallback(m_Renderer.m_Window, ImGui_ImplGlfw_ScrollCallback);
+    glfwSetKeyCallback(m_Renderer->m_Window, ImGui_ImplGlfw_KeyCallback);
+    glfwSetScrollCallback(m_Renderer->m_Window, ImGui_ImplGlfw_ScrollCallback);
 
-    while (!glfwWindowShouldClose(m_Renderer.m_Window)) {
+    while (!glfwWindowShouldClose(m_Renderer->m_Window)) {
         ImGui::SetNextFrameWantCaptureKeyboard(true);
         ImGui::SetNextFrameWantCaptureMouse(true);
 
@@ -114,7 +110,7 @@ void Application::Run() {
         glfwPollEvents();
 
         // Skip rendering if window is minimized
-        if (glfwGetWindowAttrib(m_Renderer.m_Window, GLFW_ICONIFIED) != 0) {
+        if (glfwGetWindowAttrib(m_Renderer->m_Window, GLFW_ICONIFIED) != 0) {
             ImGui_ImplGlfw_Sleep(10);
 
             continue;
@@ -178,8 +174,8 @@ void Application::Run() {
 
             // auto t{ frameTime / 0.3f }; // 300ms to reach target zoom
             auto t{ frameTime / 0.15f }; // 300ms to reach target zoom
-            // m_Renderer.m_Zoom = ImMath::Lerp(m_Renderer.m_Zoom, zoom, std::clamp(t, 0.0f, 3.0f)); // Works well but a bit abrupt at start and finish
-            m_Renderer.m_Zoom = ImMath::EaseInOut(m_Renderer.m_Zoom, zoom, std::clamp(t, 0.0f, 1.0f));
+            // m_Renderer->m_Zoom = ImMath::Lerp(m_Renderer->m_Zoom, zoom, std::clamp(t, 0.0f, 3.0f)); // Works well but a bit abrupt at start and finish
+            m_Renderer->m_Zoom = ImMath::EaseInOut(m_Renderer->m_Zoom, zoom, std::clamp(t, 0.0f, 1.0f));
         }
 
         Debounce(
@@ -201,7 +197,7 @@ void Application::Run() {
             windowsFps
         ] = CalculateWindowsFPS();
 
-        m_Renderer.prepareNewFrame();
+        m_Renderer->NewFrame();
 
         RenderSystem::update(
             m_ECSManger.m_Entities,
@@ -220,7 +216,7 @@ void Application::Run() {
             cpuUsage
         );
 
-        m_Renderer.renderFrame();
+        m_Renderer->Draw();
     }
 }
 

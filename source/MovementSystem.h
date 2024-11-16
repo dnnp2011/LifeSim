@@ -1,8 +1,7 @@
 #pragma once
 
+#include <Common.h>
 #include <unordered_set>
-
-#include "Common.h"
 
 
 class MovementSystem {

@@ -49,6 +49,7 @@ set(IMGUI_DIR ${DEPS_DIR}/imgui)
 set(INCLUDE_DIRS
         ${IMGUI_DIR}
         ${IMGUI_DIR}/backends
+        utils
 )
 set(LIBRARY_DIRS
         ${LIB_DIR}
@@ -67,7 +68,8 @@ set(PROJECT_SOURCE
         source/RenderSystem.cpp
         source/CollisionSystem.cpp
         utils/Random.h
-        source/Common.h
+        utils/Common.h
+        utils/ServiceContainer.h
 )
 
 set(IMGUI_SOURCE

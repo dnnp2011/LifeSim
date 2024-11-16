@@ -1,10 +1,10 @@
 #pragma once
 
+#include <Common.h>
 #include <unordered_map>
 #include <vector>
 
 #include "CollisionSystem.h"
-#include "Common.h"
 #include "MovementSystem.h"
 #include "RenderSystem.h"
 

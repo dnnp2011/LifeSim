@@ -1,3 +1,4 @@
+#include <Common.h>
 #include <iostream>
 #include <mutex>
 #include <unordered_map>
@@ -5,7 +6,6 @@
 #include <vector>
 
 #include "MovementSystem.h"
-#include "Common.h"
 
 
 void MovementSystem::update(

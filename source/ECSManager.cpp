@@ -1,9 +1,9 @@
 #include <iostream>
+#include <Random.h>
 #include <GLFW/glfw3.h>
 
 #include "ECSManager.h"
 #include "Application.h"
-#include "../utils/Random.h"
 
 
 ECSManager::ECSManager() {
@@ -13,7 +13,7 @@ ECSManager::ECSManager() {
     m_Colliders.reserve(ENTITY_COUNT);
 
     static int width, height;
-    glfwGetWindowSize(g_Application.m_Renderer.m_Window, &width, &height);
+    glfwGetWindowSize(g_Application.m_Renderer->m_Window, &width, &height);
 
     for (size_t i = 0; i < ENTITY_COUNT; i++) {
         const int colliderSize{ Random<int>().generate(50, 200) };

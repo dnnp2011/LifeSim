@@ -8,9 +8,8 @@
 #define GL_SILENCE_DEPRECATION
 #endif
 
+#include <Common.h>
 #include <imgui_impl_glfw.h>
-
-#include "Common.h"
 
 
 class Renderer {
@@ -35,19 +34,19 @@ public:
 
     ~Renderer();
 
-    void prepareNewFrame() const;
+    void NewFrame() const;
 
-    void renderFrame() const;
+    void Draw() const;
 
     [[nodiscard]] static ImVec2 ScreenToViewport(const ImVec2& screen_coords);
 
-    void drawCircle(const ImVec2& center, const float& radius, ImU32 color);
+    void DrawCircle(const ImVec2& center, const float& radius, ImU32 color);
 
-    void drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, ImU32 color);
+    void DrawRect(const ImVec2& topLeft, const ImVec2& bottomRight, ImU32 color);
 
-    void drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color);
+    void DrawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, ImU32 color);
 
-    void drawShape(const ShapeType& shape, const ImVec2& topLeft, const int& size, ImU32 color);
+    void DrawShape(const ShapeType& shape, const ImVec2& topLeft, const int& size, ImU32 color);
 
 private:
     void drawGui();

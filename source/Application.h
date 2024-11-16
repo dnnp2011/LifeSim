@@ -1,12 +1,15 @@
 #pragma once
 
+#include <iostream>
+#include <ServiceContainer.h>
+
 #include "ECSManager.h"
 #include "Renderer.h"
 
 
 class Application {
 public:
-    Renderer m_Renderer;
+    Renderer* m_Renderer;
     ECSManager m_ECSManger;
 
 private:
@@ -18,7 +21,9 @@ private:
     float m_minZoom{ 0.1f };
 
 public:
-    Application();
+    Application(): m_Renderer{ (Container::Bind<Renderer>().get()) } {
+        std::cout << "Booting Application Instance" << std::endl;
+    }
 
     Application(const Application&) = delete;
 

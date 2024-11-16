@@ -1,42 +1,10 @@
 #pragma once
 
-#include <iostream>
+#include <Common.h>
 #include <random>
 
 
-/**
-* Why does this Random class implementation cause the program to freeze in ECSManager::ECSManager()?
-*/
-// template<typename T>
-// class Random {
-// public:
-//     static T generate(T min, T max) {
-//         if (min > max)
-//             std::swap(min, max);
-//
-//         if constexpr (std::is_integral_v<T>) {
-//             std::uniform_int_distribution<T> distribution(min, max);
-//
-//             return distribution(generator);
-//         } else if constexpr (std::is_floating_point_v<T>) {
-//             std::uniform_real_distribution<T> distribution(min, max);
-//
-//             return distribution(generator);
-//         } else if constexpr (std::is_enum_v<T>) {
-//             std::uniform_int_distribution<int> distribution(static_cast<int>(min), static_cast<int>(max));
-//
-//             return static_cast<T>(distribution(generator));
-//         }
-//     }
-//
-// private:
-//     static std::mt19937_64 generator;
-// };
-//
-// template<typename T>
-// inline std::mt19937_64 Random<T>::generator(std::random_device{}());
-
-
+enum class ShapeType : unsigned int;
 /**
  * Generate Random Numeric Values<int, float, double, ShapeType>
  *

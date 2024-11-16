@@ -1,3 +1,10 @@
+// Learn about Dear ImGui:
+// - FAQ                  https://dearimgui.com/faq
+// - Getting Started      https://dearimgui.com/getting-started
+// - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
+// - Introduction, links and more at the top of imgui.cpp
+
+#include <Common.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
@@ -7,7 +14,6 @@
 
 #include "Renderer.h"
 #include "Application.h"
-#include "Common.h"
 
 
 //region OpenGL Error Handling -------------------------
@@ -94,8 +100,8 @@ Renderer::Renderer() {
     if (const auto err{ glewInit() }; GLEW_OK != err)
         fprintf(stderr, "Error: %p\n", glewGetErrorString(err));
 
-    fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-    fprintf(stdout, "Status: Using OpenGL %s\n", glGetString(GL_VERSION));
+    fprintf(stdout, "Status: Using GLEW %s\n", reinterpret_cast<const char*>(glewGetString(GLEW_VERSION)));
+    fprintf(stdout, "Status: Using OpenGL %s\n", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 
     m_IO = &ImGui::GetIO();
     (void)m_IO;
@@ -158,7 +164,7 @@ Renderer::~Renderer() {
     m_Window = nullptr;
 }
 
-void Renderer::prepareNewFrame() const {
+void Renderer::NewFrame() const {
     glDebugMessageCallback(
         [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
             fprintf(
@@ -177,7 +183,7 @@ void Renderer::prepareNewFrame() const {
     ImGui::NewFrame();
 }
 
-void Renderer::renderFrame() const {
+void Renderer::Draw() const {
     // Rendering
     ImGui::Render();
     int display_w, display_h;
@@ -235,9 +241,9 @@ void Renderer::renderFrame() const {
 
 ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
     static int screenHeight, screenWidth, xOffset, yOffset, windowHeight, windowWidth;
-    glfwGetFramebufferSize(g_Application.m_Renderer.m_Window, &screenWidth, &screenHeight);
-    glfwGetWindowSize(g_Application.m_Renderer.m_Window, &windowWidth, &windowHeight);
-    glfwGetWindowPos(g_Application.m_Renderer.m_Window, &xOffset, &yOffset);
+    glfwGetFramebufferSize(g_Application.m_Renderer->m_Window, &screenWidth, &screenHeight);
+    glfwGetWindowSize(g_Application.m_Renderer->m_Window, &windowWidth, &windowHeight);
+    glfwGetWindowPos(g_Application.m_Renderer->m_Window, &xOffset, &yOffset);
 
     Debounce(
         [](const std::string& id) {
@@ -282,15 +288,15 @@ Viewport Offset: { %d, %d }
     return normalized_coords;
 }
 
-void Renderer::drawRectangle(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
+void Renderer::DrawRect(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
     Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
 }
 
-void Renderer::drawCircle(const ImVec2& center, const float& radius, const ImU32 color) {
+void Renderer::DrawCircle(const ImVec2& center, const float& radius, const ImU32 color) {
     Shape<ShapeType::Circle>::draw(ImGui::GetWindowDrawList(), center, radius, color);
 }
 
-void Renderer::drawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color) {
+void Renderer::DrawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color) {
     Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), p1, p2, p3, color);
 }
 

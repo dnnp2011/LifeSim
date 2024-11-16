@@ -220,21 +220,43 @@ namespace ImMath {
         return velocity - (normal * (2.0f * dotProduct));
     }
 
-    template<typename T>
-    inline T Lerp(T start, T end, float t) {
-        return start + t * (end - start);
+    inline float Magnitude(const ImVec2& vec) {
+        return std::sqrt(vec.x * vec.x + vec.y * vec.y);
+    }
+
+    inline float Distance(const ImVec2& a, const ImVec2& b) {
+        return Magnitude(a - b);
+    }
+
+    inline ImVec2 Lerp(const ImVec2& current, const ImVec2& target, const float t) {
+        return {
+            current.x + t * (target.x - current.x),
+            current.y + t * (target.y - current.y)
+        };
+    }
+
+    inline ImVec2& Invert(ImVec2& vec) {
+        vec.x = -vec.x;
+        vec.y = -vec.y;
+
+        return vec;
     }
 
     template<typename T>
-    inline T Dampen(T current, T target, const float smoothing, const float deltaTime) {
-        return current + (target - current) * (1 - std::exp(-smoothing * deltaTime));
+    inline T Lerp(T current, T target, const float t) {
+        return current + t * (target - current);
     }
 
     template<typename T>
-    inline T EaseInOut(T start, T end, float t) {
+    inline T Dampen(T current, T target, const float smoothing, const float t) {
+        return current + (target - current) * (1 - std::exp(-smoothing * t));
+    }
+
+    template<typename T>
+    inline T EaseInOut(T current, T target, const float t) {
         float factor = (1 - std::cos(t * M_PI)) / 2;
 
-        return start * (1 - factor) + end * factor;
+        return current * (1 - factor) + target * factor;
     }
 }
 

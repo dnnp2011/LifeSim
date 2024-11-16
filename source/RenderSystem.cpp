@@ -1,11 +1,10 @@
-#include <imgui_internal.h>
+#include <Common.h>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
 
 #include "RenderSystem.h"
 #include "Application.h"
-#include "Common.h"
 
 
 // TODO: Refactor to use multithreading to draw in parallel, if possible
@@ -39,7 +38,7 @@ void RenderSystem::update(
     ImGui::Begin("Render Window", nullptr, window_flags);
     // ImGui::ScaleWindowsInViewport(viewport, 1.0f);
 
-    const auto zoom = g_Application.m_Renderer.m_Zoom;
+    const auto zoom = g_Application.m_Renderer->m_Zoom;
 
     for (const auto& [id]: entities) {
         const auto position{ positions.find(id) };
@@ -49,21 +48,21 @@ void RenderSystem::update(
         if (position != positions.end() && shape != shapes.end()) {
             switch (shape->second) {
                 case ShapeType::Rectangle:
-                    g_Application.m_Renderer.drawRectangle(
+                    g_Application.m_Renderer->DrawRect(
                         ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y - ((collider->second.height * zoom) / 2)),
                         ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Circle:
-                    g_Application.m_Renderer.drawCircle(
+                    g_Application.m_Renderer->DrawCircle(
                         ImVec2(position->second.x, position->second.y),
                         static_cast<float>(std::max(collider->second.width * zoom, collider->second.height * zoom)) / 2,
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Triangle:
-                    g_Application.m_Renderer.drawTriangle(
+                    g_Application.m_Renderer->DrawTriangle(
                         ImVec2(position->second.x, position->second.y - ((collider->second.height * zoom) / 2)),
                         ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
                         ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
