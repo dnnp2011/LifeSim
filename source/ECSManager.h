@@ -9,7 +9,8 @@
 #include "RenderSystem.h"
 
 
-class ECSManager {
+class ECSManager
+{
 public:
     EntityBuffer m_Entities;
     PositionBuffer m_Positions;

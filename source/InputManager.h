@@ -8,16 +8,20 @@
 #include "Renderer.h"
 
 
-class InputManager {
+class InputManager
+{
 private:
-    Renderer* m_renderer{ Container::Resolve<Renderer>().get() };
-    Instrumentation* m_instrumentation{ Container::Resolve<Instrumentation>().get() };
+    Renderer* m_renderer;
+    Instrumentation* m_instrumentation;
 
     float m_maxZoom{ 10.0f };
     float m_minZoom{ 0.1f };
 
 public:
-    InputManager() {
+    InputManager():
+        m_renderer{ Container::Resolve<Renderer>().get() },
+        m_instrumentation{ Container::Resolve<Instrumentation>().get() }
+    {
         // FIXME: These should already be mounted
         glfwSetKeyCallback(m_renderer->m_Window, ImGui_ImplGlfw_KeyCallback);
         glfwSetScrollCallback(m_renderer->m_Window, ImGui_ImplGlfw_ScrollCallback);

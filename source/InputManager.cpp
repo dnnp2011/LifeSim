@@ -3,11 +3,13 @@
 #include "InputManager.h"
 
 
-int InputManager::Poll() const {
+int InputManager::Poll() const
+{
     glfwPollEvents();
 
     // Skip rendering if window is minimized
-    if (glfwGetWindowAttrib(m_renderer->m_Window, GLFW_ICONIFIED) != 0) {
+    if (glfwGetWindowAttrib(m_renderer->m_Window, GLFW_ICONIFIED) != 0)
+    {
         ImGui_ImplGlfw_Sleep(50);
 
         return -1;
@@ -17,16 +19,19 @@ int InputManager::Poll() const {
     static float zoom{ 1.0f };
     const ImGuiIO* io = &ImGui::GetIO();
 
-    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow))
+    {
         std::cout << "ImGui::Arrow Up pressed" << std::endl;
         zoom += 0.1f;
     }
-    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
+    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow))
+    {
         std::cout << "ImGui::Arrow Down pressed" << std::endl;
         zoom -= 0.1f;
     }
 
-    if (std::abs(io->MouseWheel) > 0.0f || io->MouseWheelH != 0.0f) {
+    if (std::abs(io->MouseWheel) > 0.0f || io->MouseWheelH != 0.0f)
+    {
         zoom += io->MouseWheel;
         zoom = std::clamp(zoom, m_minZoom, m_maxZoom);
 

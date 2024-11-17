@@ -7,7 +7,7 @@
 #include <Common.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl2.h>
+#include <imgui_impl_opengl3.h>
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -23,11 +23,13 @@
 x; \
 GLLogCall(#x, __FILE__, __LINE__)
 
-static void GLClearError() {
+static void GLClearError()
+{
     while (glGetError() != GL_NO_ERROR);
 }
 
-static void GLLogCall(const char* function, const char* file, const int line) {
+static void GLLogCall(const char* function, const char* file, const int line)
+{
     while (const GLenum error{ glGetError() })
         std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
 }
@@ -38,30 +40,37 @@ template<ShapeType T>
 class Shape;
 
 template<>
-class Shape<ShapeType::Circle> {
+class Shape<ShapeType::Circle>
+{
 public:
-    static void draw(ImDrawList* draw_list, const ImVec2& center, const float radius, const ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& center, const float radius, const ImU32 color)
+    {
         draw_list->AddCircleFilled(Renderer::ScreenToViewport(center), radius, color);
     }
 };
 
 template<>
-class Shape<ShapeType::Rectangle> {
+class Shape<ShapeType::Rectangle>
+{
 public:
-    static void draw(ImDrawList* draw_list, const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color)
+    {
         draw_list->AddRectFilled(Renderer::ScreenToViewport(topLeft), Renderer::ScreenToViewport(bottomRight), color, 0.5f);
     }
 };
 
 template<>
-class Shape<ShapeType::Triangle> {
+class Shape<ShapeType::Triangle>
+{
 public:
-    static void draw(ImDrawList* draw_list, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color) {
+    static void draw(ImDrawList* draw_list, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color)
+    {
         draw_list->AddTriangleFilled(Renderer::ScreenToViewport(p1), Renderer::ScreenToViewport(p2), Renderer::ScreenToViewport(p3), color);
     }
 };
 
-Renderer::Renderer() {
+Renderer::Renderer()
+{
     glfwSetErrorCallback(errorCallback);
 
     if (!glfwInit())
@@ -76,9 +85,11 @@ Renderer::Renderer() {
         nullptr
     );
 
-    if (m_Window == nullptr) {
+    if (m_Window == nullptr)
+    {
         std::cout << "Failed to create GLFW window" << std::endl;
-    } else {
+    } else
+    {
         int width, height;
         glfwGetWindowSize(m_Window, &width, &height);
         std::cout << "Created GLFW window: " << width << "x" << height << std::endl;
@@ -116,7 +127,8 @@ Renderer::Renderer() {
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style{ ImGui::GetStyle() };
-    if (m_IO->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    if (m_IO->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
         style.WindowRounding              = m_windowRounding;
         style.PopupRounding               = m_popupRounding;
         style.Colors[ImGuiCol_WindowBg].w = m_windowBgAlpha;
@@ -125,7 +137,7 @@ Renderer::Renderer() {
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-    ImGui_ImplOpenGL2_Init();
+    ImGui_ImplOpenGL3_Init();
 
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -150,8 +162,9 @@ Renderer::Renderer() {
     // #endif
 }
 
-Renderer::~Renderer() {
-    ImGui_ImplOpenGL2_Shutdown();
+Renderer::~Renderer()
+{
+    ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
@@ -162,9 +175,11 @@ Renderer::~Renderer() {
     m_Window = nullptr;
 }
 
-void Renderer::NewFrame() const {
+void Renderer::NewFrame() const
+{
     glDebugMessageCallback(
-        [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+        [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+        {
             fprintf(
                 stderr,
                 "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
@@ -176,12 +191,13 @@ void Renderer::NewFrame() const {
         },
         nullptr
     );
-    ImGui_ImplOpenGL2_NewFrame();
+    ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void Renderer::Draw() const {
+void Renderer::Draw() const
+{
     // Rendering
     ImGui::Render();
 
@@ -217,13 +233,14 @@ void Renderer::Draw() const {
     //GLint last_program;
     //glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
     //glUseProgram(0);
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     //glUseProgram(last_program);
 
     // Update and Render additional Platform Windows
     // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
     //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-    if (m_IO->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    if (m_IO->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
         GLFWwindow* backup_current_context{ glfwGetCurrentContext() };
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
@@ -234,7 +251,8 @@ void Renderer::Draw() const {
     glfwSwapBuffers(m_Window);
 }
 
-ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
+ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords)
+{
     static int screenHeight, screenWidth, xOffset, yOffset, windowHeight, windowWidth;
     glfwGetFramebufferSize(g_Application.m_Renderer->m_Window, &screenWidth, &screenHeight);
     glfwGetWindowSize(g_Application.m_Renderer->m_Window, &windowWidth, &windowHeight);
@@ -284,19 +302,23 @@ Viewport Offset: { %d, %d }
 }
 
 
-void Renderer::DrawRect(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
+void Renderer::DrawRect(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color)
+{
     Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
 }
 
-void Renderer::DrawCircle(const ImVec2& center, const float& radius, const ImU32 color) {
+void Renderer::DrawCircle(const ImVec2& center, const float& radius, const ImU32 color)
+{
     Shape<ShapeType::Circle>::draw(ImGui::GetWindowDrawList(), center, radius, color);
 }
 
-void Renderer::DrawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color) {
+void Renderer::DrawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color)
+{
     Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), p1, p2, p3, color);
 }
 
-void Renderer::drawGui() {
+void Renderer::drawGui()
+{
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (m_showDemoWindow)
         ImGui::ShowDemoWindow(&m_showDemoWindow);
@@ -327,7 +349,8 @@ void Renderer::drawGui() {
     }
 
     // 3. Show another simple window.
-    if (m_showAnotherWindow) {
+    if (m_showAnotherWindow)
+    {
         ImGui::Begin("Another Window", &m_showAnotherWindow);
         // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
         ImGui::Text("Hello from another window!");
@@ -337,19 +360,23 @@ void Renderer::drawGui() {
     }
 }
 
-void Renderer::windowRefreshCallback(GLFWwindow* window) {
+void Renderer::windowRefreshCallback(GLFWwindow* window)
+{
     // NOTE: This is a workaround for the issue where the window doesn't refresh when minimized
-    if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0) {
+    if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
+    {
         fprintf(stdout, "Restore Window\n");
         glfwRestoreWindow(window);
     }
 }
 
-void Renderer::framebufferSizeCallback(GLFWwindow* window, const int width, const int height) {
+void Renderer::framebufferSizeCallback(GLFWwindow* window, const int width, const int height)
+{
     fprintf(stdout, "Framebuffer Resized: %d x %d\n", width, height);
     glViewport(0, 0, width, height);
 }
 
-void Renderer::errorCallback(const int error, const char* description) {
+void Renderer::errorCallback(const int error, const char* description)
+{
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
 }

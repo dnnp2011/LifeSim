@@ -82,7 +82,7 @@ set(IMGUI_SOURCE
         ${IMGUI_DIR}/imgui_tables.cpp
         ${IMGUI_DIR}/imgui_widgets.cpp
         ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
-        ${IMGUI_DIR}/backends/imgui_impl_opengl2.cpp
+        ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 if(WIN32 OR WIN64)

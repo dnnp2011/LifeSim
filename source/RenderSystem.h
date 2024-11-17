@@ -1,7 +1,8 @@
 #pragma once
 
 
-class RenderSystem {
+class RenderSystem
+{
 public:
     static void update(
         const EntityBuffer& entities,

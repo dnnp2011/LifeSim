@@ -13,7 +13,8 @@ void RenderSystem::update(
     const PositionBuffer& positions,
     const ColliderBuffer& colliders,
     const ShapeTypeBuffer& shapes
-) {
+)
+{
     constexpr ImGuiWindowFlags window_flags{
         ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoMove
@@ -40,13 +41,16 @@ void RenderSystem::update(
 
     const auto zoom = g_Application.m_Renderer->m_Zoom;
 
-    for (const auto& [id]: entities) {
+    for (const auto& [id]: entities)
+    {
         const auto position{ positions.find(id) };
         const auto shape{ shapes.find(id) };
         const auto collider{ colliders.find(id) };
 
-        if (position != positions.end() && shape != shapes.end()) {
-            switch (shape->second) {
+        if (position != positions.end() && shape != shapes.end())
+        {
+            switch (shape->second)
+            {
                 case ShapeType::Rectangle:
                     g_Application.m_Renderer->DrawRect(
                         ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y - ((collider->second.height * zoom) / 2)),

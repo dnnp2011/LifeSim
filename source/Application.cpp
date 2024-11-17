@@ -3,13 +3,15 @@
 #include "Application.h"
 
 
-void Application::Run() {
+void Application::Run()
+{
     static constexpr auto fixedDeltaTime{ 1.0f / 30.0f }; // Fixed timestep (30 updates per second)
     static float physicsAccumulator{ 0.0f };
 
     m_Instrumentation->Start();
 
-    while (!glfwWindowShouldClose(m_Renderer->m_Window)) {
+    while (!glfwWindowShouldClose(m_Renderer->m_Window))
+    {
         if (m_InputManager->Poll() < 0)
             continue;
 
@@ -19,7 +21,8 @@ void Application::Run() {
         physicsAccumulator += m_Instrumentation->GetFrameTime();
 
         // -- Fixed Timestep Loop -- //
-        while (physicsAccumulator >= fixedDeltaTime) {
+        while (physicsAccumulator >= fixedDeltaTime)
+        {
             m_ECSManager->update(fixedDeltaTime);
 
             physicsAccumulator -= fixedDeltaTime;

@@ -9,7 +9,8 @@
 #include "Renderer.h"
 
 
-class Application {
+class Application
+{
 public:
     Instrumentation* m_Instrumentation;
     Renderer* m_Renderer;
@@ -22,10 +23,12 @@ private:
     std::atomic<bool> m_running{ true };
 
 public:
-    Application(): m_Instrumentation{ (Container::Bind<Instrumentation>().get()) },
-                   m_Renderer{ (Container::Bind<Renderer>().get()) },
-                   m_InputManager{ (Container::Bind<InputManager>().get()) },
-                   m_ECSManager{ (Container::Bind<ECSManager>().get()) } {
+    Application():
+        m_Instrumentation{ (Container::Bind<Instrumentation>().get()) },
+        m_Renderer{ (Container::Bind<Renderer>().get()) },
+        m_InputManager{ (Container::Bind<InputManager>().get()) },
+        m_ECSManager{ (Container::Bind<ECSManager>().get()) }
+    {
         std::cout << "Booting Application Instance" << std::endl;
     }
 

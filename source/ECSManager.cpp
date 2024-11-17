@@ -6,7 +6,8 @@
 #include "Application.h"
 
 
-ECSManager::ECSManager() {
+ECSManager::ECSManager()
+{
     m_Entities.reserve(ENTITY_COUNT);
     m_Positions.reserve(ENTITY_COUNT);
     m_Velocities.reserve(ENTITY_COUNT);
@@ -15,7 +16,8 @@ ECSManager::ECSManager() {
     static int width, height;
     glfwGetWindowSize(g_Application.m_Renderer->m_Window, &width, &height);
 
-    for (size_t i = 0; i < ENTITY_COUNT; i++) {
+    for (size_t i = 0; i < ENTITY_COUNT; i++)
+    {
         const int colliderSize{ Random<int>().generate(50, 200) };
 
         createEntity(
@@ -28,7 +30,8 @@ ECSManager::ECSManager() {
     }
 }
 
-Entity ECSManager::createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape) {
+Entity ECSManager::createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape)
+{
     static int nextId{ 0 };
     const Entity entity{ nextId++ };
 
@@ -42,23 +45,28 @@ Entity ECSManager::createEntity(const Position& position, const Velocity& veloci
     return entity;
 }
 
-void ECSManager::addComponent(const int entityId, const Position& position) {
+void ECSManager::addComponent(const int entityId, const Position& position)
+{
     m_Positions[entityId] = position;
 }
 
-void ECSManager::addComponent(const int entityId, const Velocity& velocity) {
+void ECSManager::addComponent(const int entityId, const Velocity& velocity)
+{
     m_Velocities[entityId] = velocity;
 }
 
-void ECSManager::addComponent(const int entityId, const Collider& collider) {
+void ECSManager::addComponent(const int entityId, const Collider& collider)
+{
     m_Colliders[entityId] = collider;
 }
 
-void ECSManager::addComponent(const int entityId, const ShapeType& shape) {
+void ECSManager::addComponent(const int entityId, const ShapeType& shape)
+{
     m_Shapes[entityId] = shape;
 }
 
-void ECSManager::update(const float fixedDeltaTime) {
+void ECSManager::update(const float fixedDeltaTime)
+{
     m_CollisionSystem.update(
         m_Entities,
         m_Positions,
@@ -70,8 +78,6 @@ void ECSManager::update(const float fixedDeltaTime) {
         fixedDeltaTime,
         m_Entities,
         m_Positions,
-        m_Velocities,
-        m_CollisionSystem.m_entitiesToStop,
-        m_CollisionSystem.m_entitiesOutOfBounds
+        m_Velocities
     );
 }

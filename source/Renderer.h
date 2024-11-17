@@ -12,7 +12,8 @@
 #include <imgui_impl_glfw.h>
 
 
-class Renderer {
+class Renderer
+{
 public:
     GLFWwindow* m_Window{ nullptr };
     ImGuiIO* m_IO{ nullptr };

@@ -20,47 +20,73 @@ using Duration  = std::chrono::duration<double, std::milli>;
 constexpr size_t ENTITY_COUNT{ 10 };
 constexpr size_t EQ_DELTA{ static_cast<size_t>(0.1) };
 
-struct Position {
+struct Position
+{
     float x, y;
 
-    explicit operator ImVec2() const {
+    explicit operator ImVec2() const
+    {
         return { x, y };
     }
 
     Position() = default;
-    Position(const float x, const float y) : x(x), y(y) { }
+
+    Position(const float x, const float y) :
+        x(x),
+        y(y)
+    { }
+
     Position(const Position& pos) = default;
-    explicit Position(const ImVec2& vec) : x(vec.x), y(vec.y) { }
+
+    explicit Position(const ImVec2& vec) :
+        x(vec.x),
+        y(vec.y)
+    { }
 };
 
-struct Velocity {
+struct Velocity
+{
     float dx, dy;
 
-    explicit operator ImVec2() const {
+    explicit operator ImVec2() const
+    {
         return { dx, dy };
     }
 
     Velocity() = default;
-    Velocity(const float dx, const float dy) : dx(dx), dy(dy) { }
+
+    Velocity(const float dx, const float dy) :
+        dx(dx),
+        dy(dy)
+    { }
+
     Velocity(const Velocity& vel) = default;
-    explicit Velocity(const ImVec2& vec) : dx(vec.x), dy(vec.y) { }
+
+    explicit Velocity(const ImVec2& vec) :
+        dx(vec.x),
+        dy(vec.y)
+    { }
 };
 
-struct Collider {
+struct Collider
+{
     int width, height;
 };
 
-struct Entity {
+struct Entity
+{
     int id;
 };
 
-enum class ExitCode: unsigned int {
+enum class ExitCode: unsigned int
+{
     SUCCESS            = 0,
     INVALID_SHAPE_TYPE = 1,
     COUNT,
 };
 
-enum class ShapeType: unsigned int {
+enum class ShapeType: unsigned int
+{
     Rectangle,
     Circle,
     Triangle,
@@ -78,8 +104,10 @@ template<typename T>
 std::string ToString(const T& value);
 
 template<>
-inline std::string ToString(const ShapeType& shape) {
-    switch (shape) {
+inline std::string ToString(const ShapeType& shape)
+{
+    switch (shape)
+    {
         case ShapeType::Rectangle:
             return "Rectangle";
         case ShapeType::Circle:
@@ -94,8 +122,10 @@ inline std::string ToString(const ShapeType& shape) {
 }
 
 template<>
-inline std::string ToString(const ExitCode& code) {
-    switch (code) {
+inline std::string ToString(const ExitCode& code)
+{
+    switch (code)
+    {
         case ExitCode::SUCCESS:
             return "Program executed successfully";
         case ExitCode::INVALID_SHAPE_TYPE:
@@ -108,22 +138,27 @@ inline std::string ToString(const ExitCode& code) {
 }
 
 template<typename T>
-bool IsEqual(const T& a, const T& b, const T& delta = EQ_DELTA) {
+bool IsEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
+{
     return std::abs(a - b) <= delta;
 }
 
 template<typename T>
-bool IsLessThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA) {
+bool IsLessThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
+{
     return (a < b) || IsEqual(a, b, delta);
 }
 
 template<typename T>
-bool IsGreaterThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA) {
+bool IsGreaterThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
+{
     return (a > b) || IsEqual(a, b, delta);
 }
 
-inline void HandleError(const ExitCode& exitCode, const std::string& message = "") {
-    switch (exitCode) {
+inline void HandleError(const ExitCode& exitCode, const std::string& message = "")
+{
+    switch (exitCode)
+    {
         case ExitCode::INVALID_SHAPE_TYPE:
             ImGui::OpenPopup("Invalid Shape Type");
             break;
@@ -139,28 +174,32 @@ inline void HandleError(const ExitCode& exitCode, const std::string& message = "
  * @param msDelay Time in milliseconds to wait before invoking the callback
  * @param id Unique identifier for each call site
  */
-inline void Debounce(const std::function<void(const std::string& id)>& callback, const double& msDelay, const std::string& id) {
+inline void Debounce(const std::function<void(const std::string& id)>& callback, const double& msDelay, const std::string& id)
+{
     static std::unordered_map<std::string, TimePoint> lastCallTimes;
 
     auto& lastCallTime         = lastCallTimes[id];
     const auto currentTime     = Clock::now();
     const Duration elapsedTime = currentTime - lastCallTime;
 
-    if (elapsedTime.count() > msDelay) {
+    if (elapsedTime.count() > msDelay)
+    {
         callback(id);
 
         lastCallTime = currentTime;
     }
 }
 
-namespace ImMath {
+namespace ImMath
+{
     /**
      * @brief Add two ImVec2 vectors
      * @param a Vector A
      * @param b  Vector B
      * @return Sum of two vectors
      */
-    inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) {
+    inline ImVec2 operator+(const ImVec2& a, const ImVec2& b)
+    {
         return { a.x + b.x, a.y + b.y };
     }
 
@@ -170,7 +209,8 @@ namespace ImMath {
      * @param b  Vector B
      * @return Difference of two vectors
      */
-    inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) {
+    inline ImVec2 operator-(const ImVec2& a, const ImVec2& b)
+    {
         return { a.x - b.x, a.y - b.y };
     }
 
@@ -180,7 +220,8 @@ namespace ImMath {
      * @param scalar Scalar value
      * @return Scaled vector
      */
-    inline ImVec2 operator*(const ImVec2& vec, const float& scalar) {
+    inline ImVec2 operator*(const ImVec2& vec, const float& scalar)
+    {
         return { vec.x * scalar, vec.y * scalar };
     }
 
@@ -190,52 +231,62 @@ namespace ImMath {
      * @param scalar Scalar value
      * @return Scaled vector
      */
-    inline ImVec2 operator/(const ImVec2& vec, const float& scalar) {
+    inline ImVec2 operator/(const ImVec2& vec, const float& scalar)
+    {
         return { vec.x / scalar, vec.y / scalar };
     }
 
-    inline ImVec2 Normalize(const ImVec2& vec) {
+    inline ImVec2 Normalize(const ImVec2& vec)
+    {
         const auto magnitude = std::sqrt(vec.x * vec.x + vec.y * vec.y);
 
         return { vec.x / magnitude, vec.y / magnitude };
     }
 
-    inline ImVec2 CalculateNormal(const ImVec2& p1, const ImVec2& p2) {
+    inline ImVec2 CalculateNormal(const ImVec2& p1, const ImVec2& p2)
+    {
         const auto normal = ImVec2{ p2.y - p1.y, -(p1.x - p2.x) };
 
         return Normalize(normal);
     }
 
-    inline float Dot(const ImVec2& a, const ImVec2& b) {
+    inline float Dot(const ImVec2& a, const ImVec2& b)
+    {
         return (a.x * b.x) + (a.y * b.y);
     }
 
-    inline ImVec2 Cross(const ImVec2& a, const ImVec2& b) {
+    inline ImVec2 Cross(const ImVec2& a, const ImVec2& b)
+    {
         return { a.x * b.y, a.y * b.x };
     }
 
-    inline ImVec2 Reflect(const ImVec2& velocity, const ImVec2& normal) {
+    inline ImVec2 Reflect(const ImVec2& velocity, const ImVec2& normal)
+    {
         const auto dotProduct = Dot(velocity, normal);
 
         return velocity - (normal * (2.0f * dotProduct));
     }
 
-    inline float Magnitude(const ImVec2& vec) {
+    inline float Magnitude(const ImVec2& vec)
+    {
         return std::sqrt(vec.x * vec.x + vec.y * vec.y);
     }
 
-    inline float Distance(const ImVec2& a, const ImVec2& b) {
+    inline float Distance(const ImVec2& a, const ImVec2& b)
+    {
         return Magnitude(a - b);
     }
 
-    inline ImVec2 Lerp(const ImVec2& current, const ImVec2& target, const float t) {
+    inline ImVec2 Lerp(const ImVec2& current, const ImVec2& target, const float t)
+    {
         return {
             current.x + t * (target.x - current.x),
             current.y + t * (target.y - current.y)
         };
     }
 
-    inline ImVec2& Invert(ImVec2& vec) {
+    inline ImVec2& Invert(ImVec2& vec)
+    {
         vec.x = -vec.x;
         vec.y = -vec.y;
 
@@ -243,25 +294,30 @@ namespace ImMath {
     }
 
     template<typename T>
-    inline T Lerp(T current, T target, const float t) {
+    inline T Lerp(T current, T target, const float t)
+    {
         return current + t * (target - current);
     }
 
     template<typename T>
-    inline T Dampen(T current, T target, const float smoothing, const float t) {
+    inline T Dampen(T current, T target, const float smoothing, const float t)
+    {
         return current + (target - current) * (1 - std::exp(-smoothing * t));
     }
 
     template<typename T>
-    inline T EaseInOut(T current, T target, const float t) {
+    inline T EaseInOut(T current, T target, const float t)
+    {
         float factor = (1 - std::cos(t * M_PI)) / 2;
 
         return current * (1 - factor) + target * factor;
     }
 }
 
-namespace Threads {
-    class ThreadPool {
+namespace Threads
+{
+    class ThreadPool
+    {
     public:
         explicit ThreadPool(size_t numThreads);
         ~ThreadPool();
@@ -278,12 +334,15 @@ namespace Threads {
         void workerThread();
     };
 
-    inline ThreadPool::ThreadPool(const size_t numThreads) : stop(false) {
+    inline ThreadPool::ThreadPool(const size_t numThreads) :
+        stop(false)
+    {
         for (size_t i = 0; i < numThreads; ++i)
             workers.emplace_back(&ThreadPool::workerThread, this);
     }
 
-    inline ThreadPool::~ThreadPool() {
+    inline ThreadPool::~ThreadPool()
+    {
         {
             std::lock_guard lock(queueMutex);
             stop = true;
@@ -295,7 +354,8 @@ namespace Threads {
             worker.join();
     }
 
-    inline void ThreadPool::enqueue(std::function<void()> task) {
+    inline void ThreadPool::enqueue(std::function<void()> task)
+    {
         {
             std::lock_guard lock(queueMutex);
             tasks.push(std::move(task));
@@ -304,8 +364,10 @@ namespace Threads {
         condition.notify_one();
     }
 
-    inline void ThreadPool::workerThread() {
-        while (true) {
+    inline void ThreadPool::workerThread()
+    {
+        while (true)
+        {
             std::function<void()> task;
 
             {
@@ -313,7 +375,8 @@ namespace Threads {
 
                 condition.wait(
                     lock,
-                    [this] {
+                    [this]
+                    {
                         return stop || !tasks.empty();
                     }
                 );

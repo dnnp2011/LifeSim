@@ -5,7 +5,8 @@
 #include <GLFW/glfw3.h>
 
 
-class Instrumentation {
+class Instrumentation
+{
 private:
     LARGE_INTEGER m_frequency{};
     LARGE_INTEGER m_start{};
@@ -35,24 +36,29 @@ private:
 public:
     Instrumentation() = default;
 
-    void Start() {
+    void Start()
+    {
         // -- Start Windows Performance Counter -- //
         QueryPerformanceFrequency(&m_frequency);
         QueryPerformanceCounter(&m_start);
     }
 
     [[nodiscard]]
-    int GetTotalFrames() const {
+    int GetTotalFrames() const
+    {
         return m_totalFrames;
     }
 
     [[nodiscard]]
-    float GetFrameTime() const {
+    float GetFrameTime() const
+    {
         return m_frameTime;
     }
 
-    void MeasurePhysics() {
-        if (m_currentTime - m_lastPhysicsTick >= 1.0f) {
+    void MeasurePhysics()
+    {
+        if (m_currentTime - m_lastPhysicsTick >= 1.0f)
+        {
             m_physicsTps       = static_cast<float>(m_physicsTickCount) / (m_currentTime - m_lastPhysicsTick);
             m_lastPhysicsTick  = m_currentTime;
             m_physicsTickCount = 0;
@@ -62,7 +68,8 @@ public:
         m_lastPhysicsTime  = m_currentTime;
     }
 
-    void Measure() {
+    void Measure()
+    {
         m_totalFrames++;
         m_physicsTickCount++;
 
@@ -71,7 +78,8 @@ public:
         calculateWindowsFps();
     }
 
-    void Draw() const {
+    void Draw() const
+    {
         static ImVec2 panelSize{ 250, 175 };
         static ImVec2 maxPanelSize{ 400, 400 };
         static ImVec2 padding{ 10, 10 };
@@ -98,7 +106,8 @@ public:
     }
 
 private:
-    void calculateCpuUsage() {
+    void calculateCpuUsage()
+    {
         static FILETIME prevSysKernel, prevSysUser;
         static FILETIME prevProcKernel, prevProcUser;
         FILETIME sysIdle, sysKernel, sysUser;
@@ -107,7 +116,8 @@ private:
         if (!GetSystemTimes(&sysIdle, &sysKernel, &sysUser) || !GetProcessTimes(GetCurrentProcess(), &procCreation, &procExit, &procKernel, &procUser))
             m_cpuUsage = 0.0f;
 
-        if (prevSysKernel.dwLowDateTime != 0 && prevSysKernel.dwHighDateTime != 0) {
+        if (prevSysKernel.dwLowDateTime != 0 && prevSysKernel.dwHighDateTime != 0)
+        {
             ULARGE_INTEGER sysKernelDiff, sysUserDiff;
             ULARGE_INTEGER procKernelDiff, procUserDiff;
 
@@ -120,7 +130,8 @@ private:
             const ULONGLONG sysTotal  = sysKernelDiff.QuadPart + sysUserDiff.QuadPart;
             const ULONGLONG procTotal = procKernelDiff.QuadPart + procUserDiff.QuadPart;
 
-            if (sysTotal > 0) {
+            if (sysTotal > 0)
+            {
                 m_cpuUsage = (static_cast<float>(procTotal) / sysTotal) * 100.0f;
             }
         }
@@ -133,13 +144,15 @@ private:
         m_cpuUsage = 0.0f;
     }
 
-    void calculateFps() {
+    void calculateFps()
+    {
         m_currentTime = static_cast<float>(glfwGetTime());
 
         //region Calculate FPS --------------------------------------
         m_frameCount++;
 
-        if (m_currentTime - m_lastFrame >= 1.0f) {
+        if (m_currentTime - m_lastFrame >= 1.0f)
+        {
             m_fps        = static_cast<float>(m_frameCount) / (m_currentTime - m_lastFrame);
             m_lastFrame  = m_currentTime;
             m_frameCount = 0;
@@ -151,7 +164,8 @@ private:
     }
 
     // TODO: Use this example to fix the Windows FPS calculation
-    void calculateWindowsFps() {
+    void calculateWindowsFps()
+    {
         QueryPerformanceCounter(&m_end);
 
         m_windowsElapsedTime = static_cast<double>(m_end.QuadPart - m_start.QuadPart) / m_frequency.QuadPart;
@@ -159,7 +173,8 @@ private:
         m_windowsFps         = 1.0 / m_windowsFrameTime;
         m_windowsFrames++;
 
-        if (m_windowsElapsedTime >= 1.0) {
+        if (m_windowsElapsedTime >= 1.0)
+        {
             m_windowsFrames = 0;
 
             QueryPerformanceCounter(&m_start);

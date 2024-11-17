@@ -4,21 +4,17 @@
 #include <unordered_set>
 
 
-class CollisionSystem {
-public:
-    std::unordered_set<int> m_entitiesToStop;
-    std::unordered_set<int> m_entitiesOutOfBounds;
-
+class CollisionSystem
+{
 private:
     Threads::ThreadPool m_threadPool;
     std::mutex m_mtx;
     std::mutex m_oobMtx;
 
 public:
-    explicit CollisionSystem(const size_t numThreads): m_threadPool{ numThreads } {
-        m_entitiesToStop.reserve(ENTITY_COUNT);
-        m_entitiesOutOfBounds.reserve(ENTITY_COUNT);
-    } ;
+    explicit CollisionSystem(const size_t numThreads):
+        m_threadPool{ numThreads }
+    { }
 
     void update(
         const EntityBuffer& entities,
