@@ -25,11 +25,11 @@ void CollisionSystem::update(
                     const std::lock_guard oobLock(m_oobMtx);
 
                     ImVec2 boundaryNormal{ 1, 0 };
-                    if (IsGreaterThanOrEqual<float>(positions[entityA.id].x + static_cast<float>(colliders[entityA.id].width), static_cast<float>(width))) {
+                    if (ImMath::IsGreaterThanOrEqual<float>(positions[entityA.id].x + static_cast<float>(colliders[entityA.id].width), static_cast<float>(width))) {
                         boundaryNormal = { -1, 0 };
-                    } else if (IsLessThanOrEqual<float>(positions[entityA.id].y, 0)) {
+                    } else if (ImMath::IsLessThanOrEqual<float>(positions[entityA.id].y, 0)) {
                         boundaryNormal = { 0, 1 };
-                    } else if (IsGreaterThanOrEqual<float>(positions[entityA.id].y + static_cast<float>(colliders[entityA.id].height), static_cast<float>(height))) {
+                    } else if (ImMath::IsGreaterThanOrEqual<float>(positions[entityA.id].y + static_cast<float>(colliders[entityA.id].height), static_cast<float>(height))) {
                         boundaryNormal = { 0, -1 };
                     }
 
@@ -88,10 +88,10 @@ bool CollisionSystem::isColliding(
     const Collider& colB
 )
 {
-    return IsLessThanOrEqual<float>(posA.x, posB.x + static_cast<float>(colB.width))
-            && IsGreaterThanOrEqual<float>(posA.x + static_cast<float>(colA.width), posB.x)
-            && IsLessThanOrEqual<float>(posA.y, posB.y + static_cast<float>(colB.height))
-            && IsGreaterThanOrEqual<float>(posA.y + static_cast<float>(colA.height), posB.y);
+    return ImMath::IsLessThanOrEqual<float>(posA.x, posB.x + static_cast<float>(colB.width))
+            && ImMath::IsGreaterThanOrEqual<float>(posA.x + static_cast<float>(colA.width), posB.x)
+            && ImMath::IsLessThanOrEqual<float>(posA.y, posB.y + static_cast<float>(colB.height))
+            && ImMath::IsGreaterThanOrEqual<float>(posA.y + static_cast<float>(colA.height), posB.y);
 }
 
 bool CollisionSystem::isOutOfBounds(
@@ -103,8 +103,8 @@ bool CollisionSystem::isOutOfBounds(
 )
 {
     // TODO: Improve to predict if entity will be out of bounds in the next frame
-    return IsLessThanOrEqual<float>(pos.x, 0)
-            || IsGreaterThanOrEqual<float>(pos.x + static_cast<float>(col.width), static_cast<float>(width))
-            || IsLessThanOrEqual<float>(pos.y, 0)
-            || IsGreaterThanOrEqual(pos.y + static_cast<float>(col.height), static_cast<float>(height));
+    return ImMath::IsLessThanOrEqual<float>(pos.x, 0)
+            || ImMath::IsGreaterThanOrEqual<float>(pos.x + static_cast<float>(col.width), static_cast<float>(width))
+            || ImMath::IsLessThanOrEqual<float>(pos.y, 0)
+            || ImMath::IsGreaterThanOrEqual(pos.y + static_cast<float>(col.height), static_cast<float>(height));
 }

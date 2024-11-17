@@ -129,24 +129,6 @@ inline std::string ToString(const ExitCode& code)
     }
 }
 
-template<typename T>
-bool IsEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
-{
-    return std::abs(a - b) <= delta;
-}
-
-template<typename T>
-bool IsLessThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
-{
-    return (a < b) || IsEqual(a, b, delta);
-}
-
-template<typename T>
-bool IsGreaterThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
-{
-    return (a > b) || IsEqual(a, b, delta);
-}
-
 inline void HandleError(const ExitCode& exitCode, const std::string& message = "")
 {
     switch (exitCode) {
@@ -300,6 +282,24 @@ namespace ImMath {
         float factor = (1 - std::cos(t * M_PI)) / 2;
 
         return current * (1 - factor) + target * factor;
+    }
+
+    template<typename T>
+    inline bool IsEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
+    {
+        return std::abs(a - b) <= delta;
+    }
+
+    template<typename T>
+    inline bool IsLessThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
+    {
+        return (a < b) || ImMath::IsEqual(a, b, delta);
+    }
+
+    template<typename T>
+    inline bool IsGreaterThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
+    {
+        return (a > b) || ImMath::IsEqual(a, b, delta);
     }
 }
 
