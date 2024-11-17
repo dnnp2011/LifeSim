@@ -37,6 +37,8 @@
 * [Basic physics interactions](https://www.youtube.com/watch?v=-_IspRG548E)
 * [GJK Algorithm for collision detection](https://www.youtube.com/watch?v=MDusDn8oTSE)
 * [FetchContent Docs](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+* [Build Custom Instrumentation](https://youtu.be/5R6ug5NMC1M?si=8sjy3Rx-31Ci19hC&t=584)
+* [STB Library](https://github.com/nothings/stb/tree/master)
 
 # Inspiration
 

@@ -50,4 +50,10 @@ public:
 
 private:
     void drawGui();
+
+    static void errorCallback(int error, const char* description);
+
+    static void windowRefreshCallback(GLFWwindow* window);
+
+    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 };

@@ -38,6 +38,7 @@ int InputManager::Poll() const {
         m_renderer->m_Zoom = ImMath::EaseInOut(m_renderer->m_Zoom, zoom, std::clamp(t, 0.0f, 1.0f));
     }
 
+#if 0
     Debounce(
         [io](const std::string& id) {
             std::cout << "--------" << std::endl;
@@ -47,6 +48,7 @@ int InputManager::Poll() const {
         1000,
         "MouseWheel"
     );
+#endif
     //endregion -------------------------------------------------
 
     return 0;

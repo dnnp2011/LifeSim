@@ -32,10 +32,6 @@ static void GLLogCall(const char* function, const char* file, const int line) {
         std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
 }
 
-static void glfw_error_callback(const int error, const char* description) {
-    std::cerr << "GLFW Error " << error << ": " << description << std::endl;
-}
-
 //endregion --------------------------------------------
 
 template<ShapeType T>
@@ -66,7 +62,7 @@ public:
 };
 
 Renderer::Renderer() {
-    glfwSetErrorCallback(glfw_error_callback);
+    glfwSetErrorCallback(errorCallback);
 
     if (!glfwInit())
         throw std::runtime_error("Failed to initialize GLFW");
@@ -92,6 +88,8 @@ Renderer::Renderer() {
 
     glfwMakeContextCurrent(m_Window);
     glfwSwapInterval(1); // Enable vsync
+    glfwSetFramebufferSizeCallback(m_Window, framebufferSizeCallback);
+    glfwSetWindowRefreshCallback(m_Window, windowRefreshCallback);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -186,10 +184,7 @@ void Renderer::NewFrame() const {
 void Renderer::Draw() const {
     // Rendering
     ImGui::Render();
-    int display_w, display_h;
-    // glfwGetFramebufferSize(window, &display_w, &display_h);
-    glfwGetWindowSize(m_Window, &display_w, &display_h);
-    GLCall(glViewport(0, 0, display_w, display_h));
+
     GLCall(
         glClearColor(
             m_backgroundColor.x * m_backgroundColor.w,
@@ -245,13 +240,13 @@ ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) {
     glfwGetWindowSize(g_Application.m_Renderer->m_Window, &windowWidth, &windowHeight);
     glfwGetWindowPos(g_Application.m_Renderer->m_Window, &xOffset, &yOffset);
 
+#if (DEBUG && 0)
     Debounce(
-        [](const std::string& id) {
+        [&](const std::string& id) {
             static const ImGuiViewport* viewport{ ImGui::GetMainViewport() };
             static ImVec2 viewport_pos{ viewport->Pos };
             static ImVec2 viewport_size{ viewport->Size };
 
-#if (DEBUG)
             fprintf(
                 stdout,
                 R"(
@@ -287,6 +282,7 @@ Viewport Offset: { %d, %d }
 
     return normalized_coords;
 }
+
 
 void Renderer::DrawRect(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color) {
     Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), topLeft, bottomRight, color);
@@ -339,4 +335,21 @@ void Renderer::drawGui() {
             m_showAnotherWindow = false;
         ImGui::End();
     }
+}
+
+void Renderer::windowRefreshCallback(GLFWwindow* window) {
+    // NOTE: This is a workaround for the issue where the window doesn't refresh when minimized
+    if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0) {
+        fprintf(stdout, "Restore Window\n");
+        glfwRestoreWindow(window);
+    }
+}
+
+void Renderer::framebufferSizeCallback(GLFWwindow* window, const int width, const int height) {
+    fprintf(stdout, "Framebuffer Resized: %d x %d\n", width, height);
+    glViewport(0, 0, width, height);
+}
+
+void Renderer::errorCallback(const int error, const char* description) {
+    std::cerr << "GLFW Error " << error << ": " << description << std::endl;
 }

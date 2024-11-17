@@ -17,7 +17,8 @@ void MovementSystem::update(
     const std::unordered_set<int>& entitiesOutOfBounds
 ) {
     for (const auto& entity: entities) {
-        Debounce(
+#if 0
+  Debounce(
             [entity, positions, velocities](const std::string& id) {
                 const auto entityPosition{ positions.find(entity.id) };
                 const auto entityVelocity{ velocities.find(entity.id) };
@@ -30,6 +31,8 @@ void MovementSystem::update(
             5000,
             "MovementSystem::update::" + std::to_string(entity.id)
         );
+#endif
+
 
         m_threadPool.enqueue(
             [this, &fixedDeltaTime, &positions, &velocities, &entity]() {
