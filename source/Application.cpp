@@ -15,8 +15,7 @@ void Application::Run()
 
     m_Instrumentation->Start();
 
-    while (!glfwWindowShouldClose(m_Renderer->m_Window))
-    {
+    while (!glfwWindowShouldClose(m_Renderer->m_Window)) {
         if (m_InputManager->Poll() < 0)
             continue;
 
@@ -26,8 +25,7 @@ void Application::Run()
         physicsAccumulator += m_Instrumentation->GetFrameTime();
 
         // -- Fixed Timestep Loop -- //
-        while (physicsAccumulator >= fixedDeltaTime)
-        {
+        while (physicsAccumulator >= fixedDeltaTime) {
             m_ECSManager->update(fixedDeltaTime);
 
             physicsAccumulator -= fixedDeltaTime;

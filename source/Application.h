@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Instrumentation.h>
-#include <iostream>
 #include <ServiceContainer.h>
 
 #include "ECSManager.h"
@@ -28,7 +27,7 @@ public:
         m_InputManager{ (Container::Bind<InputManager>().get()) },
         m_ECSManager{ (Container::Bind<ECSManager>().get()) }
     {
-        std::cout << "Booting Application Instance" << std::endl;
+        fprintf(stdout, "Booting Application Instance\n");
     }
 
     Application(const Application&) = delete;

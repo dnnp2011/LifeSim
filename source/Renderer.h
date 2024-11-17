@@ -17,6 +17,12 @@ public:
     GLFWwindow* m_Window{ nullptr };
     ImGuiIO* m_IO{ nullptr };
     mutable float m_Zoom{ 1.0f };
+    mutable unsigned int m_BufferHeight{ 720 };
+    mutable unsigned int m_BufferWidth{ 1280 };
+    mutable unsigned int m_WindowHeight{ 720 };
+    mutable unsigned int m_WindowWidth{ 1280 };
+    mutable unsigned int m_WindowXOffset{ 0 };
+    mutable unsigned int m_WindowYOffset{ 0 };
 
 private:
     bool m_showDemoWindow{ false };
@@ -38,7 +44,7 @@ public:
 
     void Draw() const;
 
-    [[nodiscard]] static ImVec2 ScreenToViewport(const ImVec2& screen_coords);
+    [[nodiscard]] ImVec2 ScreenToViewport(const ImVec2& screen_coords) const;
 
     void DrawCircle(const ImVec2& center, const float& radius, ImU32 color);
 
@@ -51,9 +57,13 @@ public:
 private:
     void drawGui();
 
+    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+
+    static void windowPosCallback(GLFWwindow* window, int x, int y);
+
+    static void windowSizeCallback(GLFWwindow* window, int width, int height);
+
     static void errorCallback(int error, const char* description);
 
     static void windowRefreshCallback(GLFWwindow* window);
-
-    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 };

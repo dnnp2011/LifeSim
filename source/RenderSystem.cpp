@@ -1,5 +1,4 @@
 #include <Common.h>
-#include <iostream>
 #include <unordered_map>
 #include <vector>
 
@@ -39,19 +38,16 @@ void RenderSystem::update(
     ImGui::Begin("Render Window", nullptr, window_flags);
     // ImGui::ScaleWindowsInViewport(viewport, 1.0f);
 
-    for (const auto& [id]: entities)
-    {
+    for (const auto& [id]: entities) {
         const auto position{ positions.find(id) };
         const auto shape{ shapes.find(id) };
         const auto collider{ colliders.find(id) };
 
-        if (position != positions.end() && shape != shapes.end())
-        {
+        if (position != positions.end() && shape != shapes.end()) {
             const auto renderer = Container::Resolve<Renderer>();
             const auto zoom     = renderer->m_Zoom;
 
-            switch (shape->second)
-            {
+            switch (shape->second) {
                 case ShapeType::Rectangle:
                     renderer->DrawRect(
                         ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y - ((collider->second.height * zoom) / 2)),

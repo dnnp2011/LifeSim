@@ -1,8 +1,11 @@
 #pragma once
 
 #include <Common.h>
+#include <ServiceContainer.h>
 #include <windows.h>
 #include <GLFW/glfw3.h>
+
+#include "../source/Renderer.h"
 
 
 class Instrumentation {
@@ -58,8 +61,7 @@ public:
     {
         m_physicsTickCount++;
 
-        if (m_currentTime - m_lastPhysicsTick >= 1.0f)
-        {
+        if (m_currentTime - m_lastPhysicsTick >= 1.0f) {
             m_physicsTps       = static_cast<float>(m_physicsTickCount) / (m_currentTime - m_lastPhysicsTick);
             m_lastPhysicsTick  = m_currentTime;
             m_physicsTickCount = 0;
@@ -100,6 +102,13 @@ public:
         ImGui::Text("Windows FPS: %.1f", m_windowsFps);
         ImGui::Text("CPU Usage: %.1f%%", m_cpuUsage);
 
+        {
+            const auto renderer = Container::Resolve<Renderer>();
+
+            if (renderer->m_IO->Framerate > 0)
+                ImGui::Text("Average: %.3f ms/frame (%.1f FPS)", 1000.0f / renderer->m_IO->Framerate, renderer->m_IO->Framerate);
+        }
+
     cleanup:
         ImGui::End();
         ImGui::PopStyleVar();
@@ -116,8 +125,7 @@ private:
         if (!GetSystemTimes(&sysIdle, &sysKernel, &sysUser) || !GetProcessTimes(GetCurrentProcess(), &procCreation, &procExit, &procKernel, &procUser))
             m_cpuUsage = 0.0f;
 
-        if (prevSysKernel.dwLowDateTime != 0 && prevSysKernel.dwHighDateTime != 0)
-        {
+        if (prevSysKernel.dwLowDateTime != 0 && prevSysKernel.dwHighDateTime != 0) {
             ULARGE_INTEGER sysKernelDiff, sysUserDiff;
             ULARGE_INTEGER procKernelDiff, procUserDiff;
 
@@ -130,8 +138,7 @@ private:
             const ULONGLONG sysTotal  = sysKernelDiff.QuadPart + sysUserDiff.QuadPart;
             const ULONGLONG procTotal = procKernelDiff.QuadPart + procUserDiff.QuadPart;
 
-            if (sysTotal > 0)
-            {
+            if (sysTotal > 0) {
                 m_cpuUsage = (static_cast<float>(procTotal) / sysTotal) * 100.0f;
             }
         }
@@ -151,8 +158,7 @@ private:
         //region Calculate FPS --------------------------------------
         m_frameCount++;
 
-        if (m_currentTime - m_lastFrame >= 1.0f)
-        {
+        if (m_currentTime - m_lastFrame >= 1.0f) {
             m_fps        = static_cast<float>(m_frameCount) / (m_currentTime - m_lastFrame);
             m_lastFrame  = m_currentTime;
             m_frameCount = 0;
@@ -173,8 +179,7 @@ private:
         m_windowsFps         = 1.0 / m_windowsFrameTime;
         m_windowsFrames++;
 
-        if (m_windowsElapsedTime >= 1.0)
-        {
+        if (m_windowsElapsedTime >= 1.0) {
             m_windowsFrames = 0;
 
             QueryPerformanceCounter(&m_start);

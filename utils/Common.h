@@ -74,13 +74,13 @@ struct Entity {
     int id;
 };
 
-enum class ExitCode: unsigned int {
+enum class ExitCode: uint8_t {
     SUCCESS            = 0,
     INVALID_SHAPE_TYPE = 1,
     COUNT,
 };
 
-enum class ShapeType: unsigned int {
+enum class ShapeType: uint8_t {
     Rectangle,
     Circle,
     Triangle,
@@ -100,8 +100,7 @@ std::string ToString(const T& value);
 template<>
 inline std::string ToString(const ShapeType& shape)
 {
-    switch (shape)
-    {
+    switch (shape) {
         case ShapeType::Rectangle:
             return "Rectangle";
         case ShapeType::Circle:
@@ -118,8 +117,7 @@ inline std::string ToString(const ShapeType& shape)
 template<>
 inline std::string ToString(const ExitCode& code)
 {
-    switch (code)
-    {
+    switch (code) {
         case ExitCode::SUCCESS:
             return "Program executed successfully";
         case ExitCode::INVALID_SHAPE_TYPE:
@@ -151,8 +149,7 @@ bool IsGreaterThanOrEqual(const T& a, const T& b, const T& delta = EQ_DELTA)
 
 inline void HandleError(const ExitCode& exitCode, const std::string& message = "")
 {
-    switch (exitCode)
-    {
+    switch (exitCode) {
         case ExitCode::INVALID_SHAPE_TYPE:
             ImGui::OpenPopup("Invalid Shape Type");
             break;
@@ -176,8 +173,7 @@ inline void Debounce(const std::function<void(const std::string& id)>& callback,
     const auto currentTime     = Clock::now();
     const Duration elapsedTime = currentTime - lastCallTime;
 
-    if (elapsedTime.count() > msDelay)
-    {
+    if (elapsedTime.count() > msDelay) {
         callback(id);
 
         lastCallTime = currentTime;
@@ -357,8 +353,7 @@ namespace Threads {
 
     inline void ThreadPool::workerThread()
     {
-        while (true)
-        {
+        while (true) {
             std::function<void()> task;
 
             {

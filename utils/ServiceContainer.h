@@ -32,17 +32,14 @@ public:
 
         m_Services[type] = service;
 
-        for (Service& service: m_Container)
-        {
-            if (service.type == type)
-            {
+        for (Service& service: m_Container) {
+            if (service.type == type) {
                 fprintf(stderr, "Service %s already bound to Container\n", type.name());
 
                 return nullptr;
             }
 
-            if (!service.instance)
-            {
+            if (!service.instance) {
                 service.type     = type;
                 service.instance = ptr;
 
@@ -61,17 +58,14 @@ public:
 
         m_Services[type] = Service{ type, ptr };
 
-        for (Service service: m_Container)
-        {
-            if (service.type == type)
-            {
+        for (Service service: m_Container) {
+            if (service.type == type) {
                 fprintf(stderr, "Service %s already bound to Container\n", type.name());
 
                 return nullptr;
             }
 
-            if (!service.instance)
-            {
+            if (!service.instance) {
                 service.type     = type;
                 service.instance = ptr;
 
@@ -87,8 +81,7 @@ public:
     {
         const auto type = std::type_index(typeid(T));
 
-        if (!m_Services.contains(type))
-        {
+        if (!m_Services.contains(type)) {
             fprintf(stderr, "Service %s not found in Container\n", type.name());
 
             return nullptr;
@@ -102,8 +95,7 @@ public:
     {
         const auto type = std::type_index(typeid(T));
 
-        for (const auto& service: m_Container)
-        {
+        for (const auto& service: m_Container) {
             if (service.type == type)
                 return std::static_pointer_cast<T>(service.instance);
         }

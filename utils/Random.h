@@ -4,7 +4,7 @@
 #include <random>
 
 
-enum class ShapeType : unsigned int;
+enum class ShapeType : uint8_t;
 /**
  * Generate Random Numeric Values<int, float, double, ShapeType>
  *
@@ -24,18 +24,15 @@ public:
         if (min > max)
             std::swap(min, max);
 
-        if constexpr (std::is_integral_v<T>)
-        {
+        if constexpr (std::is_integral_v<T>) {
             std::uniform_int_distribution<T> distribution(min, max);
 
             return distribution(generator);
-        } else if constexpr (std::is_floating_point_v<T>)
-        {
+        } else if constexpr (std::is_floating_point_v<T>) {
             std::uniform_real_distribution<T> distribution(min, max);
 
             return distribution(generator);
-        } else if constexpr (std::is_enum_v<T>)
-        {
+        } else if constexpr (std::is_enum_v<T>) {
             std::uniform_int_distribution<int> distribution(static_cast<int>(min), static_cast<int>(max));
 
             return static_cast<T>(distribution(generator));

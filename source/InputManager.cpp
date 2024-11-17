@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "InputManager.h"
 
 
@@ -8,8 +6,7 @@ int InputManager::Poll() const
     glfwPollEvents();
 
     // Skip rendering if window is minimized
-    if (glfwGetWindowAttrib(m_renderer->m_Window, GLFW_ICONIFIED) != 0)
-    {
+    if (glfwGetWindowAttrib(m_renderer->m_Window, GLFW_ICONIFIED) != 0) {
         ImGui_ImplGlfw_Sleep(50);
 
         return -1;
@@ -19,19 +16,16 @@ int InputManager::Poll() const
     static float zoom{ 1.0f };
     const ImGuiIO* io = &ImGui::GetIO();
 
-    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow))
-    {
-        std::cout << "ImGui::Arrow Up pressed" << std::endl;
+    if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
+        fprintf(stdout, "ImGui::Arrow Up pressed\n");
         zoom += 0.1f;
     }
-    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow))
-    {
-        std::cout << "ImGui::Arrow Down pressed" << std::endl;
+    if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
+        fprintf(stdout, "ImGui::Arrow Down pressed\n");
         zoom -= 0.1f;
     }
 
-    if (std::abs(io->MouseWheel) > 0.0f || io->MouseWheelH != 0.0f)
-    {
+    if (std::abs(io->MouseWheel) > 0.0f || io->MouseWheelH != 0.0f) {
         zoom += io->MouseWheel;
         zoom = std::clamp(zoom, m_minZoom, m_maxZoom);
 
@@ -46,9 +40,9 @@ int InputManager::Poll() const
 #if 0
     Debounce(
         [io](const std::string& id) {
-            std::cout << "--------" << std::endl;
-            std::cout << id << ": " << io->MouseWheel << std::endl;
-            std::cout << id << "H: " << io->MouseWheelH << std::endl;
+            fprintf(stdout, "MouseWheel: %.2f\n", io->MouseWheel);
+            fprintf(stdout, "MouseWheelH: %.2f\n", io->MouseWheelH);
+            fprintf(stdout, "MouseWheel: %.2f\n", io->MouseWheel);
         },
         1000,
         "MouseWheel"

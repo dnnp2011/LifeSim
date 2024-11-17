@@ -1,4 +1,3 @@
-#include <iostream>
 #include <Random.h>
 #include <GLFW/glfw3.h>
 
@@ -19,9 +18,8 @@ ECSManager::ECSManager()
         glfwGetWindowSize(renderer->m_Window, &width, &height);
     }
 
-    for (size_t i = 0; i < ENTITY_COUNT; i++)
-    {
-        const int colliderSize{ Random<int>().generate(50, 200) };
+    for (size_t i = 0; i < ENTITY_COUNT; i++) {
+        const int colliderSize{ Random<int>().generate(5, 15) };
 
         createEntity(
             Position{ Position{ Random<float>().generate(0, static_cast<float>(width)), Random<float>().generate(0, static_cast<float>(height)) } },
