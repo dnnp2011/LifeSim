@@ -40,8 +40,7 @@ template<ShapeType T>
 class Shape;
 
 template<>
-class Shape<ShapeType::Circle>
-{
+class Shape<ShapeType::Circle> {
 public:
     static void draw(ImDrawList* draw_list, const ImVec2& center, const float radius, const ImU32 color)
     {
@@ -50,8 +49,7 @@ public:
 };
 
 template<>
-class Shape<ShapeType::Rectangle>
-{
+class Shape<ShapeType::Rectangle> {
 public:
     static void draw(ImDrawList* draw_list, const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color)
     {
@@ -60,8 +58,7 @@ public:
 };
 
 template<>
-class Shape<ShapeType::Triangle>
-{
+class Shape<ShapeType::Triangle> {
 public:
     static void draw(ImDrawList* draw_list, const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color)
     {
@@ -178,8 +175,7 @@ Renderer::~Renderer()
 void Renderer::NewFrame() const
 {
     glDebugMessageCallback(
-        [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
-        {
+        [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
             fprintf(
                 stderr,
                 "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
@@ -254,9 +250,13 @@ void Renderer::Draw() const
 ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords)
 {
     static int screenHeight, screenWidth, xOffset, yOffset, windowHeight, windowWidth;
-    glfwGetFramebufferSize(g_Application.m_Renderer->m_Window, &screenWidth, &screenHeight);
-    glfwGetWindowSize(g_Application.m_Renderer->m_Window, &windowWidth, &windowHeight);
-    glfwGetWindowPos(g_Application.m_Renderer->m_Window, &xOffset, &yOffset);
+    {
+        const auto renderer = Container::Resolve<Renderer>();
+
+        glfwGetFramebufferSize(renderer->m_Window, &screenWidth, &screenHeight);
+        glfwGetWindowSize(renderer->m_Window, &windowWidth, &windowHeight);
+        glfwGetWindowPos(renderer->m_Window, &xOffset, &yOffset);
+    }
 
 #if (DEBUG && 0)
     Debounce(

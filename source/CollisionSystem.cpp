@@ -1,5 +1,4 @@
 #include <mutex>
-#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -24,8 +23,7 @@ void CollisionSystem::update(
         if (isOutOfBounds(positions[entityA.id], colliders[entityA.id], velocities[entityA.id], width, height))
         {
             m_threadPool.enqueue(
-                [this, &positions, &colliders, &entityA, &velocities]()
-                {
+                [this, &positions, &colliders, &entityA, &velocities]() {
                     const std::lock_guard oobLock(m_oobMtx);
 
                     ImVec2 boundaryNormal{ 1, 0 };
@@ -53,8 +51,7 @@ void CollisionSystem::update(
                 continue;
 
             m_threadPool.enqueue(
-                [this, &positions, &colliders, &entityA, &entityB, &velocities]()
-                {
+                [this, &positions, &colliders, &entityA, &entityB, &velocities]() {
                     const auto entityAPosition{ positions.find(entityA.id) };
                     const auto entityACollider{ colliders.find(entityA.id) };
                     const auto entityBPosition{ positions.find(entityB.id) };
@@ -84,12 +81,6 @@ void CollisionSystem::update(
                             //     static_cast<const ImVec2&>(positions[entityA.id]),
                             //     static_cast<const ImVec2&>(positions[entityB.id])
                             // ) - ((colliders[entityA.id].width + colliders[entityB.id].width) / 2);
-
-                            // velocities[entityA.id].dx *= -1;
-                            // velocities[entityA.id].dy *= -1;
-
-                            // velocities[entityB.id].dx *= -1;
-                            // velocities[entityB.id].dy *= -1;
                         }
                     }
                 }

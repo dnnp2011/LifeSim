@@ -20,8 +20,7 @@ using Duration  = std::chrono::duration<double, std::milli>;
 constexpr size_t ENTITY_COUNT{ 10 };
 constexpr size_t EQ_DELTA{ static_cast<size_t>(0.1) };
 
-struct Position
-{
+struct Position {
     float x, y;
 
     explicit operator ImVec2() const
@@ -44,8 +43,7 @@ struct Position
     { }
 };
 
-struct Velocity
-{
+struct Velocity {
     float dx, dy;
 
     explicit operator ImVec2() const
@@ -68,25 +66,21 @@ struct Velocity
     { }
 };
 
-struct Collider
-{
+struct Collider {
     int width, height;
 };
 
-struct Entity
-{
+struct Entity {
     int id;
 };
 
-enum class ExitCode: unsigned int
-{
+enum class ExitCode: unsigned int {
     SUCCESS            = 0,
     INVALID_SHAPE_TYPE = 1,
     COUNT,
 };
 
-enum class ShapeType: unsigned int
-{
+enum class ShapeType: unsigned int {
     Rectangle,
     Circle,
     Triangle,
@@ -190,8 +184,7 @@ inline void Debounce(const std::function<void(const std::string& id)>& callback,
     }
 }
 
-namespace ImMath
-{
+namespace ImMath {
     /**
      * @brief Add two ImVec2 vectors
      * @param a Vector A
@@ -314,10 +307,8 @@ namespace ImMath
     }
 }
 
-namespace Threads
-{
-    class ThreadPool
-    {
+namespace Threads {
+    class ThreadPool {
     public:
         explicit ThreadPool(size_t numThreads);
         ~ThreadPool();
@@ -375,8 +366,7 @@ namespace Threads
 
                 condition.wait(
                     lock,
-                    [this]
-                    {
+                    [this] {
                         return stop || !tasks.empty();
                     }
                 );

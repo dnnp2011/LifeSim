@@ -39,8 +39,6 @@ void RenderSystem::update(
     ImGui::Begin("Render Window", nullptr, window_flags);
     // ImGui::ScaleWindowsInViewport(viewport, 1.0f);
 
-    const auto zoom = g_Application.m_Renderer->m_Zoom;
-
     for (const auto& [id]: entities)
     {
         const auto position{ positions.find(id) };
@@ -49,24 +47,27 @@ void RenderSystem::update(
 
         if (position != positions.end() && shape != shapes.end())
         {
+            const auto renderer = Container::Resolve<Renderer>();
+            const auto zoom     = renderer->m_Zoom;
+
             switch (shape->second)
             {
                 case ShapeType::Rectangle:
-                    g_Application.m_Renderer->DrawRect(
+                    renderer->DrawRect(
                         ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y - ((collider->second.height * zoom) / 2)),
                         ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Circle:
-                    g_Application.m_Renderer->DrawCircle(
+                    renderer->DrawCircle(
                         ImVec2(position->second.x, position->second.y),
                         static_cast<float>(std::max(collider->second.width * zoom, collider->second.height * zoom)) / 2,
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Triangle:
-                    g_Application.m_Renderer->DrawTriangle(
+                    renderer->DrawTriangle(
                         ImVec2(position->second.x, position->second.y - ((collider->second.height * zoom) / 2)),
                         ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
                         ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),

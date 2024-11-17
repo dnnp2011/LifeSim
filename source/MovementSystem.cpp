@@ -35,8 +35,7 @@ void MovementSystem::update(
 
 
         m_threadPool.enqueue(
-            [this, &fixedDeltaTime, &positions, &velocities, &entity]()
-            {
+            [this, &fixedDeltaTime, &positions, &velocities, &entity]() {
                 const auto entityPosition{ positions.find(entity.id) };
                 const auto entityVelocity{ velocities.find(entity.id) };
 

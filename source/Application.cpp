@@ -3,6 +3,11 @@
 #include "Application.h"
 
 
+ServicePtr<Application> Application::Init()
+{
+    return Container::Bind<Application>();
+}
+
 void Application::Run()
 {
     static constexpr auto fixedDeltaTime{ 1.0f / 30.0f }; // Fixed timestep (30 updates per second)

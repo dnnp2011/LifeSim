@@ -9,8 +9,7 @@
 #include "Renderer.h"
 
 
-class Application
-{
+class Application {
 public:
     Instrumentation* m_Instrumentation;
     Renderer* m_Renderer;
@@ -36,7 +35,7 @@ public:
 
     Application& operator=(const Application&) = delete;
 
+    static ServicePtr<Application> Init();
+
     void Run();
 };
-
-inline Application g_Application;

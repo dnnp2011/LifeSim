@@ -8,8 +8,7 @@
 #include "Renderer.h"
 
 
-class InputManager
-{
+class InputManager {
 private:
     Renderer* m_renderer;
     Instrumentation* m_instrumentation;

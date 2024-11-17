@@ -5,17 +5,16 @@
 #include <GLFW/glfw3.h>
 
 
-class Instrumentation
-{
+class Instrumentation {
 private:
     LARGE_INTEGER m_frequency{};
     LARGE_INTEGER m_start{};
     LARGE_INTEGER m_end{};
 
-    int m_windowsFrames{ 0 };
-    int m_totalFrames{ 0 };
-    int m_frameCount{ 0 };
-    int m_physicsTickCount{ 0 };
+    uint64_t m_windowsFrames{ 0 };
+    uint64_t m_totalFrames{ 0 };
+    uint16_t m_frameCount{ 0 };
+    uint16_t m_physicsTickCount{ 0 };
 
     float m_physicsFrameTime{ 0.0f };
     float m_lastPhysicsTick{ 0.0f };
@@ -57,6 +56,8 @@ public:
 
     void MeasurePhysics()
     {
+        m_physicsTickCount++;
+
         if (m_currentTime - m_lastPhysicsTick >= 1.0f)
         {
             m_physicsTps       = static_cast<float>(m_physicsTickCount) / (m_currentTime - m_lastPhysicsTick);
@@ -71,7 +72,6 @@ public:
     void Measure()
     {
         m_totalFrames++;
-        m_physicsTickCount++;
 
         calculateFps();
         calculateCpuUsage();

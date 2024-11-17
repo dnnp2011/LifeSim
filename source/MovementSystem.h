@@ -3,8 +3,7 @@
 #include <Common.h>
 
 
-class MovementSystem
-{
+class MovementSystem {
 private:
     Threads::ThreadPool m_threadPool;
     std::mutex m_mtx;

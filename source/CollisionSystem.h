@@ -1,11 +1,9 @@
 #pragma once
 
 #include <Common.h>
-#include <unordered_set>
 
 
-class CollisionSystem
-{
+class CollisionSystem {
 private:
     Threads::ThreadPool m_threadPool;
     std::mutex m_mtx;

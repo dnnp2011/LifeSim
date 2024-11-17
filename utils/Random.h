@@ -12,8 +12,7 @@ enum class ShapeType : unsigned int;
  * I had silent failures when using static members, so I opted for this approach.
  */
 template<typename T>
-class Random
-{
+class Random {
 public:
     Random():
         random_device(std::random_device{}),
@@ -60,8 +59,7 @@ template class Random<ShapeType>;
 /**
  * Compare Random performance with RandomNumberGenerator
  */
-class RandomNumberGenerator
-{
+class RandomNumberGenerator {
 public:
     virtual ~RandomNumberGenerator() = default;
 
@@ -74,8 +72,7 @@ public:
     virtual ShapeType generateShapeType(const ShapeType& min = static_cast<ShapeType>(0), const ShapeType& max = ShapeType::COUNT) = 0;
 };
 
-class UniformRandomGenerator final : public RandomNumberGenerator
-{
+class UniformRandomGenerator final : public RandomNumberGenerator {
 private:
     std::mt19937_64 generator;
     std::uniform_int_distribution<int> intDistribution;

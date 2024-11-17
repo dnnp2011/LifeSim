@@ -11,9 +11,18 @@ constexpr uint8_t MAX_SERVICES{ 10 };
 template<typename T>
 using ServicePtr = std::shared_ptr<T>;
 
-class ServiceContainer
-{
+class ServiceContainer {
 public:
+    ServiceContainer() = delete;
+
+    ServiceContainer(const ServiceContainer&) = delete;
+
+    ServiceContainer& operator=(const ServiceContainer&) = delete;
+
+    ServiceContainer(ServiceContainer&&) = delete;
+
+    ~ServiceContainer() = delete;
+
     template<typename T>
     static ServicePtr<T> Bind()
     {
@@ -105,8 +114,7 @@ public:
     }
 
 private:
-    struct Service
-    {
+    struct Service {
         std::type_index type;
         ServicePtr<void> instance;
 
