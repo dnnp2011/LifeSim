@@ -67,9 +67,12 @@ set(PROJECT_SOURCE
         source/MovementSystem.cpp
         source/RenderSystem.cpp
         source/CollisionSystem.cpp
+        source/InputManager.cpp
+        source/InputManager.h
         utils/Random.h
         utils/Common.h
         utils/ServiceContainer.h
+        utils/Instrumentation.h
 )
 
 set(IMGUI_SOURCE
