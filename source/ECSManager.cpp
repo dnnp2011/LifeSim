@@ -1,12 +1,23 @@
 #include <Random.h>
+#include <ServiceContainer.h>
 #include <GLFW/glfw3.h>
 
 #include "ECSManager.h"
-#include "Application.h"
+#include "CollisionSystem.h"
+#include "MovementSystem.h"
+#include "Renderer.h"
 
 
 ECSManager::ECSManager()
 {
+    fprintf(stdout, "Instantiating ECSManager\n");
+
+    auto movement_system{ MovementSystem(m_PhysicsBufferMutex) };
+    auto collision_system{ CollisionSystem(m_PhysicsBufferMutex) };
+
+    m_MovementSystem  = Container::Bind<MovementSystem>(&movement_system).get();
+    m_CollisionSystem = Container::Bind<CollisionSystem>(&collision_system).get();
+
     m_Entities.reserve(ENTITY_COUNT);
     m_Positions.reserve(ENTITY_COUNT);
     m_Velocities.reserve(ENTITY_COUNT);
@@ -19,66 +30,88 @@ ECSManager::ECSManager()
     }
 
     for (size_t i = 0; i < ENTITY_COUNT; i++) {
-        const int colliderSize{ Random<int>().generate(5, 15) };
+        const unsigned int colliderSize{ Random<unsigned int>().generate(5, 15) };
+        // ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }; // Random Shape
 
         createEntity(
-            Position{ Position{ Random<float>().generate(0, static_cast<float>(width)), Random<float>().generate(0, static_cast<float>(height)) } },
+            Position{
+                Position{
+                    Random<float>().generate(0, static_cast<float>(width)),
+                    Random<float>().generate(0, static_cast<float>(height))
+                }
+            },
             Velocity{ Velocity{ Random<float>().generate(-2, 2), Random<float>().generate(-2, 2) } },
             Collider{ Collider{ colliderSize, colliderSize } },
-            ShapeType{ ShapeType::Rectangle }
-            // ShapeType{ ShapeType{ Random<unsigned int>().generate(0, 3) } }
+            ShapeType{ ShapeType::Rectangle },
+            Color{ Random<float>().generate(0, 1), Random<float>().generate(0, 1), Random<float>().generate(0, 1), 1 }
         );
     }
+
+    fprintf(stdout, "ECSManager Instantiated\n");
 }
 
-Entity ECSManager::createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape)
+Entity ECSManager::createEntity(
+    const Position& position,
+    const Velocity& velocity,
+    const Collider& collider,
+    const ShapeType& shape,
+    const Color& color
+)
 {
-    static int nextId{ 0 };
+    static unsigned int nextId{ 0 };
     const Entity entity{ nextId++ };
 
     m_Entities.emplace_back(entity);
+    m_PhysicsBufferWrite.entities[nextId] = entity;
 
     addComponent(entity.id, position);
     addComponent(entity.id, velocity);
     addComponent(entity.id, collider);
     addComponent(entity.id, shape);
+    addComponent(entity.id, color);
 
     return entity;
 }
 
-void ECSManager::addComponent(const int entityId, const Position& position)
+void ECSManager::addComponent(const unsigned int entityId, const Position& position)
 {
-    m_Positions[entityId] = position;
+    m_Positions[entityId]                    = position;
+    m_PhysicsBufferWrite.positions[entityId] = position;
 }
 
-void ECSManager::addComponent(const int entityId, const Velocity& velocity)
+void ECSManager::addComponent(const unsigned int entityId, const Velocity& velocity)
 {
-    m_Velocities[entityId] = velocity;
+    m_Velocities[entityId]                    = velocity;
+    m_PhysicsBufferWrite.velocities[entityId] = velocity;
 }
 
-void ECSManager::addComponent(const int entityId, const Collider& collider)
+void ECSManager::addComponent(const unsigned int entityId, const Collider& collider)
 {
-    m_Colliders[entityId] = collider;
+    m_Colliders[entityId]                    = collider;
+    m_PhysicsBufferWrite.colliders[entityId] = collider;
 }
 
-void ECSManager::addComponent(const int entityId, const ShapeType& shape)
+void ECSManager::addComponent(const unsigned int entityId, const ShapeType& shape)
 {
-    m_Shapes[entityId] = shape;
+    m_Shapes[entityId]                    = shape;
+    m_PhysicsBufferWrite.shapes[entityId] = shape;
 }
 
-void ECSManager::update(const float fixedDeltaTime)
+void ECSManager::addComponent(const unsigned int entityId, const Color& color)
 {
-    m_CollisionSystem.update(
-        m_Entities,
-        m_Positions,
-        m_Velocities,
-        m_Colliders
-    );
+    m_PhysicsBufferWrite.colors[entityId] = color;
+}
 
-    m_MovementSystem.update(
-        fixedDeltaTime,
-        m_Entities,
-        m_Positions,
-        m_Velocities
-    );
+void ECSManager::Update(const float fixedDeltaTime)
+{
+    m_CollisionSystem->Update(m_PhysicsBufferWrite);
+    m_MovementSystem->Update(m_PhysicsBufferWrite, fixedDeltaTime);
+
+    SwapBuffers();
+}
+
+void ECSManager::SwapBuffers()
+{
+    m_PhysicsBufferRead = m_PhysicsBufferWrite;
+    m_RenderBuffer      = m_PhysicsBufferWrite;
 }

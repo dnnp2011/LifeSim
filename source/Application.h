@@ -1,19 +1,19 @@
 #pragma once
 
-#include <Instrumentation.h>
-#include <ServiceContainer.h>
+#include <Common.h>
 
-#include "ECSManager.h"
-#include "InputManager.h"
-#include "Renderer.h"
 
+class Instrumentation;
+class Renderer;
+class InputManager;
+class ECSManager;
 
 class Application {
 public:
     Instrumentation* m_Instrumentation;
     Renderer* m_Renderer;
-    InputManager* m_InputManager;
     ECSManager* m_ECSManager;
+    InputManager* m_InputManager;
 
 private:
     std::thread m_physicsThread;
@@ -21,20 +21,11 @@ private:
     std::atomic<bool> m_running{ true };
 
 public:
-    Application():
-        m_Instrumentation{ (Container::Bind<Instrumentation>().get()) },
-        m_Renderer{ (Container::Bind<Renderer>().get()) },
-        m_InputManager{ (Container::Bind<InputManager>().get()) },
-        m_ECSManager{ (Container::Bind<ECSManager>().get()) }
-    {
-        fprintf(stdout, "Booting Application Instance\n");
-    }
+    explicit Application();
 
     Application(const Application&) = delete;
 
     Application& operator=(const Application&) = delete;
 
-    static ServicePtr<Application> Init();
-
-    void Run();
+    void Run() const;
 };

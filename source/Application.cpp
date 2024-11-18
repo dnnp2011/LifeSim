@@ -1,15 +1,26 @@
+#include <Instrumentation.h>
+#include <ServiceContainer.h>
 #include <GLFW/glfw3.h>
 
 #include "Application.h"
+#include "ECSManager.h"
+#include "InputManager.h"
+#include "RenderSystem.h"
 
 
-ServicePtr<Application> Application::Init()
+Application::Application():
+    m_Instrumentation{ Container::Bind<Instrumentation>().get() },
+    m_Renderer{ Container::Bind<Renderer>().get() },
+    m_ECSManager{ Container::Bind<ECSManager>().get() },
+    m_InputManager{ Container::Bind<InputManager>().get() }
 {
-    return Container::Bind<Application>();
+    fprintf(stdout, "Bootstrapped Application\n");
 }
 
-void Application::Run()
+void Application::Run() const
 {
+    fprintf(stdout, "Starting Main Loop\n");
+
     static constexpr auto fixedDeltaTime{ 1.0f / 30.0f }; // Fixed timestep (30 updates per second)
     static float physicsAccumulator{ 0.0f };
 
@@ -26,7 +37,7 @@ void Application::Run()
 
         // -- Fixed Timestep Loop -- //
         while (physicsAccumulator >= fixedDeltaTime) {
-            m_ECSManager->update(fixedDeltaTime);
+            m_ECSManager->Update(fixedDeltaTime);
 
             physicsAccumulator -= fixedDeltaTime;
 
@@ -36,15 +47,9 @@ void Application::Run()
 
         m_Renderer->NewFrame();
 
-        RenderSystem::update(
-            m_ECSManager->m_Entities,
-            m_ECSManager->m_Positions,
-            m_ECSManager->m_Colliders,
-            m_ECSManager->m_Shapes
-        );
+        RenderSystem::Update(m_ECSManager->m_RenderBuffer);
 
         m_Instrumentation->Draw();
-
         m_Renderer->Draw();
     }
 }

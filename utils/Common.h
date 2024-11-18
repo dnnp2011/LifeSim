@@ -13,13 +13,34 @@
 #include <vector>
 
 
+// Forward Declarations
+class ServiceContainer;
+
+// Local Aliases
 using Clock     = std::chrono::steady_clock;
 using TimePoint = Clock::time_point;
 using Duration  = std::chrono::duration<double, std::milli>;
 
+// Constants
 constexpr size_t ENTITY_COUNT{ 10 };
 constexpr size_t EQ_DELTA{ static_cast<size_t>(0.1) };
+inline size_t MAX_HARDWARE_THREADS{ std::thread::hardware_concurrency() };
 
+// Enums
+enum class ExitCode: uint8_t {
+    SUCCESS            = 0,
+    INVALID_SHAPE_TYPE = 1,
+    COUNT,
+};
+
+enum class ShapeType: uint8_t {
+    Rectangle,
+    Circle,
+    Triangle,
+    COUNT
+};
+
+// Structs
 struct Position {
     float x, y;
 
@@ -67,40 +88,34 @@ struct Velocity {
 };
 
 struct Collider {
-    int width, height;
+    unsigned int width, height;
 };
 
 struct Entity {
-    int id;
+    unsigned int id;
 };
 
-enum class ExitCode: uint8_t {
-    SUCCESS            = 0,
-    INVALID_SHAPE_TYPE = 1,
-    COUNT,
+struct Color {
+    float r, g, b, a;
 };
 
-enum class ShapeType: uint8_t {
-    Rectangle,
-    Circle,
-    Triangle,
-    COUNT
+struct EntityData {
+    std::array<Entity, ENTITY_COUNT> entities;
+    std::array<Position, ENTITY_COUNT> positions;
+    std::array<Velocity, ENTITY_COUNT> velocities;
+    std::array<Collider, ENTITY_COUNT> colliders;
+    std::array<ShapeType, ENTITY_COUNT> shapes;
+    std::array<Color, ENTITY_COUNT> colors;
 };
 
-using EntityBuffer    = std::vector<Entity>;
-using PositionBuffer  = std::unordered_map<int, Position>;
-using ColliderBuffer  = std::unordered_map<int, Collider>;
-using VelocityBuffer  = std::unordered_map<int, Velocity>;
-using ShapeTypeBuffer = std::unordered_map<int, ShapeType>;
-using ThreadBuffer    = std::vector<std::thread>;
-
+// Global Helper Functions
 template<typename T>
-std::string ToString(const T& value);
+std::string ToString(const T& input);
 
 template<>
-inline std::string ToString(const ShapeType& shape)
+inline std::string ToString(const ShapeType& input)
 {
-    switch (shape) {
+    switch (input) {
         case ShapeType::Rectangle:
             return "Rectangle";
         case ShapeType::Circle:
@@ -115,9 +130,9 @@ inline std::string ToString(const ShapeType& shape)
 }
 
 template<>
-inline std::string ToString(const ExitCode& code)
+inline std::string ToString(const ExitCode& input)
 {
-    switch (code) {
+    switch (input) {
         case ExitCode::SUCCESS:
             return "Program executed successfully";
         case ExitCode::INVALID_SHAPE_TYPE:
@@ -147,7 +162,11 @@ inline void HandleError(const ExitCode& exitCode, const std::string& message = "
  * @param msDelay Time in milliseconds to wait before invoking the callback
  * @param id Unique identifier for each call site
  */
-inline void Debounce(const std::function<void(const std::string& id)>& callback, const double& msDelay, const std::string& id)
+inline void Debounce(
+    const std::function<void(const std::string& id)>& callback,
+    const double& msDelay,
+    const std::string& id
+)
 {
     static std::unordered_map<std::string, TimePoint> lastCallTimes;
 
@@ -162,46 +181,23 @@ inline void Debounce(const std::function<void(const std::string& id)>& callback,
     }
 }
 
+// Utilities
 namespace ImMath {
-    /**
-     * @brief Add two ImVec2 vectors
-     * @param a Vector A
-     * @param b  Vector B
-     * @return Sum of two vectors
-     */
     inline ImVec2 operator+(const ImVec2& a, const ImVec2& b)
     {
         return { a.x + b.x, a.y + b.y };
     }
 
-    /**
-     * @brief Subtract two ImVec2 vectors
-     * @param a Vector A
-     * @param b  Vector B
-     * @return Difference of two vectors
-     */
     inline ImVec2 operator-(const ImVec2& a, const ImVec2& b)
     {
         return { a.x - b.x, a.y - b.y };
     }
 
-    /**
-     * @brief Multiply an ImVec2 vector by a scalar
-     * @param vec Vector to scale
-     * @param scalar Scalar value
-     * @return Scaled vector
-     */
     inline ImVec2 operator*(const ImVec2& vec, const float& scalar)
     {
         return { vec.x * scalar, vec.y * scalar };
     }
 
-    /**
-     * @brief Divide an ImVec2 vector by a scalar
-     * @param vec Vector to scale
-     * @param scalar Scalar value
-     * @return Scaled vector
-     */
     inline ImVec2 operator/(const ImVec2& vec, const float& scalar)
     {
         return { vec.x / scalar, vec.y / scalar };
@@ -378,3 +374,14 @@ namespace Threads {
         }
     }
 }
+
+// Shared Aliases
+using Container = ServiceContainer;
+template<typename T>
+using ServicePtr      = std::shared_ptr<T>;
+using EntityBuffer    = std::vector<Entity>;
+using PositionBuffer  = std::unordered_map<unsigned int, Position>;
+using ColliderBuffer  = std::unordered_map<unsigned int, Collider>;
+using VelocityBuffer  = std::unordered_map<unsigned int, Velocity>;
+using ShapeTypeBuffer = std::unordered_map<unsigned int, ShapeType>;
+using ThreadBuffer    = std::vector<std::thread>;

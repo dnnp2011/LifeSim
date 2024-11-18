@@ -28,11 +28,13 @@ public:
             std::uniform_int_distribution<T> distribution(min, max);
 
             return distribution(generator);
-        } else if constexpr (std::is_floating_point_v<T>) {
+        }
+        else if constexpr (std::is_floating_point_v<T>) {
             std::uniform_real_distribution<T> distribution(min, max);
 
             return distribution(generator);
-        } else if constexpr (std::is_enum_v<T>) {
+        }
+        else if constexpr (std::is_enum_v<T>) {
             std::uniform_int_distribution<int> distribution(static_cast<int>(min), static_cast<int>(max));
 
             return static_cast<T>(distribution(generator));
@@ -66,7 +68,10 @@ public:
 
     virtual double generateDouble(double min, double max) = 0;
 
-    virtual ShapeType generateShapeType(const ShapeType& min = static_cast<ShapeType>(0), const ShapeType& max = ShapeType::COUNT) = 0;
+    virtual ShapeType generateShapeType(
+        const ShapeType& min = static_cast<ShapeType>(0),
+        const ShapeType& max = ShapeType::COUNT
+    ) = 0;
 };
 
 class UniformRandomGenerator final : public RandomNumberGenerator {
@@ -102,9 +107,14 @@ public:
         return doubleDistribution(generator);
     }
 
-    ShapeType generateShapeType(const ShapeType& min = static_cast<ShapeType>(0), const ShapeType& max = ShapeType::COUNT) override
+    ShapeType generateShapeType(
+        const ShapeType& min = static_cast<ShapeType>(0),
+        const ShapeType& max = ShapeType::COUNT
+    ) override
     {
-        intDistribution.param(std::uniform_int_distribution<int>::param_type(static_cast<int>(min), static_cast<int>(max)));
+        intDistribution.param(
+            std::uniform_int_distribution<int>::param_type(static_cast<int>(min), static_cast<int>(max))
+        );
 
         return static_cast<ShapeType>(intDistribution(generator));
     }

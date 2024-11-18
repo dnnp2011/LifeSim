@@ -4,7 +4,6 @@
 // - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
 // - Introduction, links and more at the top of imgui.cpp
 
-#include <Common.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -12,7 +11,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Renderer.h"
-#include "Application.h"
+#include "ServiceContainer.h"
 
 
 //region OpenGL Error Handling -------------------------
@@ -68,6 +67,8 @@ public:
 
 Renderer::Renderer()
 {
+    fprintf(stdout, "Instantiating Renderer...\n");
+
     glfwSetErrorCallback(errorCallback);
 
     if (!glfwInit())
@@ -84,8 +85,13 @@ Renderer::Renderer()
 
     if (m_Window == nullptr) {
         fprintf(stderr, "Failed to create GLFW window\n");
-    } else {
-        glfwGetFramebufferSize(m_Window, reinterpret_cast<int*>(&m_BufferWidth), reinterpret_cast<int*>(&m_BufferHeight));
+    }
+    else {
+        glfwGetFramebufferSize(
+            m_Window,
+            reinterpret_cast<int*>(&m_BufferWidth),
+            reinterpret_cast<int*>(&m_BufferHeight)
+        );
         glfwGetWindowSize(m_Window, reinterpret_cast<int*>(&m_WindowWidth), reinterpret_cast<int*>(&m_WindowHeight));
         glfwGetWindowPos(m_Window, reinterpret_cast<int*>(&m_WindowXOffset), reinterpret_cast<int*>(&m_WindowYOffset));
         glfwSetFramebufferSizeCallback(m_Window, framebufferSizeCallback);
@@ -158,6 +164,8 @@ Renderer::Renderer()
     //         IM_ASSERT(font != nullptr);
     //     }
     // #endif
+
+    fprintf(stdout, "Renderer Instantiated\n");
 }
 
 Renderer::~Renderer()
@@ -176,7 +184,15 @@ Renderer::~Renderer()
 void Renderer::NewFrame() const
 {
     glDebugMessageCallback(
-        [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+        [](
+    GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam
+) {
             fprintf(
                 stderr,
                 "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
@@ -249,7 +265,7 @@ void Renderer::Draw() const
 
 ImVec2 Renderer::ScreenToViewport(const ImVec2& screen_coords) const
 {
-#if (DEBUG && 0)
+    #if (DEBUG && 0)
     Debounce(
         [&](const std::string& id) {
             static const ImGuiViewport* viewport{ ImGui::GetMainViewport() };
@@ -282,7 +298,7 @@ Viewport Offset: { %d, %d }
         10000,
         "ScreenToViewport"
     );
-#endif
+    #endif
 
     // TODO: Update existing screen_coords instead of creating a new Vec2
     const ImVec2 normalized_coords{
@@ -295,7 +311,12 @@ Viewport Offset: { %d, %d }
 
 void Renderer::DrawRect(const ImVec2& topLeft, const ImVec2& bottomRight, const ImU32 color)
 {
-    Shape<ShapeType::Rectangle>::draw(ImGui::GetWindowDrawList(), ScreenToViewport(topLeft), ScreenToViewport(bottomRight), color);
+    Shape<ShapeType::Rectangle>::draw(
+        ImGui::GetWindowDrawList(),
+        ScreenToViewport(topLeft),
+        ScreenToViewport(bottomRight),
+        color
+    );
 }
 
 void Renderer::DrawCircle(const ImVec2& center, const float& radius, const ImU32 color)
@@ -305,7 +326,13 @@ void Renderer::DrawCircle(const ImVec2& center, const float& radius, const ImU32
 
 void Renderer::DrawTriangle(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImU32 color)
 {
-    Shape<ShapeType::Triangle>::draw(ImGui::GetWindowDrawList(), ScreenToViewport(p1), ScreenToViewport(p2), ScreenToViewport(p3), color);
+    Shape<ShapeType::Triangle>::draw(
+        ImGui::GetWindowDrawList(),
+        ScreenToViewport(p1),
+        ScreenToViewport(p2),
+        ScreenToViewport(p3),
+        color
+    );
 }
 
 void Renderer::drawGui()
@@ -325,8 +352,9 @@ void Renderer::drawGui()
         ImGui::Checkbox("Demo Window", &m_showDemoWindow); // Edit bools storing our window open/close state
         ImGui::Checkbox("Another Window", &m_showAnotherWindow);
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);                                    // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&m_backgroundColor)); // Edit 3 floats representing a color
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&m_backgroundColor));
+        // Edit 3 floats representing a color
 
         // Buttons return true when clicked (most widgets return true when edited/activated)
         if (ImGui::Button("Button"))

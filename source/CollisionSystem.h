@@ -3,37 +3,37 @@
 #include <Common.h>
 
 
+class Renderer;
+
 class CollisionSystem {
 private:
+    Renderer* m_renderer;
+    std::mutex& m_physicsBufferMutex;
+
     Threads::ThreadPool m_threadPool;
-    std::mutex m_mtx;
-    std::mutex m_oobMtx;
 
 public:
-    explicit CollisionSystem(const size_t numThreads):
-        m_threadPool{ numThreads }
-    { }
+    explicit CollisionSystem(std::mutex& physicsBufferMutex);
 
-    void update(
-        const EntityBuffer& entities,
-        PositionBuffer& positions,
-        VelocityBuffer& velocities,
-        ColliderBuffer& colliders
-    );
+    explicit CollisionSystem(const CollisionSystem&) = default;
+
+    explicit CollisionSystem(CollisionSystem&&) = default;
+
+    void Update(EntityData& physicsBufferWrite);
 
 private:
-    static bool isColliding(
+    [[nodiscard]]
+    bool isColliding(
         const Position& posA,
         const Collider& colA,
         const Position& posB,
         const Collider& colB
-    );
+    ) const;
 
-    static bool isOutOfBounds(
+    [[nodiscard]]
+    bool isOutOfBounds(
         const Position& pos,
         const Collider& col,
-        const Velocity& vel,
-        int width,
-        int height
-    );
+        const Velocity& vel
+    ) const;
 };

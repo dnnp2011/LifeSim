@@ -1,18 +1,16 @@
-#include <Common.h>
-#include <unordered_map>
-#include <vector>
+#include <ServiceContainer.h>
 
 #include "RenderSystem.h"
-#include "Application.h"
+#include "Renderer.h"
 
+
+RenderSystem::RenderSystem()
+{
+    fprintf(stdout, "RenderSystem Instantiated\n");
+}
 
 // TODO: Refactor to use multithreading to draw in parallel, if possible
-void RenderSystem::update(
-    const EntityBuffer& entities,
-    const PositionBuffer& positions,
-    const ColliderBuffer& colliders,
-    const ShapeTypeBuffer& shapes
-)
+void RenderSystem::Update(const EntityData& renderBuffer)
 {
     constexpr ImGuiWindowFlags window_flags{
         ImGuiWindowFlags_NoResize
@@ -32,41 +30,49 @@ void RenderSystem::update(
     const ImVec2 viewport_pos{ viewport->Pos };
     const ImVec2 viewport_size{ viewport->Size };
 
+    const auto& entities{ renderBuffer.entities };
+    const auto& positions{ renderBuffer.positions };
+    const auto& colliders{ renderBuffer.colliders };
+    const auto& shapes{ renderBuffer.shapes };
+
     ImGui::SetNextWindowPos(viewport_pos);
     ImGui::SetNextWindowSize(viewport_size);
 
     ImGui::Begin("Render Window", nullptr, window_flags);
     // ImGui::ScaleWindowsInViewport(viewport, 1.0f);
 
-    for (const auto& [id]: entities) {
-        const auto position{ positions.find(id) };
-        const auto shape{ shapes.find(id) };
-        const auto collider{ colliders.find(id) };
+    {
+        const auto renderer = Container::Resolve<Renderer>();
 
-        if (position != positions.end() && shape != shapes.end()) {
-            const auto renderer = Container::Resolve<Renderer>();
-            const auto zoom     = renderer->m_Zoom;
+        for (const auto& [id]: entities) {
+            IM_ASSERT(id < positions.size() && id < colliders.size());
 
-            switch (shape->second) {
+            const auto& position{ positions[id] };
+            const auto& collider{ colliders[id] };
+            const auto& shape{ shapes[id] };
+
+            const auto zoom = renderer->m_Zoom;
+
+            switch (shape) {
                 case ShapeType::Rectangle:
                     renderer->DrawRect(
-                        ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y - ((collider->second.height * zoom) / 2)),
-                        ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
+                        ImVec2(position.x - ((collider.width * zoom) / 2), position.y - ((collider.height * zoom) / 2)),
+                        ImVec2(position.x + ((collider.width * zoom) / 2), position.y + ((collider.height * zoom) / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Circle:
                     renderer->DrawCircle(
-                        ImVec2(position->second.x, position->second.y),
-                        static_cast<float>(std::max(collider->second.width * zoom, collider->second.height * zoom)) / 2,
+                        ImVec2(position.x, position.y),
+                        static_cast<float>(std::max(collider.width * zoom, collider.height * zoom)) / 2,
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;
                 case ShapeType::Triangle:
                     renderer->DrawTriangle(
-                        ImVec2(position->second.x, position->second.y - ((collider->second.height * zoom) / 2)),
-                        ImVec2(position->second.x + ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
-                        ImVec2(position->second.x - ((collider->second.width * zoom) / 2), position->second.y + ((collider->second.height * zoom) / 2)),
+                        ImVec2(position.x, position.y - ((collider.height * zoom) / 2)),
+                        ImVec2(position.x + ((collider.width * zoom) / 2), position.y + ((collider.height * zoom) / 2)),
+                        ImVec2(position.x - ((collider.width * zoom) / 2), position.y + ((collider.height * zoom) / 2)),
                         IM_COL32(255, 255, 255, 255)
                     );
                     break;

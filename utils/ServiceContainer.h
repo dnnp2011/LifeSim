@@ -1,15 +1,13 @@
 #pragma once
 
 #include <array>
+#include <Common.h>
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
 
 
-constexpr uint8_t MAX_SERVICES{ 10 };
-
-template<typename T>
-using ServicePtr = std::shared_ptr<T>;
+constexpr uint8_t MAX_SERVICES{ 20 };
 
 class ServiceContainer {
 public:
@@ -58,7 +56,33 @@ public:
 
         m_Services[type] = Service{ type, ptr };
 
-        for (Service service: m_Container) {
+        for (Service& service: m_Container) {
+            if (service.type == type) {
+                fprintf(stderr, "Service %s already bound to Container\n", type.name());
+
+                return nullptr;
+            }
+
+            if (!service.instance) {
+                service.type     = type;
+                service.instance = ptr;
+
+                return ptr;
+            }
+        }
+
+        throw std::runtime_error("Service Container is full");
+    }
+
+    template<typename T>
+    static ServicePtr<T> Bind(T* instance)
+    {
+        const auto type = std::type_index{ typeid(T) };
+        const auto ptr  = std::shared_ptr<T>(instance);
+
+        m_Services[type] = Service{ type, ptr };
+
+        for (Service& service: m_Container) {
             if (service.type == type) {
                 fprintf(stderr, "Service %s already bound to Container\n", type.name());
 
@@ -132,5 +156,3 @@ private:
 
 inline std::array<ServiceContainer::Service, MAX_SERVICES> ServiceContainer::m_Container;
 inline std::unordered_map<std::type_index, ServiceContainer::Service> ServiceContainer::m_Services;
-
-using Container = ServiceContainer;

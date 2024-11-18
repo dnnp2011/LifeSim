@@ -1,5 +1,21 @@
-#include "InputManager.h"
+#include <imgui_impl_glfw.h>
+#include <Instrumentation.h>
+#include <ServiceContainer.h>
+#include <GLFW/glfw3.h>
 
+#include "InputManager.h"
+#include "Renderer.h"
+
+
+InputManager::InputManager():
+    m_renderer{ Container::Resolve<Renderer>().get() },
+    m_instrumentation{ Container::Resolve<Instrumentation>().get() }
+{
+    // FIXME: These should already be mounted
+    glfwSetKeyCallback(m_renderer->m_Window, ImGui_ImplGlfw_KeyCallback);
+    glfwSetScrollCallback(m_renderer->m_Window, ImGui_ImplGlfw_ScrollCallback);
+    fprintf(stdout, "InputManager Instantiated\n");
+}
 
 int InputManager::Poll() const
 {
@@ -37,7 +53,7 @@ int InputManager::Poll() const
         m_renderer->m_Zoom = ImMath::EaseInOut(m_renderer->m_Zoom, zoom, std::clamp(t, 0.0f, 1.0f));
     }
 
-#if 0
+    #if 0
     Debounce(
         [io](const std::string& id) {
             fprintf(stdout, "MouseWheel: %.2f\n", io->MouseWheel);
@@ -47,7 +63,7 @@ int InputManager::Poll() const
         1000,
         "MouseWheel"
     );
-#endif
+    #endif
     //endregion -------------------------------------------------
 
     return 0;

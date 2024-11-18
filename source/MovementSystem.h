@@ -1,23 +1,25 @@
 #pragma once
 
 #include <Common.h>
+#include <ServiceContainer.h>
 
+
+class Renderer;
 
 class MovementSystem {
 private:
+    Renderer* m_renderer;
+    std::mutex& m_physicsBufferMutex;
+
     Threads::ThreadPool m_threadPool;
-    std::mutex m_mtx;
     uint8_t m_speed = 80;
 
 public:
-    explicit MovementSystem(const size_t numThreads):
-        m_threadPool{ numThreads }
-    { }
+    explicit MovementSystem(std::mutex& physicsBufferMutex);
 
-    void update(
-        float fixedDeltaTime,
-        const EntityBuffer& entities,
-        PositionBuffer& positions,
-        VelocityBuffer& velocities
-    );
+    explicit MovementSystem(const MovementSystem&) = default;
+
+    explicit MovementSystem(MovementSystem&&) = default;
+
+    void Update(EntityData& physicsBufferWrite, float fixedDeltaTime);
 };

@@ -36,13 +36,17 @@ private:
     double m_windowsFps{ 0.0 };
 
 public:
-    Instrumentation() = default;
+    Instrumentation()
+    {
+        fprintf(stdout, "Starting Instrumentation\n");
+    }
 
     void Start()
     {
         // -- Start Windows Performance Counter -- //
         QueryPerformanceFrequency(&m_frequency);
         QueryPerformanceCounter(&m_start);
+        fprintf(stdout, "Instrumentation Started\n");
     }
 
     [[nodiscard]]
@@ -106,7 +110,11 @@ public:
             const auto renderer = Container::Resolve<Renderer>();
 
             if (renderer->m_IO->Framerate > 0)
-                ImGui::Text("Average: %.3f ms/frame (%.1f FPS)", 1000.0f / renderer->m_IO->Framerate, renderer->m_IO->Framerate);
+                ImGui::Text(
+                    "Average: %.3f ms/frame (%.1f FPS)",
+                    1000.0f / renderer->m_IO->Framerate,
+                    renderer->m_IO->Framerate
+                );
         }
 
     cleanup:
@@ -122,18 +130,28 @@ private:
         FILETIME sysIdle, sysKernel, sysUser;
         FILETIME procCreation, procExit, procKernel, procUser;
 
-        if (!GetSystemTimes(&sysIdle, &sysKernel, &sysUser) || !GetProcessTimes(GetCurrentProcess(), &procCreation, &procExit, &procKernel, &procUser))
+        if (!GetSystemTimes(&sysIdle, &sysKernel, &sysUser) || !GetProcessTimes(
+            GetCurrentProcess(),
+            &procCreation,
+            &procExit,
+            &procKernel,
+            &procUser
+        ))
             m_cpuUsage = 0.0f;
 
         if (prevSysKernel.dwLowDateTime != 0 && prevSysKernel.dwHighDateTime != 0) {
             ULARGE_INTEGER sysKernelDiff, sysUserDiff;
             ULARGE_INTEGER procKernelDiff, procUserDiff;
 
-            sysKernelDiff.QuadPart = (reinterpret_cast<ULARGE_INTEGER&>(sysKernel).QuadPart - reinterpret_cast<ULARGE_INTEGER&>(prevSysKernel).QuadPart);
-            sysUserDiff.QuadPart   = (reinterpret_cast<ULARGE_INTEGER&>(sysUser).QuadPart - reinterpret_cast<ULARGE_INTEGER&>(prevSysUser).QuadPart);
+            sysKernelDiff.QuadPart = (reinterpret_cast<ULARGE_INTEGER&>(sysKernel).QuadPart - reinterpret_cast<
+                ULARGE_INTEGER&>(prevSysKernel).QuadPart);
+            sysUserDiff.QuadPart = (reinterpret_cast<ULARGE_INTEGER&>(sysUser).QuadPart - reinterpret_cast<
+                ULARGE_INTEGER&>(prevSysUser).QuadPart);
 
-            procKernelDiff.QuadPart = (reinterpret_cast<ULARGE_INTEGER&>(procKernel).QuadPart - reinterpret_cast<ULARGE_INTEGER&>(prevProcKernel).QuadPart);
-            procUserDiff.QuadPart   = (reinterpret_cast<ULARGE_INTEGER&>(procUser).QuadPart - reinterpret_cast<ULARGE_INTEGER&>(prevProcUser).QuadPart);
+            procKernelDiff.QuadPart = (reinterpret_cast<ULARGE_INTEGER&>(procKernel).QuadPart - reinterpret_cast<
+                ULARGE_INTEGER&>(prevProcKernel).QuadPart);
+            procUserDiff.QuadPart = (reinterpret_cast<ULARGE_INTEGER&>(procUser).QuadPart - reinterpret_cast<
+                ULARGE_INTEGER&>(prevProcUser).QuadPart);
 
             const ULONGLONG sysTotal  = sysKernelDiff.QuadPart + sysUserDiff.QuadPart;
             const ULONGLONG procTotal = procKernelDiff.QuadPart + procUserDiff.QuadPart;

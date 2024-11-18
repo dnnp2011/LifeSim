@@ -1,21 +1,38 @@
-#include <Common.h>
-#include <mutex>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
-
 #include "MovementSystem.h"
+#include "ECSManager.h"
+#include "Renderer.h"
 
 
-void MovementSystem::update(
-    const float fixedDeltaTime,
-    const EntityBuffer& entities,
-    PositionBuffer& positions,
-    VelocityBuffer& velocities
-)
+MovementSystem::MovementSystem(std::mutex& physicsBufferMutex):
+    m_renderer{ Container::Resolve<Renderer>().get() },
+    m_physicsBufferMutex{ physicsBufferMutex },
+    m_threadPool{ MAX_HARDWARE_THREADS }
 {
+    fprintf(stdout, "MovementSystem Instantiated\n");
+}
+
+void MovementSystem::Update(EntityData& physicsBufferWrite, float fixedDeltaTime)
+{
+    const auto& entities{ physicsBufferWrite.entities };
+    auto& positions{ physicsBufferWrite.positions };
+    const auto& velocities{ physicsBufferWrite.velocities };
+
     for (const auto& entity: entities) {
-#if 0
+        IM_ASSERT(entity.id < positions.size() && entity.id < velocities.size());
+
+        m_threadPool.enqueue(
+            [this, &fixedDeltaTime, &positions, &velocities, &entity]() {
+                auto& entityPosition{ positions[entity.id] };
+                const auto& entityVelocity{ velocities[entity.id] };
+
+                const std::lock_guard lock(m_physicsBufferMutex);
+
+                entityPosition.x += (entityVelocity.dx * fixedDeltaTime * static_cast<float>(m_speed));
+                entityPosition.y += (entityVelocity.dy * fixedDeltaTime * static_cast<float>(m_speed));
+            }
+        );
+
+        #if 0
         Debounce(
             [entity, positions, velocities](const std::string& id) {
                 const auto entityPosition{ positions.find(entity.id) };
@@ -29,21 +46,6 @@ void MovementSystem::update(
             5000,
             "MovementSystem::update::" + std::to_string(entity.id)
         );
-#endif
-
-
-        m_threadPool.enqueue(
-            [this, &fixedDeltaTime, &positions, &velocities, &entity]() {
-                const auto entityPosition{ positions.find(entity.id) };
-                const auto entityVelocity{ velocities.find(entity.id) };
-
-                if (entityPosition != positions.end() && entityVelocity != velocities.end()) {
-                    const std::lock_guard lock(m_mtx);
-
-                    positions[entity.id].x += (entityVelocity->second.dx * fixedDeltaTime * static_cast<float>(m_speed));
-                    positions[entity.id].y += (entityVelocity->second.dy * fixedDeltaTime * static_cast<float>(m_speed));
-                }
-            }
-        );
+        #endif
     }
 }

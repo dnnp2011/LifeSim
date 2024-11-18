@@ -1,40 +1,52 @@
 #pragma once
 
 #include <Common.h>
-#include <unordered_map>
-#include <vector>
 
-#include "CollisionSystem.h"
-#include "MovementSystem.h"
-#include "RenderSystem.h"
 
+class MovementSystem;
+class CollisionSystem;
 
 class ECSManager {
 public:
+    EntityData m_RenderBuffer{};
+    EntityData m_PhysicsBufferRead{};
+    EntityData m_PhysicsBufferWrite{};
+
     EntityBuffer m_Entities;
     PositionBuffer m_Positions;
     VelocityBuffer m_Velocities;
     ColliderBuffer m_Colliders;
     ShapeTypeBuffer m_Shapes;
 
+    std::mutex m_PhysicsBufferMutex;
+
 private:
-    MovementSystem m_MovementSystem{ std::thread::hardware_concurrency() };
-    CollisionSystem m_CollisionSystem{ std::thread::hardware_concurrency() };
-    RenderSystem m_RenderSystem;
+    MovementSystem* m_MovementSystem;
+    CollisionSystem* m_CollisionSystem;
 
 public:
     ECSManager();
 
-    void update(float fixedDeltaTime);
+    void Update(float fixedDeltaTime);
+
+    void SwapBuffers();
 
 private:
-    Entity createEntity(const Position& position, const Velocity& velocity, const Collider& collider, const ShapeType& shape);
+    Entity createEntity(
+        const Position& position,
+        const Velocity& velocity,
+        const Collider& collider,
+        const ShapeType& shape,
+        const Color& color
+    );
 
-    void addComponent(int entityId, const Position& position);
+    void addComponent(int unsigned entityId, const Position& position);
 
-    void addComponent(int entityId, const Velocity& velocity);
+    void addComponent(int unsigned entityId, const Velocity& velocity);
 
-    void addComponent(int entityId, const Collider& collider);
+    void addComponent(int unsigned entityId, const Collider& collider);
 
-    void addComponent(int entityId, const ShapeType& shape);
+    void addComponent(int unsigned entityId, const ShapeType& shape);
+
+    void addComponent(int unsigned entityId, const Color& color);
 };
