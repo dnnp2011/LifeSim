@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="Source" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="12" type="long" />
+    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppFormatterOtherPage" type="string" />
+    <option name="/Default/CodeEditing/CppDocumentationComment/AddBriefTag/@EntryValue" value="true" type="bool" />
+    <option name="/Default/CodeEditing/TypingAssist/Cpp/CloseBlockComment/@EntryValue" value="true" type="bool" />
+    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=DE85CCDB63FFC248B69647D5A36AEDB8/ShortenQualifiedReferences/@EntryValue" value="true" type="bool" />
+    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=DE85CCDB63FFC248B69647D5A36AEDB8/IsBlessed/@EntryValue" value="true" type="bool" />
+    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=DE85CCDB63FFC248B69647D5A36AEDB8/Text/@EntryValue" value="/**&#10; * \brief $END$&#10; *&#10; * \tparam $TNAME$ $TDESCRIPTION$&#10; * \param $PNAME$ $PDESCRIPTION$&#10; * \param $MNAME$ $MDESCRIPTION$&#10; *&#10; * \return $RETURN$&#10; */" type="string" />
+    <option name="/Default/PatternsAndTemplates/LiveTemplates/Template/=DE85CCDB63FFC248B69647D5A36AEDB8/Reformat/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Environment/UserInterface/HierarchyView/ViewStyle/@EntryValue" value="SubTypes" type="string" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="LifeSim" targetName="LifeSim" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="VC Debug" ENABLED="false" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio 17 2022" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot;" />
+      <configuration PROFILE_NAME="VC Release" ENABLED="false" CONFIG_NAME="Release" TOOLCHAIN_NAME="Visual Studio 17 2022" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot;" />
+      <configuration PROFILE_NAME="Debug" ENABLED="false" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Release" ENABLED="false" CONFIG_NAME="Release" />
+      <configuration PROFILE_NAME="WSL Debug" ENABLED="false" CONFIG_NAME="Debug" TOOLCHAIN_NAME="WSL" GENERATION_OPTIONS="-G Ninja" />
+      <configuration PROFILE_NAME="Profiler" ENABLED="false" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Docker" GENERATION_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_INSTALL_PREFIX:PATH=/LifeSim -DCMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make -DCMAKE_STRIP:FILEPATH=/usr/bin/strip -DCMAKE_READELF:FILEPATH=/usr/bin/readelf -DCMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump -DCMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy -DCMAKE_NM:FILEPATH=/usr/bin/nm -DCMAKE_RANLIB:FILEPATH=/usr/bin/ranlib -DCMAKE_LINKER:FILEPATH=/usr/bin/ld -DCMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib -DCMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib -DCMAKE_CXX_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -DCMAKE_AR:FILEPATH=/usr/bin/ar -DCMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line -DCMAKE_DLLTOOL:FILEPATH= -DCMAKE_RC_COMPILER:FILEPATH=" />
+      <configuration PROFILE_NAME="vcpkg-debug" ENABLED="true" FROM_PRESET="true" GENERATION_DIR="$PROJECT_DIR$/build-debug" />
+      <configuration PROFILE_NAME="vcpkg-release" ENABLED="false" FROM_PRESET="true" GENERATION_DIR="$PROJECT_DIR$/build-release" />
+      <configuration PROFILE_NAME="vcpkg-debug-msvc" ENABLED="false" FROM_PRESET="true" GENERATION_DIR="$PROJECT_DIR$/build-msvc-debug" />
+      <configuration PROFILE_NAME="vcpkg-release-msvc" ENABLED="false" FROM_PRESET="true" GENERATION_DIR="$PROJECT_DIR$/build-msvc-debug" />
+      <configuration PROFILE_NAME="vcpkg-docker" ENABLED="false" FROM_PRESET="true" GENERATION_DIR="$PROJECT_DIR$/build-docker" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="02326da8-5867-46f9-8b25-ff466267b232" name="Changes" comment="Trying out std::format and std::print">
+      <change afterPath="$PROJECT_DIR$/.idea/LifeSim.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/block-folding-matchers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/dnnp2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/fileColors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/scopes/Editable.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/scopes/Source.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+    <option name="indexerUseModules" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:vcpkg-debug" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="devicetree_source" />
+        <option value="editable-svg" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+    <option name="myAllFileTypesSelected" value="false" />
+    <option name="mySelectedFileTypes">
+      <set>
+        <option value="C++" />
+        <option value="C++ Header" />
+        <option value="CMakeLists.txt" />
+        <option value="JSON" />
+        <option value="JSON-lines" />
+        <option value="JSON5" />
+        <option value="XML" />
+        <option value="YAML" />
+      </set>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$/dependencies/vcpkg" value="10b7a178346f3f0abef60cecd5130e295afd8da4" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="HierarchyBrowserManager">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="true" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_HOME_DIR$/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_thread.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Synchronized/Active-Projects/LifeSim/LifeSim.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/Application.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/Application.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/CollisionSystem.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/ECSManager.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/ECSManager.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/MovementSystem.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/RenderSystem.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/RenderSystem.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/Renderer.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/source/Renderer.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Synchronized/Active-Projects/LifeSim/utils/Common.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/utils/Common.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/utils/Random.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/utils/ServiceContainer.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="NamedScopeManager">
+    <order>
+      <scope name="Source" />
+      <scope name="Editable" />
+    </order>
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+    <option name="showPreview" value="true" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2024" />
+    <option name="minorVersion" value="2.2" />
+    <option name="productBranch" value="Classic" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2oIPpGBycUCyWAqtW03VMt067uW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="compactDirectories" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;CMake Application.LifeSim.executor&quot;: &quot;Run&quot;,
+    &quot;CMake Debug.LifeSim.executor&quot;: &quot;Debug&quot;,
+    &quot;Docker.CLion Profiler Toolchain.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.advertisement.text.has.clang-format&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;full.screen.before.presentation.mode&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Synchronized/Active-Projects/LifeSim/utils&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;typescript.add.unambiguous.imports.on.the.fly&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;AsciiDoc&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\utils" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\cmake-build-vc-debug" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\dependencies\imgui" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\dependencies\vcpkg\vcpkg_installed\x64-windows\lib" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\dependencies\vcpkg\vcpkg_installed\x64-windows\debug\lib" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Synchronized\Active-Projects\LifeSim" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\dependencies\vcpkg" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\dependencies" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\lib\glew" />
+      <recent name="D:\Synchronized\Active-Projects\LifeSim\source" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.LifeSim">
+    <configuration name="LifeSim" type="CMakeRunConfiguration" factoryName="Application" singleton="false" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LifeSim" TARGET_NAME="LifeSim" CONFIG_NAME="vcpkg-debug" RUN_TARGET_PROJECT_NAME="LifeSim" RUN_TARGET_NAME="LifeSim">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CLion Profiler Toolchain" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="clion-profiler-toolchain" />
+          <option name="containerName" value="clion-profiler-toolchain" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.LifeSim" />
+      <item itemvalue="Docker.CLion Profiler Toolchain" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\dnnp2\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="02326da8-5867-46f9-8b25-ff466267b232" name="Changes" comment="" />
+      <created>1730554298485</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730554298485</updated>
+      <workItem from="1730554301571" duration="467000" />
+      <workItem from="1730554784928" duration="3263000" />
+      <workItem from="1730559420765" duration="5279000" />
+      <workItem from="1730606720788" duration="11817000" />
+      <workItem from="1730665034397" duration="28932000" />
+      <workItem from="1730734657169" duration="4750000" />
+      <workItem from="1730763398002" duration="8309000" />
+      <workItem from="1730828583164" duration="1057000" />
+      <workItem from="1730861557348" duration="11060000" />
+      <workItem from="1730911969697" duration="5225000" />
+      <workItem from="1730919544160" duration="1696000" />
+      <workItem from="1731022567404" duration="42699000" />
+      <workItem from="1731125945770" duration="14435000" />
+      <workItem from="1731185755454" duration="7942000" />
+      <workItem from="1731205411009" duration="23207000" />
+      <workItem from="1731278465016" duration="16422000" />
+      <workItem from="1731338487878" duration="21331000" />
+      <workItem from="1731421292246" duration="12945000" />
+      <workItem from="1731518536915" duration="5455000" />
+      <workItem from="1731536804172" duration="10427000" />
+      <workItem from="1731599357624" duration="10775000" />
+      <workItem from="1731628354093" duration="8903000" />
+      <workItem from="1731705275988" duration="35543000" />
+      <workItem from="1731794676019" duration="944000" />
+      <workItem from="1731795659625" duration="4461000" />
+      <workItem from="1731802586655" duration="2260000" />
+      <workItem from="1731807286931" duration="5655000" />
+      <workItem from="1731813058377" duration="89000" />
+      <workItem from="1731813158158" duration="7735000" />
+      <workItem from="1731856028666" duration="28807000" />
+      <workItem from="1731897426997" duration="371000" />
+      <workItem from="1731897821239" duration="6271000" />
+      <workItem from="1731904267446" duration="6392000" />
+      <workItem from="1731937454216" duration="4777000" />
+      <workItem from="1731967267279" duration="3723000" />
+      <workItem from="1731979545962" duration="259000" />
+      <workItem from="1731979819549" duration="694000" />
+      <workItem from="1731981482818" duration="4158000" />
+      <workItem from="1732069175348" duration="2998000" />
+      <workItem from="1732122327197" duration="206000" />
+      <workItem from="1732233667391" duration="2397000" />
+    </task>
+    <task id="LOCAL-00001" summary="Windows Build&#10;&#10;- Got build process working on Windows&#10;- Cleaned up CMake config&#10;- I broke the executable though">
+      <option name="closed" value="true" />
+      <created>1730564856773</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1730564856773</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Windows Build&#10;&#10;- Got build process working on Windows&#10;- Cleaned up CMake config&#10;- Added .dll and .dylib files to repo&#10;- Fixed runtime error for Windows platform&#10;- Adjusted window size and application name&#10;- Organized source files into appropriate folders">
+      <option name="closed" value="true" />
+      <created>1730565519355</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730565519355</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Windows Specific Build&#10;&#10;- Added Windows-specific modifications to build process&#10;- Renamed 'modules' folder to 'source'">
+      <option name="closed" value="true" />
+      <created>1730655687452</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730655687452</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Entity Component System Implementation&#10;&#10;- Implemented an ECS control architecture via ECSManager&#10;- Abstracted away GUI rendering to Renderer&#10;- Abstracted away program initialization to Application&#10;- Added Roboto font&#10;- BUG// Still working out some build issues due to implementation errors">
+      <option name="closed" value="true" />
+      <created>1730679284678</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730679284678</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Working Render Pipeline&#10;&#10;- Fixed build issues &amp; circular references&#10;- Added common.h file to encapsulate global declarations&#10;- Created RenderSystem to handle rendering shapes at entity position&#10;- Start position and velocity are now randomly selected">
+      <option name="closed" value="true" />
+      <created>1730690436740</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730690436740</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Header File Splitting&#10;&#10;- Extracted implementation details into .cpp files">
+      <option name="closed" value="true" />
+      <created>1730694902047</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1730694902047</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Fixed Global Variable&#10;&#10;- Improved code formatting&#10;- Fixed circular reference issues when trying to access g_Application global variable across header files&#10;- Removed `static` from Renderer class methods">
+      <option name="closed" value="true" />
+      <created>1730697065468</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1730697065468</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added multithreading support to CollisionSystem&#10;&#10;- Collisions now processed on multiple threads&#10;- Mutex lock used to prevent more than one collision being logged at one time">
+      <option name="closed" value="true" />
+      <created>1730698697728</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1730698697728</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Better Abstractions&#10;&#10;- Abstracted random number generation to Random class&#10;- Changed ImVec2 types used outside Renderer to Position type&#10;- Created specialized template class methods for drawing various types of basic shapes&#10;- Updated shape generation logic to inset shape variations into the rectangle circumscribed by the entity position, height, &amp; width&#10;- Added Collider data to RenderSystem so shapes can be rendered based on their collider size&#10;- Hoisted entity creation in ECSManager constructor&#10;- Bug// Currently a problem running the program - it builds, but the window never appears">
+      <option name="closed" value="true" />
+      <created>1730776018456</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1730776018456</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added GLEW but having Linking issues - WIP&#10;&#10;- Abstracted away Random value generation to Random class&#10;- Fixed program lockup when using Random class in ECSManager constructor&#10;- Other minor naming and type tweaks">
+      <option name="closed" value="true" />
+      <created>1730917224618</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1730917224618</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added vcpkg for managing dependencies&#10;&#10;- Removed unused dependency files&#10;- Extracted functions and macros from `CMakeLists.txt` for cleaner script&#10;- Replaced raw dependency files for ImGui and vcpkg with Git submodules&#10;- Created setup scripts for Windows &amp; Unix to configure submodules and initialize vcpkg&#10;- Automated installation of dependencies with vcpkg manifest file&#10;- Minor fixes for MSVC compile errors">
+      <option name="closed" value="true" />
+      <created>1731120218613</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1731120218613</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Removed unnecessary committed dependencies">
+      <option name="closed" value="true" />
+      <created>1731127043609</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1731127043609</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Removed unnecessary committed dependencies&#10;&#10;- Cleaned up CMake files">
+      <option name="closed" value="true" />
+      <created>1731128948428</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1731128948428</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Decoupled render loop and compute loop&#10;&#10;- Added fixed timestep compute loop&#10;- Render loop now runs separately at monitor refresh rate&#10;- Disabled WorldManager&#10;- Updated class members to use &quot;m_&quot; naming convention">
+      <option name="closed" value="true" />
+      <created>1731132714624</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1731132714624</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Style Improvements&#10;&#10;- Reformat code style&#10;- Streamlined CMake presets&#10;- Regenerated .clang-format">
+      <option name="closed" value="true" />
+      <created>1731192065582</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1731192065582</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Style Improvements&#10;&#10;- Reformat code style&#10;- Streamlined CMake presets&#10;- Regenerated .clang-format">
+      <option name="closed" value="true" />
+      <created>1731211494209</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1731211494209</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Added Dockerfile to setup Linux profiler toolchain">
+      <option name="closed" value="true" />
+      <created>1731269246347</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1731269246347</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Added Dockerfile to setup Linux profiler toolchain">
+      <option name="closed" value="true" />
+      <created>1731278317057</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1731278317057</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Added performance metrics and debug GUI&#10;&#10;- Changed push_back() to emplace_back()&#10;- Optimized more function arguments&#10;- Changed ENTITY_COUNT to a `size_t constexpr` global and moved to `Common.h`&#10;- Defined OpenGL error callback&#10;- Changed window background to black&#10;- Renamed some methods">
+      <option name="closed" value="true" />
+      <created>1731303610689</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1731303610689</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Entities bounce off viewport&#10;&#10;- Updated ScreenToViewport to grab the actual window size from GLFW&#10;- Fixed bug in `CollisionSystem` causing imprecise collision bounding box&#10;- Added new `CollisionSystem::isOutOfBounds()` method&#10;- Update entities to bounce off viewport boundaries&#10;- Added `Debounce()`` helper function&#10;- Added `IsEqual&lt;T&gt;()`, `IsGreaterThanOrEqual&lt;T&gt;()`, and `IsLessThanOrEqual&lt;T&gt;()` generic helper functions">
+      <option name="closed" value="true" />
+      <created>1731362344659</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1731362344659</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Entities contained within viewport&#10;&#10;- Fixed scaling and offset of ImGui geometry to ensure entities stay within viewport bounds and do not re-scale with the GLFW window&#10;- Updated variable declarations to use uniform initializer where possible _(Hoping this will make them reserve memory on the stack instead of the heap)_&#10;- Tweaked performance metrics panel to have proper size and functionality&#10;- Added OpenGL error handling macros&#10;- Updated `Renderer::ScreenToViewport()` to be static method">
+      <option name="closed" value="true" />
+      <created>1731436675925</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1731436675925</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Improved entity&lt;-&gt;boundary bounce calculation&#10;&#10;- Added constructors to Position and Velocity structs to more easily convert from ImVec2 types _(I'll eventually refactor Position and Velocity to use a more generalizable custom Vector 2 type)_&#10;- Added new ImMath namespace containing basic Vector 2 math operations&#10;- Improved Debounce function to support tracking multiple debounce streams from unique call sites&#10;- Updated `Debounce` function `callback` argument to accept a `std::string id` argument in case the callback needs to reference the unique identifier for debounce&#10;- Improved how entities bounce off viewport boundaries to respect the angle of incidence for a proper &quot;reflection&quot; bounce">
+      <option name="closed" value="true" />
+      <created>1731524259845</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1731524259845</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Fixed MSVC compile issues &amp; Greatly improved performance with threads&#10;&#10;- Created new ThreadPool utility class&#10;- Fixed performance issues by using new ThreadPool class to make CollisionSystem and MovementSystem more efficient. No longer starts and kills a large number of threads each frame&#10;- Fixed issues with MSVC build toolchain and defined new CMake presets&#10;- Cleaned up CMake build flags to avoid compiler warnings and only use debug flags in debug mode&#10;- Removed unused WorldManager class&#10;- Updated member variable naming scheme to be consistent across all classes: m_PascalCase for public variables and m_camelCase for private ones">
+      <option name="closed" value="true" />
+      <created>1731563968336</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1731563968337</updated>
+    </task>
+    <task id="LOCAL-00024" summary="User Input&#10;&#10;- Added new transition smoothing functions to ImMath namespace: Lerp, Dampen, and EaseInOut&#10;- Implemented zoom support with scalable entities &amp; smooth interpolation&#10;- Up/Down arrow keys zoom In/Out&#10;- Working on responding to user scroll and keyboard events&#10;- Working on splitting program into dedicated physics &amp; render threads">
+      <option name="closed" value="true" />
+      <created>1731641163448</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1731641163448</updated>
+    </task>
+    <task id="LOCAL-00025" summary="ServiceContainer &amp; Improved Collision&#10;&#10;- Implemented ServiceContainer class to encapsulate singleton instances used throughout the program&#10;- Bound Renderer class to ServiceCounter&#10;- Renamed Renderer methods to be simpler and use proper capitalization conventions&#10;- Added new ImMath functions: Magnitude(), Distance(), ImVec2 Lerp(), and ImVec2&amp; Invert()&#10;- Updated README.md&#10;- Fixed compiled errors due to missing Service constructor&#10;- Added utils folder to included directories so utilities can be imported using angle bracket syntax&#10;- Fixed compile errors in ServiceContainer class when split across .h and .cpp files _(merged into a single header file)_">
+      <option name="closed" value="true" />
+      <created>1731797194389</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1731797194389</updated>
+    </task>
+    <task id="LOCAL-00026" summary="- Added public m_FrameCount member variable to Application class for future instrumentation&#10;- Created new InputManager class to handle processing mouse and keyboard input&#10;- Created Instrumentation class to handle measuring debug metrics like FPS &amp; Frame Count&#10;- Split InputManager into header and cpp files&#10;- Converted m_InputManager and m_ECSManager Application member variables into ServiceContainer pointers&#10;- Abstracted 90% of frame logic out of Application class">
+      <option name="closed" value="true" />
+      <created>1731814013654</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1731814013654</updated>
+    </task>
+    <task id="LOCAL-00027" summary="GLFW Callbacks&#10;&#10;- Replaced polling for window size changes and replaced with GLFW callbacks&#10;- Moved callbacks into Renderer">
+      <option name="closed" value="true" />
+      <created>1731820548882</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1731820548882</updated>
+    </task>
+    <task id="LOCAL-00028" summary="OpenGL 3&#10;&#10;- Updated ImGui backend to use OpenGL 3&#10;- Trying out new code style">
+      <option name="closed" value="true" />
+      <created>1731827133156</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1731827133156</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Entry point manages Application lifecycle&#10;&#10;- Replaced global Application variable with ServiceContainer&#10;- Updated ServiceContainer::Resolve references to be scope wrapped to ensure the shared pointer is released when no longer needed&#10;- LifeSim entrypoint now maintains Application ownership for program lifecycle&#10;- Added explicit code to reset Application pointer on program completion&#10;- Modified code style a bit to use combination of K&amp;R and BSD brace layout">
+      <option name="closed" value="true" />
+      <created>1731859404876</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1731859404876</updated>
+    </task>
+    <task id="LOCAL-00030" summary="More GLFW Callbacks&#10;&#10;- Replaced iostream `std::cout` and `std::cerr` with `fprintf` calls for better formatting&#10;- Refactored Renderer to persist framebuffer and window size as class member variables&#10;- Added more GLFW callbacks to update window property fields on change&#10;- Refactored Renderer::ScreenToViewport() to use class fields instead of polling window properties&#10;- Added FPS and frame time averages from ImGui to debug metrics panel&#10;- Tweaked code style again, trying to find something I'm happy with">
+      <option name="closed" value="true" />
+      <created>1731868017135</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1731868017135</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Moved Math operations into the ImMath namespace">
+      <option name="closed" value="true" />
+      <created>1731879289431</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1731879289431</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Triple Buffer Prep - WIP&#10;&#10;Program is currently crashing at runtime due to dereferencing a null pointer&#10;&#10;- Cleaned up imports for all classes to fix circular dependencies&#10;- Moved all constructor implementations from header files to cpp files to avoid breaking forward declarations&#10;- Added constructor log statements&#10;- Created a shared `physicsBufferMutex` to pass around for write access to `physicsBuffer`&#10;- Moved calculation of available threads to `MAX_HARDWARE_THREADS` global constant&#10;- Created new `SwapBuffer()` method in `ECSManager`&#10;- Updated entity id's to use unsigned integers&#10;- Created new `EntityData` struct to hold copies of all data regarding entities and their properties&#10;- Refactored entity data to use more efficient std::array data structures&#10;- Created triple buffer architecture with RenderBuffer, PhysicsBufferRead, and PhysicsBufferWrite&#10;- Fixed bugs in overloaded ServiceContainer constructors">
+      <option name="closed" value="true" />
+      <created>1731910735404</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1731910735404</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Trying out std::format and std::print">
+      <option name="closed" value="true" />
+      <created>1732234496580</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1732234496580</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="GitHub.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/lib" />
+    </ignored-roots>
+    <MESSAGE value="Fixed Global Variable&#10;&#10;- Improved code formatting&#10;- Fixed circular reference issues when trying to access g_Application global variable across header files&#10;- Removed `static` from Renderer class methods" />
+    <MESSAGE value="Added multithreading support to CollisionSystem&#10;&#10;- Collisions now processed on multiple threads&#10;- Mutex lock used to prevent more than one collision being logged at one time" />
+    <MESSAGE value="Better Abstractions&#10;&#10;- Abstracted random number generation to Random class&#10;- Changed ImVec2 types used outside Renderer to Position type&#10;- Created specialized template class methods for drawing various types of basic shapes&#10;- Updated shape generation logic to inset shape variations into the rectangle circumscribed by the entity position, height, &amp; width&#10;- Added Collider data to RenderSystem so shapes can be rendered based on their collider size&#10;- Hoisted entity creation in ECSManager constructor&#10;- Bug// Currently a problem running the program - it builds, but the window never appears" />
+    <MESSAGE value="Added GLEW but having Linking issues - WIP&#10;&#10;- Abstracted away Random value generation to Random class&#10;- Fixed program lockup when using Random class in ECSManager constructor&#10;- Other minor naming and type tweaks" />
+    <MESSAGE value="Added vcpkg for managing dependencies&#10;&#10;- Removed unused dependency files&#10;- Extracted functions and macros from `CMakeLists.txt` for cleaner script&#10;- Replaced raw dependency files for ImGui and vcpkg with Git submodules&#10;- Created setup scripts for Windows &amp; Unix to configure submodules and initialize vcpkg&#10;- Automated installation of dependencies with vcpkg manifest file&#10;- Minor fixes for MSVC compile errors" />
+    <MESSAGE value="Removed unnecessary committed dependencies" />
+    <MESSAGE value="Removed unnecessary committed dependencies&#10;&#10;- Cleaned up CMake files" />
+    <MESSAGE value="Decoupled render loop and compute loop&#10;&#10;- Added fixed timestep compute loop&#10;- Render loop now runs separately at monitor refresh rate&#10;- Disabled WorldManager&#10;- Updated class members to use &quot;m_&quot; naming convention" />
+    <MESSAGE value="Style Improvements&#10;&#10;- Reformat code style&#10;- Streamlined CMake presets&#10;- Regenerated .clang-format" />
+    <MESSAGE value="Added Dockerfile to setup Linux profiler toolchain" />
+    <MESSAGE value="Added performance metrics and debug GUI&#10;&#10;- Changed push_back() to emplace_back()&#10;- Optimized more function arguments&#10;- Changed ENTITY_COUNT to a `size_t constexpr` global and moved to `Common.h`&#10;- Defined OpenGL error callback&#10;- Changed window background to black&#10;- Renamed some methods" />
+    <MESSAGE value="Entities bounce off viewport&#10;&#10;- Updated ScreenToViewport to grab the actual window size from GLFW&#10;- Fixed bug in `CollisionSystem` causing imprecise collision bounding box&#10;- Added new `CollisionSystem::isOutOfBounds()` method&#10;- Update entities to bounce off viewport boundaries&#10;- Added `Debounce()`` helper function&#10;- Added `IsEqual&lt;T&gt;()`, `IsGreaterThanOrEqual&lt;T&gt;()`, and `IsLessThanOrEqual&lt;T&gt;()` generic helper functions" />
+    <MESSAGE value="Entities contained within viewport&#10;&#10;- Fixed scaling and offset of ImGui geometry to ensure entities stay within viewport bounds and do not re-scale with the GLFW window&#10;- Updated variable declarations to use uniform initializer where possible _(Hoping this will make them reserve memory on the stack instead of the heap)_&#10;- Tweaked performance metrics panel to have proper size and functionality&#10;- Added OpenGL error handling macros&#10;- Updated `Renderer::ScreenToViewport()` to be static method" />
+    <MESSAGE value="Improved entity&lt;-&gt;boundary bounce calculation&#10;&#10;- Added constructors to Position and Velocity structs to more easily convert from ImVec2 types _(I'll eventually refactor Position and Velocity to use a more generalizable custom Vector 2 type)_&#10;- Added new ImMath namespace containing basic Vector 2 math operations&#10;- Improved Debounce function to support tracking multiple debounce streams from unique call sites&#10;- Updated `Debounce` function `callback` argument to accept a `std::string id` argument in case the callback needs to reference the unique identifier for debounce&#10;- Improved how entities bounce off viewport boundaries to respect the angle of incidence for a proper &quot;reflection&quot; bounce" />
+    <MESSAGE value="Fixed MSVC compile issues &amp; Greatly improved performance with threads&#10;&#10;- Created new ThreadPool utility class&#10;- Fixed performance issues by using new ThreadPool class to make CollisionSystem and MovementSystem more efficient. No longer starts and kills a large number of threads each frame&#10;- Fixed issues with MSVC build toolchain and defined new CMake presets&#10;- Cleaned up CMake build flags to avoid compiler warnings and only use debug flags in debug mode&#10;- Removed unused WorldManager class&#10;- Updated member variable naming scheme to be consistent across all classes: m_PascalCase for public variables and m_camelCase for private ones" />
+    <MESSAGE value="User Input&#10;&#10;- Added new transition smoothing functions to ImMath namespace: Lerp, Dampen, and EaseInOut&#10;- Implemented zoom support with scalable entities &amp; smooth interpolation&#10;- Up/Down arrow keys zoom In/Out&#10;- Working on responding to user scroll and keyboard events&#10;- Working on splitting program into dedicated physics &amp; render threads" />
+    <MESSAGE value="ServiceContainer &amp; Improved Collision&#10;&#10;- Implemented ServiceContainer class to encapsulate singleton instances used throughout the program&#10;- Bound Renderer class to ServiceCounter&#10;- Renamed Renderer methods to be simpler and use proper capitalization conventions&#10;- Added new ImMath functions: Magnitude(), Distance(), ImVec2 Lerp(), and ImVec2&amp; Invert()&#10;- Updated README.md&#10;- Fixed compiled errors due to missing Service constructor&#10;- Added utils folder to included directories so utilities can be imported using angle bracket syntax&#10;- Fixed compile errors in ServiceContainer class when split across .h and .cpp files _(merged into a single header file)_" />
+    <MESSAGE value="- Added public m_FrameCount member variable to Application class for future instrumentation&#10;- Created new InputManager class to handle processing mouse and keyboard input&#10;- Created Instrumentation class to handle measuring debug metrics like FPS &amp; Frame Count&#10;- Split InputManager into header and cpp files&#10;- Converted m_InputManager and m_ECSManager Application member variables into ServiceContainer pointers&#10;- Abstracted 90% of frame logic out of Application class" />
+    <MESSAGE value="GLFW Callbacks&#10;&#10;- Replaced polling for window size changes and replaced with GLFW callbacks&#10;- Moved callbacks into Renderer" />
+    <MESSAGE value="OpenGL 3&#10;&#10;- Updated ImGui backend to use OpenGL 3&#10;- Trying out new code style" />
+    <MESSAGE value="Entry point manages Application lifecycle&#10;&#10;- Replaced global Application variable with ServiceContainer&#10;- Updated ServiceContainer::Resolve references to be scope wrapped to ensure the shared pointer is released when no longer needed&#10;- LifeSim entrypoint now maintains Application ownership for program lifecycle&#10;- Added explicit code to reset Application pointer on program completion&#10;- Modified code style a bit to use combination of K&amp;R and BSD brace layout" />
+    <MESSAGE value="More GLFW Callbacks&#10;&#10;- Replaced iostream `std::cout` and `std::cerr` with `fprintf` calls for better formatting&#10;- Refactored Renderer to persist framebuffer and window size as class member variables&#10;- Added more GLFW callbacks to update window property fields on change&#10;- Refactored Renderer::ScreenToViewport() to use class fields instead of polling window properties&#10;- Added FPS and frame time averages from ImGui to debug metrics panel&#10;- Tweaked code style again, trying to find something I'm happy with" />
+    <MESSAGE value="Moved Math operations into the ImMath namespace" />
+    <MESSAGE value="Triple Buffer Prep - WIP&#10;&#10;Program is currently crashing at runtime due to dereferencing a null pointer&#10;&#10;- Cleaned up imports for all classes to fix circular dependencies&#10;- Moved all constructor implementations from header files to cpp files to avoid breaking forward declarations&#10;- Added constructor log statements&#10;- Created a shared `physicsBufferMutex` to pass around for write access to `physicsBuffer`&#10;- Moved calculation of available threads to `MAX_HARDWARE_THREADS` global constant&#10;- Created new `SwapBuffer()` method in `ECSManager`&#10;- Updated entity id's to use unsigned integers&#10;- Created new `EntityData` struct to hold copies of all data regarding entities and their properties&#10;- Refactored entity data to use more efficient std::array data structures&#10;- Created triple buffer architecture with RenderBuffer, PhysicsBufferRead, and PhysicsBufferWrite&#10;- Fixed bugs in overloaded ServiceContainer constructors" />
+    <MESSAGE value="Trying out std::format and std::print" />
+    <option name="LAST_COMMIT_MESSAGE" value="Trying out std::format and std::print" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/source/Application.cpp</url>
+          <line>28</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/source/ECSManager.cpp</url>
+          <line>52</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/source/MovementSystem.cpp</url>
+          <line>13</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/LifeSim.cpp</url>
+          <line>25</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

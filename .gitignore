@@ -3,6 +3,7 @@ vcpkg_installed/
 dependencies/vcpkg/**
 
 ## Library Docs
+lib/
 /dependencies/**/docs
 /dependencies/**/doc
 /dependencies/**/readme.md
@@ -59,7 +60,6 @@ examples/example_glfw_wgpu/external/*
 examples/example_sdl2_opengl3/web/*
 
 ## JetBrains IDE artifacts
-.idea
 cmake-build-*
 
 ## Unix executables from our example Makefiles
@@ -104,8 +104,6 @@ examples/example_sdl2_sdlrenderer/example_sdl2_sdlrenderer
 *.temp
 
 # Ignore IDE specific files
-.vscode/
-.idea/
 *.code-workspace
 
 # Ignore system files

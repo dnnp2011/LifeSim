@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Editable" pattern="(file[LifeSim]:assets//*||file[LifeSim]:cmake//*||file[LifeSim]:source//*||file[LifeSim]:utils//*||file:.clang-format||file:.gitignore||file:.gitmodules||file:CMakeLists.txt||file:CMakePresets.json||file:Dockerfile||file:LifeSim.cpp||file:README.md||file:setup.bat||file:setup.sh||file:vcpkg-configuration.json||file:vcpkg.json)&amp;&amp;!ext:*/&amp;&amp;!file[LifeSim]:.idea//*&amp;&amp;!file[LifeSim]:.vscode//*&amp;&amp;!file[LifeSim]:dependencies//*" />
+</component>
