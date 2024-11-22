@@ -20,7 +20,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 int main(int, char**)
 {
-    fprintf(stdout, "main(): Booting Application...\n");
+    // std::print("main(): Booting Application...\n");
+    fprintf(stdout, std::format("{}: Booting Application...\n", "main()").c_str());
 
     auto app = Container::Bind<Application>();
 
