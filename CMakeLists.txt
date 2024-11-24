@@ -36,7 +36,7 @@ endif()
 
 #region GLOBALS ------------------------------------------------------
 set(DEPS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
-set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+#set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 if(USE_PKG_CONFIG)
     check_dependencies()
@@ -53,8 +53,6 @@ set(INCLUDE_DIRS
 )
 set(LIBRARY_DIRS
         ${LIB_DIR}
-        ${IMGUI_DIR}
-        ${IMGUI_DIR}/backends
 )
 #endregion ---------------------------------------------------------------
 

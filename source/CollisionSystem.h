@@ -8,16 +8,16 @@ class Renderer;
 class CollisionSystem {
 private:
     Renderer* m_renderer;
-    std::mutex& m_physicsBufferMutex;
+    std::mutex* m_physicsBufferMutex;
 
     Threads::ThreadPool m_threadPool;
 
 public:
-    explicit CollisionSystem(std::mutex& physicsBufferMutex);
+    explicit CollisionSystem(std::mutex* physicsBufferMutex);
 
-    explicit CollisionSystem(const CollisionSystem&) = default;
+    explicit CollisionSystem(const CollisionSystem&) = delete;
 
-    explicit CollisionSystem(CollisionSystem&&) = default;
+    explicit CollisionSystem(CollisionSystem&&) = delete;
 
     void Update(EntityData& physicsBufferWrite);
 

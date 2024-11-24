@@ -105,6 +105,8 @@ examples/example_sdl2_sdlrenderer/example_sdl2_sdlrenderer
 
 # Ignore IDE specific files
 *.code-workspace
+*.vscode
+*.idea
 
 # Ignore system files
 .DS_Store

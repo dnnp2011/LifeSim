@@ -12,8 +12,8 @@ ECSManager::ECSManager()
 {
     fprintf(stdout, "Instantiating ECSManager\n");
 
-    auto movement_system{ MovementSystem(m_PhysicsBufferMutex) };
-    auto collision_system{ CollisionSystem(m_PhysicsBufferMutex) };
+    auto movement_system{ MovementSystem(&m_PhysicsBufferMutex) };
+    auto collision_system{ CollisionSystem(&m_PhysicsBufferMutex) };
 
     m_MovementSystem  = Container::Bind<MovementSystem>(&movement_system).get();
     m_CollisionSystem = Container::Bind<CollisionSystem>(&collision_system).get();

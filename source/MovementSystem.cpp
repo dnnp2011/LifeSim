@@ -1,9 +1,11 @@
-#include "MovementSystem.h"
-#include "ECSManager.h"
+#include <ServiceContainer.h>
+
+// #include "ECSManager.h"
 #include "Renderer.h"
 
+#include "MovementSystem.h"
 
-MovementSystem::MovementSystem(std::mutex& physicsBufferMutex):
+MovementSystem::MovementSystem(std::mutex* physicsBufferMutex):
     m_renderer{ Container::Resolve<Renderer>().get() },
     m_physicsBufferMutex{ physicsBufferMutex },
     m_threadPool{ MAX_HARDWARE_THREADS }

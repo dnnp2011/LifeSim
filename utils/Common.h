@@ -1,11 +1,13 @@
 #pragma once
 
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <condition_variable>
 #include <functional>
 #include <imgui.h>
 #include <mutex>
+#include <ostream>
 #include <queue>
 #include <string>
 #include <thread>
@@ -156,6 +158,13 @@ inline void HandleError(const ExitCode& exitCode, const std::string& message = "
     }
 }
 
+// Overloads
+inline std::ostream& operator<<(std::ostream& stream, const ImVec2& vec)
+{
+    // TODO: Rewrite using my custom Vector class
+    return stream << "(" << vec.x << ", " << vec.y << ")";
+}
+
 /**
  * @brief Debounce a callback
  * @param callback Callback to invoke
@@ -304,47 +313,49 @@ namespace Threads {
     public:
         explicit ThreadPool(size_t numThreads);
         ~ThreadPool();
+        explicit ThreadPool(const ThreadPool&) = delete;
+        explicit ThreadPool(ThreadPool&&)      = delete;
 
         void enqueue(std::function<void()> task);
 
     private:
-        std::vector<std::thread> workers;
-        std::queue<std::function<void()>> tasks;
-        std::mutex queueMutex;
-        std::condition_variable condition;
-        bool stop;
+        std::vector<std::thread> m_workers;
+        std::queue<std::function<void()>> m_tasks;
+        std::mutex m_queueMutex;
+        std::condition_variable m_condition;
+        bool m_stop;
 
         void workerThread();
     };
 
     inline ThreadPool::ThreadPool(const size_t numThreads) :
-        stop(false)
+        m_stop(false)
     {
         for (size_t i = 0; i < numThreads; ++i)
-            workers.emplace_back(&ThreadPool::workerThread, this);
+            m_workers.emplace_back(&ThreadPool::workerThread, this);
     }
 
     inline ThreadPool::~ThreadPool()
     {
         {
-            std::lock_guard lock(queueMutex);
-            stop = true;
+            std::lock_guard lock(m_queueMutex);
+            m_stop = true;
         }
 
-        condition.notify_all();
+        m_condition.notify_all();
 
-        for (std::thread& worker: workers)
+        for (std::thread& worker: m_workers)
             worker.join();
     }
 
     inline void ThreadPool::enqueue(std::function<void()> task)
     {
         {
-            std::lock_guard lock(queueMutex);
-            tasks.push(std::move(task));
+            std::lock_guard lock(m_queueMutex);
+            m_tasks.push(std::move(task));
         }
 
-        condition.notify_one();
+        m_condition.notify_one();
     }
 
     inline void ThreadPool::workerThread()
@@ -353,21 +364,21 @@ namespace Threads {
             std::function<void()> task;
 
             {
-                std::unique_lock lock(queueMutex);
+                std::unique_lock lock(m_queueMutex);
 
-                condition.wait(
+                m_condition.wait(
                     lock,
                     [this] {
-                        return stop || !tasks.empty();
+                        return m_stop || !m_tasks.empty();
                     }
                 );
 
-                if (stop && tasks.empty())
+                if (m_stop && m_tasks.empty())
                     return;
 
-                task = std::move(tasks.front());
+                task = std::move(m_tasks.front());
 
-                tasks.pop();
+                m_tasks.pop();
             }
 
             task();

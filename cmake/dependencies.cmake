@@ -34,14 +34,33 @@ endfunction()
 function(find_dependencies)
     message(STATUS "Finding vcpkg dependencies...")
 
-    set(glew_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glew")
+    if(MSVC OR WIN32 OR WIN64)
+        set(glew_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glew")
+    elseif(APPLE)
+        set(glew_DIR "${VCPKG_INSTALL_ROOT}/x64-osx/share/glew")
+    elseif(UNIX)
+        set(glew_DIR "${VCPKG_INSTALL_ROOT}/x64-linux/share/glew")
+    endif()
     set(glew_FOUND TRUE)
     find_package(glew CONFIG REQUIRED)
 
-    set(OpenGL_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/opengl")
+    if(MSVC OR WIN32 OR WIN64)
+        set(OpenGL_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/opengl")
+    elseif(APPLE)
+        set(OpenGL_DIR "${VCPKG_INSTALL_ROOT}/x64-osx/share/opengl")
+    elseif(UNIX)
+        set(OpenGL_DIR "${VCPKG_INSTALL_ROOT}/x64-linux/share/opengl")
+    endif()
     find_package(OpenGL REQUIRED)
 
-    set(glm_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glm")
+    if(MSVC OR WIN32 OR WIN64)
+        set(glm_DIR "${VCPKG_INSTALL_ROOT}/x64-windows/share/glm")
+    elseif(APPLE)
+        set(glm_DIR "${VCPKG_INSTALL_ROOT}/x64-osx/share/glm")
+    elseif(UNIX)
+        set(glm_DIR "${VCPKG_INSTALL_ROOT}/x64-linux/share/glm")
+    endif()
+
     set(glm_FOUND TRUE)
     find_package(glm CONFIG REQUIRED)
 
@@ -54,21 +73,35 @@ endfunction()
 function(link_dependencies)
     message(STATUS "Linking vcpkg dependencies...")
 
-    set(GLEW_INCLUDE_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/include)
-    set(GLEW_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/lib)
-    set(GLEW_DEBUG_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/debug/lib)
-    set(GLEW_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/bin)
-    set(GLEW_DEBUG_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/debug/bin)
+    if(MSVC OR WIN32 OR WIN64)
+        set(GLEW_INCLUDE_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/include)
+        set(GLEW_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/lib)
+        set(GLEW_DEBUG_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/debug/lib)
+        set(GLEW_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/bin)
+        set(GLEW_DEBUG_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-windows/debug/bin)
+    elseif(APPLE)
+        set(GLEW_INCLUDE_DIR ${VCPKG_INSTALL_ROOT}/x64-osx/include)
+        set(GLEW_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-osx/lib)
+        set(GLEW_DEBUG_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/osx-windows/debug/lib)
+        set(GLEW_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-osx/lib)
+        set(GLEW_DEBUG_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-osx/debug/lib)
+    elseif(UNIX)
+        set(GLEW_INCLUDE_DIR ${VCPKG_INSTALL_ROOT}/x64-linux/include)
+        set(GLEW_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-linux/lib)
+        set(GLEW_DEBUG_LIBRARY_DIR ${VCPKG_INSTALL_ROOT}/x64-linux/debug/lib)
+        set(GLEW_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-linux/bin)
+        set(GLEW_DEBUG_BIN_DIR ${VCPKG_INSTALL_ROOT}/x64-linux/debug/bin)
+    endif()
 
     # Fix for missing glew32.lib reference
-    set_target_properties(GLEW::GLEW PROPERTIES
-            IMPORTED_IMPLIB "${GLEW_LIBRARY_DIR}/glew32.lib"
-            IMPORTED_IMPLIB_DEBUG "${GLEW_DEBUG_LIBRARY_DIR}/glew32d.lib"
-            IMPORTED_LINK_INTERFACE_LIBRARIES "opengl32;glu32"
-            IMPORTED_LOCATION "${GLEW_BIN_DIR}/glew32.dll"
-            IMPORTED_LOCATION_DEBUG "${GLEW_DEBUG_BIN_DIR}/glew32d.dll"
-            INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIR}"
-    )
+    #    set_target_properties(GLEW::GLEW PROPERTIES
+    #            IMPORTED_IMPLIB "${GLEW_LIBRARY_DIR}/glew32.lib"
+    #            IMPORTED_IMPLIB_DEBUG "${GLEW_DEBUG_LIBRARY_DIR}/glew32d.lib"
+    #            IMPORTED_LINK_INTERFACE_LIBRARIES "opengl32;glu32"
+    #            IMPORTED_LOCATION "${GLEW_BIN_DIR}/glew32.dll"
+    #            IMPORTED_LOCATION_DEBUG "${GLEW_DEBUG_BIN_DIR}/glew32d.dll"
+    #            INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIR}"
+    #    )
 
     target_link_libraries(LifeSim PRIVATE GLEW::GLEW)
     target_link_libraries(LifeSim PRIVATE OpenGL::GL)

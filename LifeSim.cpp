@@ -1,9 +1,12 @@
 #include <ServiceContainer.h>
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include "source/Application.h"
 
 
+#ifdef _WIN32
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     fprintf(stdout, "WinMain(): Booting Application...\n");
@@ -17,11 +20,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     return 0;
 }
+#endif
 
 int main(int, char**)
 {
-    // std::print("main(): Booting Application...\n");
-    fprintf(stdout, std::format("{}: Booting Application...\n", "main()").c_str());
+    fprintf(stdout, "main(): Booting Application...\n");
 
     auto app = Container::Bind<Application>();
 

@@ -2,7 +2,9 @@
 
 #include <Common.h>
 #include <ServiceContainer.h>
+#ifdef _WIN32
 #include <windows.h>
+#endif
 #include <GLFW/glfw3.h>
 
 #include "../source/Renderer.h"
@@ -10,9 +12,11 @@
 
 class Instrumentation {
 private:
+    #ifdef _WIN32
     LARGE_INTEGER m_frequency{};
     LARGE_INTEGER m_start{};
     LARGE_INTEGER m_end{};
+    #endif
 
     uint64_t m_windowsFrames{ 0 };
     uint64_t m_totalFrames{ 0 };
@@ -43,9 +47,11 @@ public:
 
     void Start()
     {
+        #ifdef _WIN32
         // -- Start Windows Performance Counter -- //
         QueryPerformanceFrequency(&m_frequency);
         QueryPerformanceCounter(&m_start);
+        #endif
         fprintf(stdout, "Instrumentation Started\n");
     }
 
@@ -125,6 +131,7 @@ public:
 private:
     void calculateCpuUsage()
     {
+        #ifdef _WIN32
         static FILETIME prevSysKernel, prevSysUser;
         static FILETIME prevProcKernel, prevProcUser;
         FILETIME sysIdle, sysKernel, sysUser;
@@ -167,6 +174,7 @@ private:
         prevProcUser   = procUser;
 
         m_cpuUsage = 0.0f;
+        #endif
     }
 
     void calculateFps()
@@ -190,6 +198,7 @@ private:
     // TODO: Use this example to fix the Windows FPS calculation
     void calculateWindowsFps()
     {
+        #ifdef _WIN32
         QueryPerformanceCounter(&m_end);
 
         m_windowsElapsedTime = static_cast<double>(m_end.QuadPart - m_start.QuadPart) / m_frequency.QuadPart;
@@ -202,5 +211,6 @@ private:
 
             QueryPerformanceCounter(&m_start);
         }
+        #endif
     }
 };

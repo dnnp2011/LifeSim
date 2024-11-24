@@ -45,37 +45,29 @@ endmacro()
 #endregion ---------------------------------------------------------------
 
 #region Build for Apple/Mac ----------------------------------------------
-macro(configure_apples_settings)
+macro(configure_apple_settings)
     message("Building for Mac OS X")
 
     set(MAC_INCLUDE_DIRS
             /usr/local/include
             /opt/local/include
             /opt/homebrew/include
-            ${GLFW_DIR}/glfw-3.4.bin.MACOS/include
-            ${OPENGL_DIR}/Headers
-            ${GLEW_DIR}/include
     )
     set(MAC_LINK_DIRECTORIES
             /usr/local/lib
             /opt/local/lib
             /opt/homebrew/lib
             /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks
-            ${GLFW_DIR}/glfw-3.4.bin.MACOS/lib-x86_64
-            ${OPENGL_DIR}
     )
     set(MAC_LINK_LIBRARIES
-            glfw3
-            glew
             "-framework OpenGL"
             "-framework Cocoa"
             "-framework IOKit"
-            glm
     )
 
     target_include_directories(LifeSim PRIVATE ${INCLUDE_DIRS} ${MAC_INCLUDE_DIRS})
     target_link_directories(LifeSim PRIVATE ${MAC_LINK_DIRECTORIES})
-    target_link_libraries(LifeSim PRIVATE ${MAC_LINK_LIBRARIES})
+    target_link_libraries(LifeSim PRIVATE ${LIBRARY_DIRS} ${MAC_LINK_LIBRARIES})
 endmacro()
 #endregion ---------------------------------------------------------------
 

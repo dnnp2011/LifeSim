@@ -8,9 +8,9 @@
 #include "Renderer.h"
 
 
-CollisionSystem::CollisionSystem(std::mutex& physicsBufferMutex):
+CollisionSystem::CollisionSystem(std::mutex* physicsBufferMutex):
     m_renderer{ Container::Resolve<Renderer>().get() },
-    m_physicsBufferMutex{ physicsBufferMutex },
+    m_physicsBufferMutex(physicsBufferMutex),
     m_threadPool{ MAX_HARDWARE_THREADS }
 {
     fprintf(stdout, "CollisionSystem Instantiated\n");
@@ -48,7 +48,7 @@ void CollisionSystem::Update(EntityData& physicsBufferWrite)
                     }
 
                     {
-                        const std::lock_guard lock(m_physicsBufferMutex);
+                        const std::lock_guard lock(*m_physicsBufferMutex);
                         velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect(
                             (ImVec2)velocities[entityA.id],
                             boundaryNormal
@@ -79,7 +79,7 @@ void CollisionSystem::Update(EntityData& physicsBufferWrite)
                             ImVec2{ entityBPosition.x, entityBPosition.y }
                         );
 
-                        const std::lock_guard lock(m_physicsBufferMutex);
+                        const std::lock_guard lock(*m_physicsBufferMutex);
                         velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect(
                             (ImVec2)velocities[entityA.id],
                             normal
