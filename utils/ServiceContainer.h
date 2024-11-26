@@ -2,7 +2,6 @@
 
 #include <array>
 #include <Common.h>
-#include <memory>
 #include <typeindex>
 #include <unordered_map>
 
@@ -79,6 +78,31 @@ public:
     {
         const auto type = std::type_index{ typeid(T) };
         const auto ptr  = std::shared_ptr<T>(instance);
+
+        m_Services[type] = Service{ type, ptr };
+
+        for (Service& service: m_Container) {
+            if (service.type == type) {
+                fprintf(stderr, "Service %s already bound to Container\n", type.name());
+
+                return nullptr;
+            }
+
+            if (!service.instance) {
+                service.type     = type;
+                service.instance = ptr;
+
+                return ptr;
+            }
+        }
+
+        throw std::runtime_error("Service Container is full");
+    }
+
+    template<typename T>
+    static ServicePtr<T> Bind(std::shared_ptr<T> ptr)
+    {
+        const auto type = std::type_index{ typeid(T) };
 
         m_Services[type] = Service{ type, ptr };
 

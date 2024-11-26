@@ -1,6 +1,6 @@
 #include <ServiceContainer.h>
 
-// #include "ECSManager.h"
+#include "ECSManager.h" // May not be needed
 #include "Renderer.h"
 
 #include "MovementSystem.h"
@@ -10,6 +10,9 @@ MovementSystem::MovementSystem(std::mutex* physicsBufferMutex):
     m_physicsBufferMutex{ physicsBufferMutex },
     m_threadPool{ MAX_HARDWARE_THREADS }
 {
+    if (physicsBufferMutex == nullptr)
+        throw std::invalid_argument("MovementSystem(): physicsBufferMutex == nullptr");
+
     fprintf(stdout, "MovementSystem Instantiated\n");
 }
 
@@ -23,11 +26,16 @@ void MovementSystem::Update(EntityData& physicsBufferWrite, float fixedDeltaTime
         IM_ASSERT(entity.id < positions.size() && entity.id < velocities.size());
 
         m_threadPool.enqueue(
-            [this, &fixedDeltaTime, &positions, &velocities, &entity]() {
+            [this, &fixedDeltaTime, &positions, &velocities, &entity] {
                 auto& entityPosition{ positions[entity.id] };
                 const auto& entityVelocity{ velocities[entity.id] };
 
-                const std::lock_guard lock(m_physicsBufferMutex);
+                if (m_physicsBufferMutex == nullptr)
+                    throw std::runtime_error("MovementSystem: physicsBufferMutex == nullptr");
+                else
+                    fprintf(stdout, "MovementSystem: physicsBufferMutex appears valid\n");
+
+                const std::lock_guard lock(*m_physicsBufferMutex);
 
                 entityPosition.x += (entityVelocity.dx * fixedDeltaTime * static_cast<float>(m_speed));
                 entityPosition.y += (entityVelocity.dy * fixedDeltaTime * static_cast<float>(m_speed));

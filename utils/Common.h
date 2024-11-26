@@ -311,7 +311,7 @@ namespace ImMath {
 namespace Threads {
     class ThreadPool {
     public:
-        explicit ThreadPool(size_t numThreads);
+        explicit ThreadPool(size_t numThreads = MAX_HARDWARE_THREADS);
         ~ThreadPool();
         explicit ThreadPool(const ThreadPool&) = delete;
         explicit ThreadPool(ThreadPool&&)      = delete;
@@ -331,6 +331,8 @@ namespace Threads {
     inline ThreadPool::ThreadPool(const size_t numThreads) :
         m_stop(false)
     {
+        fprintf(stdout, "ThreadPool: Instantiated with %lu threads\n", numThreads);
+
         for (size_t i = 0; i < numThreads; ++i)
             m_workers.emplace_back(&ThreadPool::workerThread, this);
     }
@@ -338,6 +340,7 @@ namespace Threads {
     inline ThreadPool::~ThreadPool()
     {
         {
+            fprintf(stdout, "~ThreadPool: Locking queueMutex\n");
             std::lock_guard lock(m_queueMutex);
             m_stop = true;
         }
@@ -351,6 +354,7 @@ namespace Threads {
     inline void ThreadPool::enqueue(std::function<void()> task)
     {
         {
+            fprintf(stdout, "ThreadPool::enqueue: Locking queueMutex\n");
             std::lock_guard lock(m_queueMutex);
             m_tasks.push(std::move(task));
         }

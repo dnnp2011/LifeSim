@@ -1,11 +1,13 @@
 #include <Instrumentation.h>
 #include <ServiceContainer.h>
+
 #include <GLFW/glfw3.h>
 
-#include "Application.h"
 #include "ECSManager.h"
 #include "InputManager.h"
 #include "RenderSystem.h"
+
+#include "Application.h"
 
 
 Application::Application():

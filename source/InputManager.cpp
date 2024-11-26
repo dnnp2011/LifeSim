@@ -1,10 +1,12 @@
 #include <imgui_impl_glfw.h>
 #include <Instrumentation.h>
 #include <ServiceContainer.h>
+
 #include <GLFW/glfw3.h>
 
-#include "InputManager.h"
 #include "Renderer.h"
+
+#include "InputManager.h"
 
 
 InputManager::InputManager():

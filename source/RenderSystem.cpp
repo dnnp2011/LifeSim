@@ -1,7 +1,8 @@
 #include <ServiceContainer.h>
 
-#include "RenderSystem.h"
 #include "Renderer.h"
+
+#include "RenderSystem.h"
 
 
 RenderSystem::RenderSystem()
