@@ -17,12 +17,6 @@ CollisionSystem::CollisionSystem(std::mutex* physicsBufferMutex):
 {
     if (physicsBufferMutex == nullptr)
         throw std::invalid_argument("CollisionSystem(): physicsBufferMutex == nullptr");
-    else
-        fprintf(
-            stdout,
-            "CollisionSystem: Define physicsBufferMutex@: %p\n",
-            static_cast<const void* const>(m_physicsBufferMutex)
-        );
 
     fprintf(stdout, "CollisionSystem Instantiated\n");
 }
@@ -60,14 +54,7 @@ void CollisionSystem::Update(EntityData& physicsBufferWrite)
 
                     {
                         if (m_physicsBufferMutex == nullptr)
-                            // Why is the mutex becoming 0xfff... instead of 0x000... (nullptr)?
                             throw std::runtime_error("CollisionSystem: physicsBufferMutex == nullptr");
-                        else
-                            fprintf(
-                                stdout,
-                                "CollisionSystem: physicsBufferMutex address: %p\n",
-                                static_cast<const void* const>(m_physicsBufferMutex)
-                            );
 
                         const std::lock_guard lock(*m_physicsBufferMutex);
                         velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect(
@@ -102,8 +89,6 @@ void CollisionSystem::Update(EntityData& physicsBufferWrite)
 
                         if (m_physicsBufferMutex == nullptr)
                             throw std::runtime_error("CollisionSystem: physicsBufferMutex == nullptr");
-                        else
-                            fprintf(stdout, "CollisionSystem(1): physicsBufferMutex appears valid\n");
 
                         const std::lock_guard lock(*m_physicsBufferMutex);
                         velocities[entityA.id] = static_cast<Velocity>(ImMath::Reflect(

@@ -55,8 +55,6 @@ macro(configure_apple_settings)
     )
     set(MAC_LINK_DIRECTORIES
             /usr/local/lib
-            /opt/local/lib
-            /opt/homebrew/lib
             /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks
     )
     set(MAC_LINK_LIBRARIES

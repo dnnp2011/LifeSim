@@ -32,8 +32,6 @@ void MovementSystem::Update(EntityData& physicsBufferWrite, float fixedDeltaTime
 
                 if (m_physicsBufferMutex == nullptr)
                     throw std::runtime_error("MovementSystem: physicsBufferMutex == nullptr");
-                else
-                    fprintf(stdout, "MovementSystem: physicsBufferMutex appears valid\n");
 
                 const std::lock_guard lock(*m_physicsBufferMutex);
 

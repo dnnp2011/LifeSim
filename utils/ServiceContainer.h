@@ -2,11 +2,16 @@
 
 #include <array>
 #include <Common.h>
+#include <concepts>
+#include <memory>
 #include <typeindex>
 #include <unordered_map>
 
 
 constexpr uint8_t MAX_SERVICES{ 20 };
+
+template<typename T, typename ...Args>
+concept NotSameAsT = (!std::same_as<std::decay_t<Args>, T> && ...);
 
 class ServiceContainer {
 public:
@@ -20,14 +25,13 @@ public:
 
     ~ServiceContainer() = delete;
 
-    template<typename T>
-    static ServicePtr<T> Bind()
+    template<typename T, typename ...Args> requires NotSameAsT<T, Args ...>
+    static ServicePtr<T> Bind(Args&& ...args)
     {
-        const auto type    = std::type_index(typeid(T));
-        const auto ptr     = std::make_shared<T>();
-        const auto service = Service{ type, ptr };
+        const auto type = std::type_index(typeid(T));
+        const auto ptr  = std::make_shared<T>(std::forward<Args>(args) ...);
 
-        m_Services[type] = service;
+        m_Services[type] = Service{ type, ptr };
 
         for (Service& service: m_Container) {
             if (service.type == type) {

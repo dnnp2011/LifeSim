@@ -14,16 +14,8 @@ ECSManager::ECSManager()
 {
     fprintf(stdout, "Instantiating ECSManager\n");
 
-    // FIXME: When these local variables leave scope, the memory is deallocated
-    auto movement_system{ MovementSystem(&m_PhysicsBufferMutex) };
-    auto collision_system{ CollisionSystem(&m_PhysicsBufferMutex) };
-
-    // FIXME: Manually setting up the shared pointers avoids the immediate crash, but still crashes down the line
-    const auto movement_system_ptr  = std::make_shared<MovementSystem>(&m_PhysicsBufferMutex);
-    const auto collision_system_ptr = std::make_shared<CollisionSystem>(&m_PhysicsBufferMutex);
-
-    m_MovementSystem  = Container::Bind<MovementSystem>(movement_system_ptr).get();
-    m_CollisionSystem = Container::Bind<CollisionSystem>(collision_system_ptr).get();
+    m_MovementSystem  = Container::Bind<MovementSystem>(&m_PhysicsBufferMutex).get();
+    m_CollisionSystem = Container::Bind<CollisionSystem>(&m_PhysicsBufferMutex).get();
 
     m_Entities.reserve(ENTITY_COUNT);
     m_Positions.reserve(ENTITY_COUNT);
@@ -67,8 +59,6 @@ Entity ECSManager::createEntity(
 {
     static unsigned int nextId{ 0 };
     const Entity entity{ nextId++ };
-
-    fprintf(stdout, "Creating Entity: %d\n", entity.id);
 
     m_Entities.emplace_back(entity);
     m_PhysicsBufferWrite.entities[entity.id] = entity;

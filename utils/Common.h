@@ -340,7 +340,6 @@ namespace Threads {
     inline ThreadPool::~ThreadPool()
     {
         {
-            fprintf(stdout, "~ThreadPool: Locking queueMutex\n");
             std::lock_guard lock(m_queueMutex);
             m_stop = true;
         }
@@ -354,7 +353,6 @@ namespace Threads {
     inline void ThreadPool::enqueue(std::function<void()> task)
     {
         {
-            fprintf(stdout, "ThreadPool::enqueue: Locking queueMutex\n");
             std::lock_guard lock(m_queueMutex);
             m_tasks.push(std::move(task));
         }
